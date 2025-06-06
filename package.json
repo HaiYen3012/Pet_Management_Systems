@@ -1,0 +1,35 @@
+{
+  "name": "pet-manager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "async-exit-hook": "^2.0.1",
+    "concurrently": "^7.6.0",
+    "cors": "^2.8.5",
+    "googleapis": "^137.1.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.30.1",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^3.0.0",
+    "react-spinners": "^0.13.8",
+    "sass": "^1.75.0"
+  },
+  "scripts": {
+    "start": "node server | npx pino-pretty",
+    "server": "cd server && nodemon | npx pino-pretty",
+    "client": "npm start --prefix client | npx pino-pretty",
+    "dev": "concurrently \"npm run server | npx pino-pretty\" \"npm run client | npx pino-pretty\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

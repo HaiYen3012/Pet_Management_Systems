@@ -1,0 +1,39 @@
+.statistics {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    &__title {
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        &__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .data {
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .evaluate {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                .text {
+                    font-size: 15px;
+                    line-height: 26.67px;
+                }
+            }
+        }
+    }
+}
+
+g.MuiChartsAxis-root.MuiChartsAxis-directionY.MuiChartsAxis-left.css-1k2u9zb-MuiChartsAxis-root {
+    tspan {
+        display: none;
+    }
+}

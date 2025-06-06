@@ -1,0 +1,45 @@
+.header-wrapper {
+  height: '45px';
+  position: 'sticky';
+  top: 0;
+  z-index: 1;
+  width: '100%';
+  display: 'flex';
+  align-items: center;
+
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    img {
+      width: 45px;
+    }
+  }
+
+  &__right-side {
+    display: inline-flex;
+    gap: 20px;
+    align-items: center;
+    &__username {
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+    }
+    div {
+      display: inline-block;
+      color: #ffff;
+    }
+    &__search {
+      font-size: 23px;
+    }
+    &__question {
+      font-size: 18px;
+    }
+    &__bell {
+      font-size: 23px;
+    }
+
+    &__language {
+      font-size: 23px;
+    }
+  }
+}

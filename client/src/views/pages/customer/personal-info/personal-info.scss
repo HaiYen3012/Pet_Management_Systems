@@ -1,0 +1,15 @@
+.personal-info {
+  &-wrapper {
+    background: #fff;
+    padding: 10px;
+    padding-top: 30px;
+    display: flex;
+    // align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__avatar {
+    padding: 0 30px 30px;
+  }
+}

@@ -1,0 +1,81 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.register-container {
+  width: 100vw;
+  height: auto;
+  background: #0050b3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &__sub {
+    width: 50vw;
+    height: auto;
+    // margin: auto;
+    display: flex;
+    justify-content: center;
+    &__content {
+      // align-items: center;
+      // justify-content: center;
+      width: 80%;
+      max-width: 600px;
+      height: 100%;
+      background-color: #fff;
+      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      padding: 1.4rem 3.5rem 1.5rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      &__form {
+        max-width: 100vw;
+        &__header {
+          &__title {
+            font-size: 20pt;
+            font-weight: 600;
+            margin-bottom: 8px;
+          }
+          &__sub-title {
+            font-size: 0.75rem;
+            color: #666666;
+            margin: 20px 0;
+          }
+        }
+
+        .form-item {
+          .ant-form-item-required {
+            font-size: 0.85rem;
+          }
+          .ant-form-item-explain-error {
+            font-size: 0.85rem;
+          }
+        }
+      }
+
+      .to-login {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+
+        .login-link {
+          color: #1890ff;
+          cursor: pointer;
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ant-col.ant-form-item-control.ant-col-xs-24.ant-col-xs-offset-0.ant-col-sm-16.ant-col-sm-offset-8.css-dev-only-do-not-override-1kuana8 {
+  margin: 0;
+}
+button.ant-btn.css-dev-only-do-not-override-1kuana8.ant-btn-primary.btn-register {
+  width: 100%;
+  margin-top: 20px;
+}

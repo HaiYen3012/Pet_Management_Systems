@@ -1,0 +1,61 @@
+.pet-info {
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        
+    }
+    &__header {
+        background-color: #fff;
+        margin-bottom: 10px;
+        padding: 12px 20px;
+        height: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        &__title {
+            font-size: 20px;
+            font-weight: 550;
+            display: flex;
+            justify-content: space-between;
+        }
+        &__button-add-pet {
+            align-self: self-end;
+            
+        }
+    }
+    &__card-list {
+        padding: 32px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+        background-color: #fff;
+        min-height: 80vh;
+        &__card {
+            display: inline-flex;
+            flex-direction: column;
+            width: 270px;
+            height: 323px;
+            img {
+                height: 150px;
+            }
+            &__description {
+                padding: 10px 0;
+            }
+            &__button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
+            // ant-card-body {
+            //     padding-bottom: 5px;
+            // }
+            // ul {
+            //     height: 30px;
+            //     display: flex;
+            //     align-items: center;
+            // }
+        }
+    }
+}
