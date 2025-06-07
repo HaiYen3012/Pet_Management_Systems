@@ -82,20 +82,25 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
       diet
         .getDietFood(selectedPet.pet_id)
         .then((res) => {
+          console.log('API Response:', res.data) // Debug log
           setFood(res.data)
           if (res.data && res.data.length > 0) {
             const petData = res.data.map((item, index) => ({
-              ...item,
+              ...item, // Giữ lại tất cả properties từ API, bao gồm food_id
               time: formatTimeMealToVN(item.time),
               key: index + 1,
+              // Đảm bảo food_id được preserve
+              food_id: item.food_id || item.id, // Fallback nếu API trả về 'id' thay vì 'food_id'
             }))
+            console.log('Mapped petData:', petData) // Debug log
             setData(petData)
             setInitialData(petData)
           } else {
             setData([])
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('Error fetching diet food:', error)
           setData([])
           setInitialData([])
           setInitialFields({})
@@ -128,7 +133,8 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
             setInitialFields(fields)
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('Error fetching diet plan:', error)
           setError(true)
           setInitialFields({})
           setEditableFields({})
@@ -236,9 +242,16 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
       console.log(res)
       toast.success('cập nhật thành công')
     })
-    // console.log('Editable Fields:', dietPlanNe)
-    // console.log('Table Data:', data)
-    data.map((row) => {
+    
+    // Validate và update từng food item
+    data.forEach((row) => {
+      // Kiểm tra food_id có tồn tại và hợp lệ
+      if (!row.food_id) {
+        console.error('Food ID is missing for row:', row)
+        toast.error(`Không thể cập nhật thực phẩm ${row.name}: thiếu ID`)
+        return
+      }
+
       const foodNe = {
         name: row.name,
         amount: row.amount,
@@ -246,10 +259,17 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
         description: row.description,
         time: formatTimeMealToE(row.time),
       }
+      
+      console.log('Updating food item:', row.food_id, foodNe) // Debug log
+      
       diet
         .updateDietFood(selectedPet.pet_id, row.food_id, foodNe)
         .then((res) => {
-          console.log(res)
+          console.log('Food update success:', res)
+        })
+        .catch((error) => {
+          console.error('Food update error:', error)
+          toast.error(`Lỗi cập nhật thực phẩm ${row.name}`)
         })
     })
 

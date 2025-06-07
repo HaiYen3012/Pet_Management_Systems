@@ -12,28 +12,34 @@ import {
   Card,
   Space,
   Typography,
+  DatePicker,
+  Select,
 } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 import diet from 'api/diet'
 import { toast } from 'react-toastify'
+import dayjs from 'dayjs'
+
+const { Option } = Select;
 
 const AddDietPlan = ({ visible, onCancel, selectedPet, setUpdate, addFood }) => {
   console.log(addFood);
+  
   const handleSubmit = (values) => {
     if (addFood === false) {
       diet
         .creatDietPlan(selectedPet.pet_id, {
           name: values.name,
           description: values.description,
-          date_start: formatDateToYYYYMMDD(values.date_start),
-          date_end: formatDateToYYYYMMDD(values.date_end),
+          date_start: values.date_start.format('YYYY-MM-DD'),
+          date_end: values.date_end.format('YYYY-MM-DD'),
         })
         .then((res) => {
           // console.log(res)
           values.food.map((food) => {
             const formattimefood = {
               ...food,
-              time: formatTimeMealToE(food.time)
+              time: food.time // Giờ đây time đã là enum (breakfast/lunch/dinner)
             }
             diet.creatDietFood(selectedPet.pet_id, formattimefood).then((res) => {
               // console.log(res)
@@ -49,25 +55,20 @@ const AddDietPlan = ({ visible, onCancel, selectedPet, setUpdate, addFood }) => 
         values.food.map((food) => {
           const formattimefood = {
             ...food,
-            time: formatTimeMealToE(food.time)
+            time: food.time // Giờ đây time đã là enum (breakfast/lunch/dinner)
           }
           diet.creatDietFood(selectedPet.pet_id, formattimefood).then((res) => {
             console.log(res)
-
           })
         })
         setUpdate(true)
+        toast.success("Thêm thực phẩm thành công")
         onCancel()
       } catch (error) {
         toast.error("Thêm không thành công")
         onCancel()
       }
-
-
-
     }
-    // console.log(values)
-
   }
 
   return (
@@ -92,35 +93,64 @@ const AddDietPlan = ({ visible, onCancel, selectedPet, setUpdate, addFood }) => 
             >
               {
                 !addFood && (
-                  <><Form.Item
-                    label="Tên chế độ ăn"
-                    name="name"
-                    rules={[{ required: true, message: 'Give the target a name!' }]}
-                  >
-                    <Input placeholder="Give the target a name" />
-                  </Form.Item>
+                  <>
+                    <Form.Item
+                      label="Tên chế độ ăn"
+                      name="name"
+                      rules={[{ required: true, message: 'Vui lòng nhập tên chế độ ăn!' }]}
+                    >
+                      <Input placeholder="Nhập tên chế độ ăn" />
+                    </Form.Item>
+                    
                     <Form.Item
                       label="Mô tả"
                       name="description"
-                      rules={[{ required: true, message: 'Give the target a name!' }]}
+                      rules={[{ required: true, message: 'Vui lòng nhập mô tả!' }]}
                     >
-                      <Input placeholder="Give the target a name" />
+                      <Input.TextArea 
+                        rows={3}
+                        placeholder="Nhập mô tả chế độ ăn" 
+                      />
                     </Form.Item>
+                    
                     <Form.Item
                       label="Ngày bắt đầu"
                       name="date_start"
-                      rules={[{ required: true, message: 'Give the target a name!' }]}
+                      rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu!' }]}
                     >
-                      <Input placeholder="Nhập chủng loại" />
+                      <DatePicker 
+                        placeholder="Chọn ngày bắt đầu"
+                        format="DD/MM/YYYY"
+                        style={{ width: '100%' }}
+                      />
                     </Form.Item>
 
                     <Form.Item
                       label="Ngày kết thúc"
                       name="date_end"
-                      rules={[{ required: true, message: 'Give the target a name!' }]}
+                      rules={[
+                        { required: true, message: 'Vui lòng chọn ngày kết thúc!' },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            const startDate = getFieldValue('date_start');
+                            if (!value || !startDate) {
+                              return Promise.resolve();
+                            }
+                            if (value.isBefore(startDate)) {
+                              return Promise.reject(new Error('Ngày kết thúc phải sau ngày bắt đầu!'));
+                            }
+                            return Promise.resolve();
+                          },
+                        }),
+                      ]}
                     >
-                      <Input placeholder="Nhập chủng loại" />
-                    </Form.Item></>
+                      <DatePicker 
+                        placeholder="Chọn ngày kết thúc"
+                        format="DD/MM/YYYY"
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                  </>
                 )
               }
 
@@ -135,39 +165,86 @@ const AddDietPlan = ({ visible, onCancel, selectedPet, setUpdate, addFood }) => 
                       }}
                     >
                       {subFields.map((subField) => (
-                        <Space key={subField.key}>
-                          <Form.Item noStyle name={[subField.name, 'time']}>
-                            <Input placeholder="time" />
+                        <Space key={subField.key} align="start">
+                          <Form.Item 
+                            noStyle 
+                            name={[subField.name, 'time']}
+                            rules={[{ required: true, message: 'Chọn bữa ăn!' }]}
+                          >
+                            <Select 
+                              placeholder="Chọn bữa ăn"
+                              style={{ width: 120 }}
+                            >
+                              <Option value="breakfast">Sáng</Option>
+                              <Option value="lunch">Trưa</Option>
+                              <Option value="dinner">Tối</Option>
+                            </Select>
                           </Form.Item>
-                          <Form.Item noStyle name={[subField.name, 'name']}>
-                            <Input placeholder="name" />
+                          
+                          <Form.Item 
+                            noStyle 
+                            name={[subField.name, 'name']}
+                            rules={[{ required: true, message: 'Nhập tên!' }]}
+                          >
+                            <Input 
+                              placeholder="Tên thực phẩm" 
+                              style={{ width: 150 }}
+                            />
                           </Form.Item>
+                          
                           <Form.Item
                             noStyle
                             name={[subField.name, 'description']}
                           >
-                            <Input placeholder="description" />
+                            <Input 
+                              placeholder="Mô tả" 
+                              style={{ width: 150 }}
+                            />
                           </Form.Item>
-                          <Form.Item noStyle name={[subField.name, 'amount']}>
-                            <Input placeholder="amount" />
+                          
+                          <Form.Item 
+                            noStyle 
+                            name={[subField.name, 'amount']}
+                            rules={[{ required: true, message: 'Nhập số lượng!' }]}
+                          >
+                            <Input 
+                              placeholder="Số lượng" 
+                              type="number"
+                              style={{ width: 100 }}
+                            />
                           </Form.Item>
-                          <Form.Item noStyle name={[subField.name, 'unit']}>
-                            <Input placeholder="unit" />
+                          
+                          <Form.Item 
+                            noStyle 
+                            name={[subField.name, 'unit']}
+                            rules={[{ required: true, message: 'Nhập đơn vị!' }]}
+                          >
+                            <Input 
+                              placeholder="Đơn vị" 
+                              style={{ width: 80 }}
+                            />
                           </Form.Item>
+                          
                           <CloseOutlined
                             onClick={() => {
                               subOpt.remove(subField.name)
+                            }}
+                            style={{ 
+                              color: '#ff4d4f', 
+                              cursor: 'pointer',
+                              marginTop: 8
                             }}
                           />
                         </Space>
                       ))}
                       <Button type="dashed" onClick={() => subOpt.add()} block>
-                        + Thực phẩm
+                        + Thêm thực phẩm
                       </Button>
                     </div>
                   )}
                 </Form.List>
               </Form.Item>
+              
               <Form.Item className="self-end flex flex-row">
                 <div className="flex flex-row gap-5">
                   <Button type="primary" htmlType="submit">

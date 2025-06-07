@@ -5,9 +5,10 @@ const serviceAppointment = require('../services/servicesAppointment.service')
 const timeSlotService = require('../services/time_slot.service')
 // Appointment
 const createAppointment = async (req, res) => {
-  const { date, note, time_slot, pet_id } = req.body
+  console.log(req)
+  console.log(res)
+  const { date, note, time_slot, pet_id, total } = req.body
   const { user_id } = req.user
-  total = 0.0
   const user = await userService.getUserById(user_id)
   if (!user) {
     throw new ErrorHandler(404, 'User not found')
@@ -174,6 +175,7 @@ const deleteAppointment = async (req, res) => {
 }
 
 const updateAppointment = async (req, res) => {
+  console.log('Return', req);
   const { user_id } = req.user
   const user = await userService.getUserById(user_id)
   if (!user) {
@@ -243,6 +245,7 @@ const updateAppointment = async (req, res) => {
 }
 
 const updateAppointmentStatus = async (req, res) => {
+  console.log('Return', req);
   const { id, status } = req.body
   const validStatuses = ['complete', 'canceled', 'processing']
   if (!validStatuses.includes(status)) {
@@ -336,15 +339,15 @@ const createMedicalRecord = async (req, res) => {
         });
       }
 
-      // // Lấy trạng thái của cuộc hẹn từ đối tượng appointment
-      // const status0 = appointment.status;
+      // Lấy trạng thái của cuộc hẹn từ đối tượng appointment
+      const status0 = appointment.status;
       
-      // if (status0 !== 'complete') {
-      //   return res.status(400).json({
-      //     status: "error",
-      //     message: "Appointment must be completed before creating a medical record. Current status: ${status0}",
-      //   });
-      // }
+      if (status0 !== 'complete') {
+        return res.status(400).json({
+          status: "error",
+          message: "Appointment must be completed before creating a medical record.",
+        });
+      }
 
       // Tạo medical_record mới
       const newMedicalRecord = await serviceAppointment.createMedicalRecord({ neutered, symptoms, diagnostic });
