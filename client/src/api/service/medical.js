@@ -1,4 +1,4 @@
-import API from "api/axios.config";
+import API from 'api/axios.config';
 const MedicalService = {
     getAllPrice: () => {
       const url = '/services/allPrice'

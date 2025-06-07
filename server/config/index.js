@@ -8,7 +8,7 @@ const pool = new Pool({
   password: '236204',
   host: 'localhost',
   port: 5432,
-  database: 'yen',
+  database: 'pet',
   ssl: false, // Bắt buộc phải false với PostgreSQL local
 });
 
