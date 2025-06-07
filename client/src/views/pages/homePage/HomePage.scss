@@ -5,16 +5,16 @@
 :root {
     --mau-vang-chinh: #ffc107;
     --mau-vang-dam: #ffa000;
-    --mau-vang-nhat: #fff8e1;      /* Vàng nhạt cho các chi tiết nhỏ */
-    --mau-vang-rat-nhat: #fffbeb;  /* Vàng siêu nhạt cho nền gradient */
+    --mau-vang-nhat: #fff8e1;
+    --mau-vang-rat-nhat: #fffbeb;
 
     --mau-nen-toi: #2c3e50;
-    --mau-chu-sang: #ffffff;      /* Màu trắng cho nền của các thẻ */
+    --mau-chu-sang: #ffffff;
     --mau-chu-toi: #34495e;
     --mau-chu-phu: #7f8c8d;
     
     --hieu-ung-chuyen-dong: all 0.3s ease-in-out;
-    --do-bong: 0 10px 35px rgba(0, 0, 0, 0.08); /* Một loại bóng đổ cho tất cả thẻ */
+    --do-bong: 0 10px 35px rgba(0, 0, 0, 0.08);
 }
 
 /* ----- ANIMATION ----- */
@@ -29,26 +29,31 @@
     }
 }
 
+@keyframes gradient-text-shine {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 /* ==========================================================================
    BODY & LAYOUT CHÍNH VỚI NỀN VÀNG
    ========================================================================== */
 body {
     font-family: 'Poppins', sans-serif;
-    /* NỀN VÀNG GRADIENT CHO TOÀN BỘ TRANG */
     background: linear-gradient(170deg, var(--mau-vang-rat-nhat) 0%, var(--mau-vang-nhat) 100%);
     color: var(--mau-chu-toi);
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
 .homepage {
     max-width: 1100px;
     width: 90%;
     margin: 0 auto;
-    /* Sử dụng flexbox để tạo khoảng cách giữa các thẻ một cách hoàn hảo */
     display: flex;
     flex-direction: column;
-    gap: 3rem; /* Khoảng cách giữa các thẻ nội dung */
-    padding: 2rem 0; /* Thêm padding trên dưới cho toàn trang */
+    gap: 3rem;
+    padding: 2rem 0;
 }
 
 /* ==========================================================================
@@ -87,27 +92,44 @@ body {
     color: var(--mau-chu-phu);
 }
 
-
 /* ==========================================================================
    KHỐI NỘI DUNG DẠNG "THẺ" TRÊN NỀN VÀNG
    ========================================================================== */
-.Homepage-part1, .homepage-part2, .homepage-part3 {
-    background-color: var(--mau-chu-sang); /* Nền trắng cho thẻ */
-    border-radius: 25px; /* Bo góc mềm mại */
-    padding: 3rem 4rem; /* Padding rộng rãi bên trong thẻ */
+.Homepage-part1, .homepage-part2 {
+    background-color: var(--mau-chu-sang);
+    border-radius: 25px;
+    padding: 3rem 4rem;
     box-shadow: var(--do-bong);
     animation: fadeInUp 1s ease-out 0.2s forwards;
-    animation-fill-mode: both; /* Giữ trạng thái cuối của animation */
+    animation-fill-mode: both;
 }
 
-/* --- PART 1 --- */
+/* ==========================================================================
+   PART 1 - HERO SECTION
+   ========================================================================== */
 .Homepage-part1 {
     display: flex;
     align-items: center;
     gap: 4rem;
 }
 
-.Homepage-part1 .Homepage-part1-right {
+.Homepage-part1-left {
+    flex: 1;
+    text-align: center;
+}
+
+.Homepage-part1-left img {
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    transition: var(--hieu-ung-chuyen-dong);
+}
+
+.Homepage-part1-left img:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+.Homepage-part1-right {
     flex: 1.2;
 }
 
@@ -128,33 +150,36 @@ body {
 }
 
 .Homepage-part1 p {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: var(--mau-chu-toi);
+    line-height: 1.7;
+}
+
+/* =================================================================== */
+/* ======> ĐÃ TĂNG KÍCH THƯỚC VÀ KHOẢNG CÁCH Ở ĐÂY <====== */
+/* =================================================================== */
+
+.Homepage-part1 .img-list {
+    display: flex;
+    justify-content: center;
+    gap: 3rem; /* Tăng khoảng cách giữa các ảnh (trước đây là 2.5rem) */
     margin-bottom: 2rem;
 }
 
-.Homepage-part1 .img-list {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-}
-
 .Homepage-part1 .img-list .img-item {
-    width: 160px;
-    height: 220px;
-    border-radius: 16px;
+    width: 140px;  /* Tăng kích thước ảnh tròn (trước đây là 120px) */
+    height: 140px; /* Tăng kích thước ảnh tròn (trước đây là 120px) */
+    border-radius: 50%;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     transition: var(--hieu-ung-chuyen-dong);
     object-fit: cover;
+    border: 3px solid var(--mau-vang-nhat);
 }
 
-.Homepage-part1 .img-list .img-item:nth-child(2) {
-    transform: translateY(-25px);
-}
 .Homepage-part1 .img-list .img-item:hover {
-    transform: translateY(-12px) scale(1.05);
-    z-index: 10;
+    transform: translateY(-8px) scale(1.1);
+    border-color: var(--mau-vang-chinh);
 }
 
 .Homepage-part1 button {
@@ -162,10 +187,9 @@ body {
     border: none;
     border-radius: 50px;
     color: var(--mau-nen-toi);
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
-    padding: 0.8rem 2rem;
-    height: auto;
+    padding: 1rem 2.5rem;
     cursor: pointer;
     box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
     transition: var(--hieu-ung-chuyen-dong);
@@ -176,92 +200,104 @@ body {
     box-shadow: 0 10px 25px rgba(255, 193, 7, 0.5);
 }
 
-
-/* --- PART 2 --- */
+/* ==========================================================================
+   PART 2 - DỊCH VỤ & ƯU ĐIỂM
+   ========================================================================== */
 .homepage-part2 {
-    /* Style cho Part 2 nằm trong thẻ trắng đã được định nghĩa ở trên */
+    text-align: center;
 }
 
-.homepage-part2 .homepage-part2-content {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-}
-
-.homepage-part2 .img-list {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-.homepage-part2 .img-list div { text-align: center; }
-
-.homepage-part2 .img-list .img-item {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-    box-shadow: var(--do-bong);
-    transition: var(--hieu-ung-chuyen-dong);
-    object-fit: cover;
-    border: 4px solid white;
-}
-
-.homepage-part2 .img-list .img-item:hover {
-    transform: translateY(-10px) scale(1.05);
-}
-
-.homepage-part2 .img-list span {
-    background: linear-gradient(90deg, var(--mau-vang-dam), var(--mau-vang-chinh), #b38e00, var(--mau-vang-dam));
-    background-size: 300% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    font-size: 2.2rem;
+.homepage-part2 h1 {
+    font-size: 2.5rem;
     font-weight: 700;
-    animation: gradient-text-shine 4s ease-in-out infinite;
+    color: var(--mau-nen-toi);
+    margin-bottom: 2rem;
 }
 
-@keyframes gradient-text-shine {
-    0% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+.homepage-part2 > img {
+    width: 100%;
+    max-width: 600px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: var(--do-bong);
+    margin-bottom: 3rem;
 }
 
-.homepage-part2 .homepage-part2-right {
-    flex: 1;
-    min-height: 300px;
-    /* Không cần background nữa vì đã có nền trắng của thẻ */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
 }
 
-
-/* --- PART 3 - KHỐI TRÍCH DẪN NẰM TRÊN THẺ TRẮNG --- */
-.homepage-part3 {
-    padding: 3rem;
+.service-item {
+    background: linear-gradient(135deg, var(--mau-vang-rat-nhat) 0%, #ffffff 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: var(--hieu-ung-chuyen-dong);
+    border: 1px solid var(--mau-vang-nhat);
 }
 
-.homepage-part3 p {
-    font-size: 1.25rem;
-    font-style: italic;
-    line-height: 1.8;
-    color: var(--mau-chu-toi);
-    padding-left: 2rem;
-    border-left: 4px solid var(--mau-vang-chinh);
-    position: relative;
+.service-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    border-color: var(--mau-vang-chinh);
 }
 
-.homepage-part3 p::before {
-    content: '“';
-    font-family: 'Georgia', serif;
-    position: absolute;
-    left: -10px;
-    top: -10px;
-    font-size: 5rem;
-    color: var(--mau-vang-chinh);
-    opacity: 0.15;
-    z-index: 1;
+.service-item h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--mau-nen-toi);
+    margin-bottom: 1rem;
 }
 
-/* Xóa đường kẻ vì các thẻ đã phân chia rõ ràng */
+.service-item p {
+    color: var(--mau-chu-phu);
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 768px) {
+    .homepage {
+        width: 95%;
+        gap: 2rem;
+        padding: 1rem 0;
+    }
+    
+    .Homepage-part1, .homepage-part2 {
+        padding: 2rem;
+    }
+    
+    .Homepage-part1 {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .Homepage-part1 h1 {
+        font-size: 2rem;
+    }
+    
+    .homepage-part2 h1 {
+        font-size: 2rem;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .header {
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+
+/* Xóa đường kẻ vì không cần thiết */
 hr {
     display: none;
 }
