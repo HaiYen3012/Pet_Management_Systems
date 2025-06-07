@@ -21,7 +21,7 @@ const AddPetModal = ({ visible, onCancel }) => {
     // Thay đổi link ảnh mặc định nếu người dùng không nhập
     const finalValues = {
       ...values,
-      avatar: values.avatar || '/avatarpet.jpg'
+      avatar: values.avatar || '/avatarpet1.png'
     };
 
     if (userData && (userData.roles === 'staff' || userData.roles === 'admin')) {
@@ -68,7 +68,7 @@ const AddPetModal = ({ visible, onCancel }) => {
         {/* === CỘT BÊN TRÁI: AVATAR === */}
         <div className="pet-avatar-section">
           <Avatar
-            src={'/avatarpet.jpg'}
+            src={'/avatarpet.png'}
             size={180}
           />
           <p>Ảnh đại diện sẽ giúp nhận diện bé cưng dễ dàng hơn!</p>

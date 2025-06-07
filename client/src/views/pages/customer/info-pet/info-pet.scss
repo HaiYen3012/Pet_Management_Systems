@@ -1,6 +1,3 @@
-// --- FILE: pet-info.scss (PHIÊN BẢN "HOÀNG KIM TUYỆT ĐỐI") ---
-
-// 1. BẢNG MÀU VÀNG - NÂU ĐA SẮC (Trái tim của thiết kế)
 $bg-page-gold: #FFFBEB;          // Vàng kem cực nhạt cho nền toàn trang
 $bg-container-gold: #FFFDE7;     // Vàng kem nhạt cho các container (header, card)
 $primary-yellow: #FFC107;
@@ -94,7 +91,7 @@ $button-delete-hover: #D7CCC8;
     }
 
     .ant-card-cover img {
-      height: 220px;
+      height: 150px;
       object-fit: cover;
     }
 
