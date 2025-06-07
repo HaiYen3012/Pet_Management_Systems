@@ -209,7 +209,7 @@ const StaffManage = () => {
             type="primary"
             style={{ marginBottom: 16, width: '100px' }}
           >
-            <PlusOutlined />
+            <PlusOutlined/>
             Thêm
           </Button>
           {listStaff && listStaff.length > 0 ? (
