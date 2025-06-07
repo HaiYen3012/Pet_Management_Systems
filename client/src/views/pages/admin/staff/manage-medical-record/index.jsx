@@ -53,8 +53,10 @@ const ManageMedicalRecord = () => {
     const fetchData = async () => {
         try {
             const res = await service.getAllAppointment();
+            console.log(res);
             if (res && res.status === 201) {
                 const data = res.data.allAppointment;
+                console.log(data);
                 const dataComplete = data
                     .filter((item) => item.status === 'complete')
                     .map((item) => {
@@ -64,6 +66,7 @@ const ManageMedicalRecord = () => {
                             statusRecord
                         };
                     });
+                console.log(dataComplete);
                 setDataTable(dataComplete);
             }
         } catch (error) {

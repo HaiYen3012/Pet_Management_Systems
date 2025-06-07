@@ -1,0 +1,171 @@
+/* --- BIẾN MÀU SẮC CHỦ ĐẠO (Tái sử dụng từ lần trước cho nhất quán) --- */
+:root {
+  --pet-yellow: #ffc107;
+  --pet-dark-brown: #6d4c41;
+  --pet-light-brown: #a1887f;
+  --pet-bg-main: #fdfaf5; /* Nền chính của trang, màu kem ấm */
+  --pet-bg-container: #ffffff; /* Nền của các khối nội dung */
+  --pet-border-color: #f0e9e1; /* Màu viền rất nhạt */
+  --pet-danger-red: #ef5350; /* Màu đỏ dịu mắt hơn */
+  --pet-text-light: #8d8d8d;
+}
+
+/* --- TỔNG THỂ TRANG --- */
+.service-history-page {
+  background-color: var(--pet-bg-main);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* --- KHUNG CARD CHÍNH --- */
+.service-history-card {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 16px;
+  overflow: hidden; /* Quan trọng để table không bị tràn ra ngoài góc bo */
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+}
+
+.service-history-card .ant-card-body {
+  padding: 0; /* Xóa padding mặc định của card */
+}
+
+/* --- HEADER (Tiêu đề, Lọc, Nút) --- */
+.service-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.service-history-header .ant-typography {
+  color: var(--pet-dark-brown);
+  margin-bottom: 0;
+}
+
+.service-history-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* --- BỘ LỌC & NÚT BẤM --- */
+.service-history-controls .ant-select-selector,
+.service-history-controls .ant-btn {
+  border-radius: 8px;
+  height: 40px;
+}
+
+.service-history-controls .ant-select-selector {
+  border-color: #d9d9d9;
+}
+
+.service-history-controls .ant-select-focused .ant-select-selector {
+  border-color: var(--pet-yellow);
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+.service-history-controls .btn-cancel-service {
+  background-color: var(--pet-danger-red);
+  border-color: var(--pet-danger-red);
+  color: white;
+  font-weight: 500;
+}
+.service-history-controls .btn-cancel-service:hover {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+/* --- BẢNG DỮ LIỆU (TABLE) --- */
+.service-history-table .ant-table-thead > tr > th {
+  background-color: #faf8f5; /* Màu nền header của bảng hơi khác một chút */
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.service-history-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--pet-border-color);
+  vertical-align: middle;
+}
+
+.service-history-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: var(--pet-bg-main);
+}
+
+.service-history-table .ant-table-pagination.ant-pagination {
+  padding: 16px 32px;
+  margin: 0;
+}
+
+/* --- THẺ TRẠNG THÁI (STATUS TAG) --- */
+.status-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 13px;
+  border: 1px solid transparent;
+}
+
+.status-tag.created {
+  background-color: #e3f2fd;
+  color: #1e88e5;
+}
+.status-tag.processing {
+  background-color: #fff8e1;
+  color: #ffc107;
+}
+.status-tag.complete, .status-tag.completed {
+  background-color: #e8f5e9;
+  color: #43a047;
+}
+.status-tag.canceled {
+  background-color: #f5f5f5;
+  color: #757575;
+}
+
+
+/* --- MODAL THÔNG TIN NGÂN HÀNG --- */
+.bank-info-modal .ant-modal-content {
+  border-radius: 16px;
+}
+.bank-info-modal .ant-modal-header {
+  border-radius: 16px 16px 0 0;
+  background: var(--pet-bg-main);
+  border-bottom: 1px solid var(--pet-border-color);
+}
+.bank-info-modal .ant-modal-title {
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+}
+.bank-info-modal .ant-form-item-label > label {
+  color: var(--pet-dark-brown);
+  font-weight: 500;
+}
+.bank-info-modal .ant-input,
+.bank-info-modal .ant-select-selector {
+  border-radius: 8px;
+}
+
+.bank-info-modal .ant-input:focus,
+.bank-info-modal .ant-input-focused,
+.bank-info-modal .ant-select-focused .ant-select-selector {
+    border-color: var(--pet-yellow);
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+.bank-info-modal .btn-confirm-refund {
+  background-color: var(--pet-yellow);
+  border-color: var(--pet-yellow);
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+  height: 40px;
+  border-radius: 8px;
+}
+.bank-info-modal .btn-confirm-refund:hover {
+  background-color: #ffca28;
+  border-color: #ffca28;
+}

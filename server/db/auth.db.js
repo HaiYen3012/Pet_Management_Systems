@@ -36,11 +36,29 @@ const deleteResetTokenDb = async (curDate) => {
   return true
 }
 
-const activityLogin = async (type_user) => {
-  await pool.query(`insert into public."log_login" (type_user) values($1)`, [
-    type_user,
-  ])
-  return true
+const activityLogin = async ({
+    user_id = 1,
+    type_user = 'customer',            // enum roles_t
+    login_method = 'email',         // enum login_method_t
+    ip_address = null,
+    user_agent = null,
+    success = true,
+    error_message = null,
+  }) => {
+    if (!user_id) {
+      throw new Error('user_id is required for login logging')
+    }
+
+    await pool.query(
+      `
+      INSERT INTO public."log_login" 
+        (user_id, type_user, login_method, ip_address, user_agent, success, error_message)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `,
+      [user_id, type_user, login_method, ip_address, user_agent, success, error_message]
+    )
+
+    return true
 }
 
 module.exports = {

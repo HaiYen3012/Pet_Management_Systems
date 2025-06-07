@@ -1,115 +1,137 @@
-import React, { useState } from 'react'
-import { Table, Space, Typography, Tabs } from 'antd'
+import React from 'react'
+import { Table, Typography, Tabs, Card } from 'antd'
 import useService from 'hooks/useService'
+// Import file CSS đã tạo
+import './ServiceCost.scss'
 
-const items = [
-  {
-    key: '1',
-    label: 'Dịch vụ khám chữa bệnh',
-    children: <></>,
-  },
-  {
-    key: '2',
-    label: 'Dịch vụ lưu trữ',
-    children: <></>,
-  },
-  {
-    key: '3',
-    label: 'Dịch vụ vệ sinh làm đẹp',
-    children: <></>,
-  },
-]
+const { Title } = Typography
 
-const columnsAppoint = [
+// --- ĐỊNH NGHĨA CÁC CỘT CHO BẢNG ---
+
+// Định dạng giá tiền cho đẹp
+const formatPrice = (price) => (
+  <span className="price-cell">
+    {Number(price).toLocaleString('vi-VN')} ₫
+  </span>
+);
+
+// Cột cho dịch vụ Khám & Làm đẹp
+const columnsAppointmentAndBeauty = [
   {
-    title: 'ID',
+    // THAY ĐỔI: Sửa "Mã Dịch Vụ" thành "ID"
+    title: 'ID', 
     dataIndex: 'id',
-    defaultSortOrder: 'ascend',
-    sorter: (a, b) => a.id - b.id,
-    fixed: 'left',
-    width: '70px',
+    key: 'id',
+    width: 120,
+    // Chức năng sort đã có sẵn ở đây
+    sorter: (a, b) => a.id - b.id, 
   },
   {
-    title: 'Thời gian',
+    // THAY ĐỔI: Sửa "Hạng Mục" thành "Thời gian"
+    title: 'Thời gian', 
     dataIndex: 'time',
+    key: 'time',
   },
   {
-    title: 'Giá',
+    title: 'Chi Phí',
     dataIndex: 'price',
+    key: 'price',
+    render: formatPrice,
   },
   {
-    title: 'Đơn vị',
+    title: 'Đơn Vị',
     dataIndex: 'unit',
+    key: 'unit',
   },
 ]
 
+// Cột cho dịch vụ Trông giữ
 const columnsStorage = [
   {
+    // THAY ĐỔI: Sửa "Mã Dịch Vụ" thành "ID"
     title: 'ID',
     dataIndex: 'id',
-    defaultSortOrder: 'ascend',
+    key: 'id',
+    width: 120,
+    // Chức năng sort đã có sẵn ở đây
     sorter: (a, b) => a.id - b.id,
-    fixed: 'left',
-    width: '70px',
   },
   {
-    title: 'Loại phòng',
+    title: 'Loại Phòng',
     dataIndex: 'type',
+    key: 'type',
   },
   {
-    title: 'Giá',
+    title: 'Chi Phí',
     dataIndex: 'price',
+    key: 'price',
+    render: formatPrice,
   },
   {
-    title: 'Đơn vị',
+    title: 'Đơn Vị',
     dataIndex: 'unit',
+    key: 'unit',
   },
 ]
+
+// Component Bảng con để tái sử dụng
+const ServiceTable = ({ dataSource, columns }) => (
+  <div className="service-cost-table-wrapper">
+      <Table
+        className="service-cost-table"
+        dataSource={dataSource}
+        columns={columns}
+        rowKey="id"
+        pagination={{
+          defaultPageSize: 8,
+          showSizeChanger: true,
+          pageSizeOptions: ['8', '15', '25'],
+        }}
+      />
+  </div>
+);
+
 
 const ServiceCost = () => {
   const { serviceAppointment, serviceBeauty, serviceStorage } = useService()
-  const [listData, setListData] = useState(serviceAppointment)
-  const [col, setCol] = useState(columnsAppoint)
 
-  const onChangeTabs = (key) => {
-    switch (key) {
-      case '1':
-        setListData(serviceAppointment)
-        setCol(columnsAppoint)
-        break
-      case '2':
-        setListData(serviceStorage)
-        setCol(columnsStorage)
-        break
-      case '3':
-        setListData(serviceBeauty)
-        setCol(columnsAppoint)
-        break
-      default:
-        setListData(serviceAppointment)
-        setCol(columnsAppoint)
-        break
-    }
-  }
+  // Tối ưu: Định nghĩa Bảng giá ngay trong `children` của mỗi tab
+  const serviceItems = [
+    {
+      key: '1',
+      label: 'Dịch vụ Khám & Chữa bệnh',
+      children: <ServiceTable dataSource={serviceAppointment} columns={columnsAppointmentAndBeauty} />,
+    },
+    {
+      key: '2',
+      label: 'Dịch vụ Trông giữ (Hotel)',
+      children: <ServiceTable dataSource={serviceStorage} columns={columnsStorage} />,
+    },
+    {
+      key: '3',
+      label: 'Dịch vụ Spa & Grooming',
+      children: <ServiceTable dataSource={serviceBeauty} columns={columnsAppointmentAndBeauty} />,
+    },
+  ]
 
   return (
-    <div className="service-cost">
-      <Space style={{ width: '100%', justifyContent: 'center' }}>
-        <Typography.Title level={2}>Bảng giá dịch vụ</Typography.Title>
-        <br />
-        <br />
-      </Space>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChangeTabs} />
-      <Table
-        dataSource={listData}
-        columns={col}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '20', '30'],
-        }}
-      />
-      ;
+    <div className="service-cost-page">
+      <Card className="service-cost-card">
+        <div className="service-cost-header">
+          <Title level={2}>Bảng Giá Dịch Vụ</Title>
+          <p>
+            Chúng tôi cung cấp các dịch vụ chăm sóc toàn diện với mức giá hợp lý, 
+            đảm bảo mang lại trải nghiệm tốt nhất cho các bé cưng.
+          </p>
+        </div>
+        
+        <Tabs 
+          defaultActiveKey="1" 
+          items={serviceItems} 
+          centered // Căn giữa các tab
+          className="service-cost-tabs"
+        />
+      </Card>
     </div>
   )
 }

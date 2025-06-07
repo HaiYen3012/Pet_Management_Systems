@@ -3,18 +3,13 @@ import useAuth from "hooks/useAuth";
 import { useNavigate } from 'react-router-dom';
 
 import "./HomePage.scss";
-import thumbnail1 from 'assets/images/homePage-image/anhh4.jpg';
-import thumbnail2 from 'assets/images/homePage-image/anhh5.jpg';
-import thumbnail3 from 'assets/images/homePage-image/anhh6.jpg';
-import thumbnail4 from 'assets/images/homePage-image/anhh7.jpg';
-import thumbnail5 from 'assets/images/homePage-image/anhh9.jpg';
-import thumbnail10 from 'assets/images/homePage-image/anhh10.jpg';
-import thumnail1 from 'assets/images/homePage-image/catdog.jpg';
-import thumnail2 from 'assets/images/homePage-image/anh1.jpg';
-import thumnail3 from 'assets/images/homePage-image/anh2.jpg';
-import thumnail4 from 'assets/images/homePage-image/anh3.jpg';
 
-
+// URLs ảnh thú cưng đẹp
+const mainPetImage = 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=560&h=667&fit=crop&crop=entropy&auto=format&q=80';
+const serviceImage1 = 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=150&h=150&fit=crop&crop=entropy&auto=format&q=80';
+const serviceImage2 = 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?w=150&h=150&fit=crop&crop=entropy&auto=format&q=80';
+const serviceImage3 = 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=150&h=150&fit=crop&crop=entropy&auto=format&q=80';
+const teamImage = 'https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8?w=600&h=400&fit=crop&crop=entropy&auto=format&q=80';
 
 const Header = () => {
     const { logout } = useAuth();
@@ -30,15 +25,14 @@ const Header = () => {
     }
     return (
         <div className='header'>
-            <button onClick={() => handleLogin()} >Log in</button>
-            <span>or</span>
-            <button onClick={() => handleSignup()}>Sign up</button>
+            <button onClick={() => handleLogin()} >Đăng nhập</button>
+            <span>hoặc</span>
+            <button onClick={() => handleSignup()}>Đăng ký</button>
         </div>
     )
 }
 
 const HomePart1 = () => {
-    
     const navigate = useNavigate();
 
     const handleLogin = () => {
@@ -47,28 +41,27 @@ const HomePart1 = () => {
 
     return (
         <div className='Homepage-part1'>
-            <div className='Homepage-part1-left '>
-                <img src={thumnail1} alt="" width="560" height="667" />
+            <div className='Homepage-part1-left'>
+                <img src={mainPetImage} alt="Thú cưng đáng yêu" width="560" height="667" />
             </div>
             <div className='Homepage-part1-right'>
                 <h1>
-                    PET SERVICES MANAGER
-                    <span> for customer</span>
+                    QUẢN LÝ DỊCH VỤ THÚ CƯNG
+                    <span> dành cho khách hàng yêu thương</span>
                 </h1>
-                <br /> <br /> <br /> 
-                <p>
-                    Revolutionizing pet care, our platform lets you effortlessly organize all pet-related tasks and appointments in one place. From vet visits to grooming, medication reminders to training, our user-friendly interface makes pet care a breeze. Access valuable resources for your pet's health and happiness. Say goodbye to stress and hello to peace of mind. Join us today for an easier pet ownership experience!
-                </p>
                 <br /> <br />
+                <p>
+                    Nền tảng chăm sóc thú cưng toàn diện - nơi bạn có thể quản lý mọi nhu cầu của boss nhỏ từ khám sức khỏe, grooming, đến lịch tiêm phòng. Giao diện thân thiện, dễ sử dụng giúp bạn yên tâm chăm sóc "con cưng" một cách tốt nhất!
+                </p>
+                <br />
                 <div className='img-list'>
-                    <img src={thumnail2} className='img-item' alt="" />
-                    <img src={thumnail3} className='img-item' alt="" />
-                    <img src={thumnail4} className='img-item' alt="" />
+                    <img src={serviceImage1} className='img-item' alt="Chăm sóc sức khỏe" />
+                    <img src={serviceImage2} className='img-item' alt="Grooming chuyên nghiệp" />
+                    <img src={serviceImage3} className='img-item' alt="Dịch vụ cao cấp" />
                 </div>
-                <br /> <br /> 
-                <button onClick={() => handleLogin()} >Using service now !</button>
+                <br />
+                <button onClick={() => handleLogin()}>Bắt đầu ngay! 🐾</button>
             </div>
-            <br/><br/>
         </div> 
     )
 }
@@ -76,57 +69,28 @@ const HomePart1 = () => {
 const HomePart2 = () => {
     return (
         <div className='homepage-part2'>
-            <br/> <br />
+            <br/><br/>
             <hr />
-            <br /> <br/>
+            <br/><br/>
+            <h1>Tại sao chọn chúng tôi? 🌟</h1>
+            <br/><br/>
             <div className='homepage-part2-content'>
-                <div className='homepage-part2-left'>
-                    <img src={thumbnail5} alt="" />
-                    <div className='img-list'>
-                        <div>
-                            <img src={thumbnail1} className='img-item' alt="" />
-                            <span>Clean</span>
-                        </div>
-                        <div>
-                            <img src={thumbnail3} className='img-item' alt="" />
-                            <span>Healthy</span>
-                        </div>
-                        <div>
-                            <img src={thumbnail2} className='img-item' alt="" />
-                            <span>Storage</span>
-                        </div>
+                <div className='services-grid'>
+                    <div className='service-item'>
+                        <h3>🏥 Chăm sóc sức khỏe</h3>
+                        <p>Đội ngũ bác sĩ thú y giàu kinh nghiệm, luôn sẵn sàng chăm sóc boss của bạn</p>
                     </div>
-                    <br /> <br /> 
-                </div>
-                <div className='homepage-part2-right'>
-                    <img src={thumbnail4} alt="" />
+                    <div className='service-item'>
+                        <h3>✨ Grooming chuyên nghiệp</h3>
+                        <p>Dịch vụ làm đẹp cao cấp, giúp thú cưng luôn xinh xắn và sạch sẽ</p>
+                    </div>
+                    <div className='service-item'>
+                        <h3>💖 Yêu thương tận tâm</h3>
+                        <p>Chúng tôi hiểu rằng thú cưng không chỉ là động vật mà còn là thành viên trong gia đình bạn</p>
+                    </div>
                 </div>
             </div>
-            <br /><br />
-        </div>
-    )
-}
-
-const HomePart3 = () => {
-    return (
-        <div className='homepage-part3'>
-            <hr /> <br /> <br />  
-            <h1>Why should you rely on us</h1>
-            <br /> <br /> 
-            <img src={thumbnail10} alt='' />
-            <br /> <br /> 
-            <p>
-                At our service, we prioritize sustainability, efficiency, and compassion in everything we do. 
-                <br /><br />
-                <ul>
-                    <li><strong>Sustainability:</strong> We believe in recycling and using sustainable materials to help protect our planet. </li><br /> 
-                    <li><strong>Reliability:</strong> From accurate documentation to punctual service delivery, you can rely on us to meet your needs with the utmost reliability and responsibility.</li><br /> 
-                    <li><strong>Trust:</strong> We build trust through transparent transactions and fair trade practices. Our ethical approach ensures that every interaction is based on honesty and integrity.</li><br /> 
-                    <li><strong>Community:</strong> We are deeply embedded in our community, providing not only services but also care and support. We believe in giving back to the community that supports us.</li><br /> 
-                    <li><strong>Accountability:</strong> We hold ourselves accountable for the welfare of our clients and their interests. Our quality assurance practices are rigorous, ensuring that you receive only the best.</li><br /> 
-                </ul>
-            </p>
-            <br /> <br />
+            <br/><br/>
         </div>
     )
 }
@@ -137,7 +101,6 @@ const Homepage = () => {
             <Header />
             <HomePart1 />
             <HomePart2 />
-            <HomePart3 />
         </div>
     )
 }
