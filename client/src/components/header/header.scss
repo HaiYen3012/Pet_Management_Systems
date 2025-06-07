@@ -1,6 +1,6 @@
 .header-wrapper {
   /* Setting core header properties for structure and gold theme */
-  height: 65px; /* Increased height for a balanced, spacious look */
+  height: 72px; /* Increased height for a balanced, spacious look */
   background-color: #FFC107; /* Vibrant gold (Amber) as primary theme color */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth and prominence */
   padding: 0 40px; /* Wider padding for a refined, open feel */
@@ -25,9 +25,9 @@
       width: 60px; /* Tăng kích thước logo cho sự nổi bật */
       height: 60px;
       border-radius: 50%; /* Bo tròn logo cho vẻ ngoài hiện đại */
-      border: 2px solid #FFD700; /* Viền vàng sáng hơn để tạo điểm nhấn */
+      border: 3px solid #f9e76f; /* Viền vàng sáng hơn để tạo điểm nhấn */
       background-color: #fff; /* Nền trắng để logo nổi trên tông vàng của header */
-      padding: 5px; /* Khoảng đệm bên trong để viền không sát vào hình */
+      padding: 2px; /* Khoảng đệm bên trong để viền không sát vào hình */
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ nhẹ cho chiều sâu */
       transition: all 0.3s ease; /* Chuyển động mượt mà cho các hiệu ứng */
       &:hover {
@@ -75,7 +75,7 @@
     /* Styling icons for consistency and visibility */
     div {
       display: inline-block;
-      color: #1A1A1A; /* Dark shade for clear visibility on gold */
+      color: #1c1b1b; /* Dark shade for clear visibility on gold */
       &:hover {
         color: #FFD700; /* Lighter gold for hover effect */
       }
@@ -83,7 +83,7 @@
 
     /* Specific icon sizes for balanced proportions */
     &__search, &__bell, &__language {
-      font-size: 26px; /* Slightly larger for prominence */
+      font-size: 20px; /* Slightly larger for prominence */
     }
 
     &__question {
@@ -91,3 +91,5 @@
     }
   }
 }
+
+

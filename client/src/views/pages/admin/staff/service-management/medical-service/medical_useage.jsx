@@ -17,6 +17,14 @@ import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import '../../index.css'
 import MedicalService from 'api/service/medical'
 import moment from 'moment'
+import {
+  FaPlus,
+  FaSearch,
+  FaPen,
+  FaTrashAlt,
+  FaSave,
+  FaTimes,
+} from 'react-icons/fa'
 
 const { Option } = Select
 
@@ -281,19 +289,19 @@ const MedicalServiceUsage = () => {
           </span>
         ) : (
           <Space size="middle">
-            <a
-              className="action-link"
+            <button
               disabled={editingKey !== ''}
               onClick={() => edit(record)}
+              className="ml-3 p-2 text-orange-300 hover:text-orange-400 hover:bg-orange-50 rounded border transition-colors"
             >
-              Cập nhật
-            </a>
-            <a
-              className="action-link"
+              <FaPen />
+            </button>
+            <button
               onClick={() => showConfirm(record.service_id)}
+              className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border  transition-colors"
             >
-              Xóa
-            </a>
+              <FaTrashAlt />
+            </button>
           </Space>
         )
       },

@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons'
 import './header.scss'
 import useAuth from 'hooks/useAuth'
+import { FaBell, FaQuestionCircle, FaSearch } from 'react-icons/fa'
 const HeaderRender = () => {
   const { userData, logout } = useAuth()
   const items = [
@@ -58,18 +59,21 @@ const HeaderRender = () => {
 
           <div className="header-wrapper__right-side">
             <div className="header-wrapper__right-side__search">
-              <SearchOutlined />
+              <FaSearch></FaSearch>
+              {/* <SearchOutlined /> */}
             </div>
             <div className="header-wrapper__right-side__question">
-              <QuestionCircleOutlined />
+              <FaQuestionCircle></FaQuestionCircle>
+              {/* <QuestionCircleOutlined /> */}
             </div>
             <div className="header-wrapper__right-side__bell">
-              <BellOutlined />
+              <FaBell></FaBell>
+              {/* <BellOutlined /> */}
             </div>
 
             <div className="header-wrapper__right-side__profile">
               <Link to={'/personal-info'}>
-                <Avatar
+                <Avatar className='ava'
                   style={{ width: '40px' }}
                   size={40}
                   icon={<UserOutlined />}
@@ -84,7 +88,7 @@ const HeaderRender = () => {
                   className="header-wrapper__profile__username"
                   onClick={(e) => e.preventDefdivult()}
                 >
-                  <Space>{userData && userData.username}</Space>
+                  <Space className='p-3'>{userData && userData.username}</Space>
                 </div>
               </Dropdown>
             </div>

@@ -19,6 +19,14 @@ import pet from 'api/pet'
 import { toast } from 'react-toastify'
 const { Option } = Select
 const { confirm } = Modal
+import {
+  FaPlus,
+  FaSearch,
+  FaPen,
+  FaTrashAlt,
+  FaSave,
+  FaTimes,
+} from 'react-icons/fa'
 
 const PetInfoOverview = () => {
   const [sortOrder, setSortOrder] = useState({})
@@ -39,15 +47,33 @@ const PetInfoOverview = () => {
     { title: 'Giới tính', dataIndex: 'sex', key: 'sex' },
     { title: 'Cân nặng', dataIndex: 'weight', key: 'weight' },
     { title: 'ID khách hàng', dataIndex: 'user_id', key: 'user_id' },
+    {
+      title: 'Chi tiết',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <a onClick={() => showDetails(record)}>Xem chi tiết</a>
+        </Space>
+      ),
+    },
     // { title: 'x', dataIndex: 'x', key: 'x' },
     {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => showDetails(record)}>Xem chi tiết</a>
-          <a onClick={() => updateInfos(record)}>Cập nhật</a>
-          <a onClick={() => showConfirm(record.pet_id)}>Xóa</a>
+          <button
+            className="ml-3 p-2 text-orange-300 hover:text-orange-400 hover:bg-orange-50 rounded border transition-colors"
+            onClick={() => updateInfos(record)}
+          >
+            <FaPen />
+          </button>
+          <button
+            onClick={() => showConfirm(record.pet_id)}
+            className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border  transition-colors"
+          >
+            <FaTrashAlt />
+          </button>
         </Space>
       ),
     },

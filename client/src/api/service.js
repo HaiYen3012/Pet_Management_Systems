@@ -15,15 +15,15 @@ const service = {
     return API.get(url)
   },
   createAppointment: (body) => {
-    const url = `/services/appointment/CreateAppointment`
+    const url = '/services/appointment/CreateAppointment'
     return API.post(url, body)
   },
   createStorage: (body) => {
-    const url = `/services/CreateStorageService`
+    const url = '/services/CreateStorageService'
     return API.post(url, body)
   },
   createBeauty: (body) => {
-    const url = `/services/createBeauty`
+    const url = '/services/createBeauty'
     return API.post(url, body)
   },
   getAllServiceByUserId: () => {
@@ -47,7 +47,7 @@ const service = {
     return API.get(url)
   },
   createMedicalRecord: (body) => {
-    const url = `/services/appointment/CreateMedicalRecord`
+    const url = '/services/appointment/CreateMedicalRecord'
     return API.post(url, body)
   },
 }

@@ -59,7 +59,7 @@ function Register() {
           >
             <div className="register-container__sub__content__form__header">
               <h3 className="register-container__sub__content__form__header__title">
-                Tạo tài khoản
+                Sign Up
               </h3>
               <hr />
               <div className="register-container__sub__content__form__header__sub-title">
