@@ -1,66 +1,195 @@
-.service-register {
-    &__content {
-        background: #fff;
-        padding: 10px;
-        padding-top: 30px;
-        // display: flex;
-        // justify-content: center;
-        // flex-direction: column;
-        // align-items: center;
-        min-height: 800px;
-
-        &__step {
-            width: 80%;
-            margin: 0 auto;
-            padding: 50px 0;
-        }
-
-        &__form-ticket {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: column;
-            height: 370px;
-
-            .card-body {
-                width: 600px;
-                border: 1px solid #ccc;
-                border-radius: 3px;
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-                &__header {
-                    padding-bottom: 20px;
-                    border-bottom: 1px solid #ccc;
-                    font-size: 1rem;
-                    font-weight: 600;
-                    span {
-                        color: #1890ff;
-                    }
-                }
-                &__content {
-                    display: flex;
-                    justify-content: space-around;
-                    font-size: 0.95rem;
-                    margin-top: 20px;
-                    height: 200px;
-
-                    &__left {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-evenly;
-                    }
-                    &__right {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-evenly;
-                    }
-                }
-            }
-        }
-    }
+// Giả sử các biến này được định nghĩa trong _theme.scss của bạn
+:root {
+  --pet-yellow: #ffc107;
+  --pet-dark-brown: #6d4c41;
+  --pet-light-brown: #a1887f;
+  --pet-bg-main: #fdfaf5;
+  --pet-bg-container: #ffffff;
+  --pet-border-color: #f0e9e1;
+  --pet-success-green: #4caf50;
 }
 
-.ant-btn {
-    text-align: center;
+// --- TỔNG THỂ TRANG ---
+.service-register-page {
+  background-color: var(--pet-bg-main);
+  padding: 32px;
+}
+
+// --- KHUNG CARD CHÍNH ---
+.service-register {
+  &__container {
+    max-width: 1000px;
+    margin: 0 auto;
+    
+    // Tiêu đề "Đăng ký dịch vụ"
+    .page-title {
+      text-align: center;
+      margin-bottom: 32px;
+      .ant-typography {
+        color: var(--pet-dark-brown);
+      }
+    }
+  }
+
+  &__content {
+    background: var(--pet-bg-main);
+    padding: 32px 48px;
+    border-radius: 16px;
+    box-shadow: 0 0 0 4px var(--pet-yellow), 0 8px 24px rgba(149, 157, 165, 0.1);
+    border: 1px solid var(--pet-border-color);
+    min-height: 650px;
+
+    // --- STEPS ĐƯỢC THIẾT KẾ LẠI ---
+    &__step {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      padding-bottom: 48px;
+
+      // Style cho từng bước
+      .ant-steps-item-process .ant-steps-item-icon,
+      .ant-steps-item-finish .ant-steps-item-icon {
+        background-color: var(--pet-yellow);
+        border-color: var(--pet-yellow);
+      }
+
+      .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+        color: var(--pet-dark-brown);
+      }
+      
+      .ant-steps-item-process .ant-steps-item-title,
+      .ant-steps-item-finish .ant-steps-item-title {
+        color: var(--pet-dark-brown) !important;
+        font-weight: 500;
+      }
+      .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
+        background-color: var(--pet-yellow);
+      }
+    }
+
+    // --- FORM CHUNG ---
+    .service-register-form {
+      .ant-form-item-label > label {
+        color: var(--pet-dark-brown);
+        font-weight: 500;
+      }
+      .ant-input, .ant-select-selector, .ant-picker {
+        border-radius: 8px;
+        height: 44px !important;
+        padding: 10px 14px;
+        &:focus, &:hover {
+          border-color: var(--pet-yellow) !important;
+          box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+        }
+      }
+      .ant-select-arrow {
+        color: var(--pet-light-brown);
+      }
+      .ant-input-textarea-show-count::after {
+        color: var(--pet-light-brown);
+      }
+    }
+
+    // --- NÚT BẤM CHÍNH ---
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      
+      .ant-btn {
+        height: 44px;
+        border-radius: 8px;
+        padding: 0 24px;
+        font-weight: 600;
+      }
+      
+      .ant-btn-primary {
+        background: var(--pet-yellow);
+        border-color: var(--pet-yellow);
+        color: var(--pet-dark-brown);
+        &:hover, &:focus { 
+          background: #ffca28; 
+          border-color: #ffca28; 
+        }
+      }
+    }
+
+    // --- TICKET XÁC NHẬN SANG TRỌNG ---
+    &__form-ticket {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px; // Thay thế height cố định
+
+      .card-body {
+        width: 100%;
+        max-width: 650px;
+        border: 1px solid var(--pet-border-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        background: linear-gradient(135deg, var(--pet-bg-main), #fff);
+        padding: 24px 32px;
+        color: var(--pet-dark-brown);
+
+        &__header {
+          padding-bottom: 16px;
+          border-bottom: 2px dashed var(--pet-border-color);
+          font-size: 22px;
+          font-weight: 600;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          span {
+            color: var(--pet-yellow);
+            font-size: 18px;
+            font-family: 'Courier New', Courier, monospace;
+          }
+        }
+
+        &__content {
+          display: grid; // Dùng grid để căn chỉnh đẹp hơn
+          grid-template-columns: 1fr 1fr;
+          gap: 20px 40px;
+          font-size: 15px;
+          margin-top: 24px;
+
+          // Xóa style cũ của left/right
+          &__left, &__right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px; // Khoảng cách giữa các dòng thông tin
+          }
+          
+          .info-item {
+            display: flex;
+            flex-direction: column;
+            .info-label {
+              font-size: 13px;
+              color: var(--pet-light-brown);
+              margin-bottom: 4px;
+            }
+            .info-value {
+              font-weight: 500;
+              &.status-created {
+                color: var(--pet-success-green);
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+      .ticket-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 16px;
+        color: var(--pet-light-brown);
+        .ant-btn-primary {
+          height: 44px;
+        }
+      }
+    }
+  }
 }

@@ -23,7 +23,7 @@ export default function PetSider({ activeButton, onButtonClick, selectedPet }) {
       <div className="flex flex-col mt-10 max-md:mt-10">
         <img
           loading="lazy"
-          src={selectedPet?.avatar || '/avatarpet.jpg'}
+          src={selectedPet?.avatar || '/avatarpet.png'}
           alt="Pet profile"
           className="ml-6 max-w-full border-white border-solid aspect-[0.99] rounded-full border-[10px] w-[156px] max-md:ml-2.5"
         />

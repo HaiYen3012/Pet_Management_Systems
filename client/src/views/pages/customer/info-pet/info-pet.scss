@@ -1,61 +1,154 @@
+$bg-page-gold: #FFFBEB;          // Vàng kem cực nhạt cho nền toàn trang
+$bg-container-gold: #FFFDE7;     // Vàng kem nhạt cho các container (header, card)
+$primary-yellow: #FFC107;
+$yellow-dark: #FFA000;
+$text-dark: #5D4037;
+$text-light: #A1887F;
+$shadow-color-gold: rgba(196, 145, 32, 0.15); // Bóng đổ màu vàng-nâu
+$button-delete-bg: #EFEBE9; // Nền màu be cho nút Xóa
+$button-delete-text: #8D6E63; // Chữ màu nâu cho nút Xóa
+$button-delete-hover: #D7CCC8;
+
+// --- GHI ĐÈ TRỰC TIẾP VÀO LAYOUT CHUNG ---
+// Đảm bảo nền của Content và Footer cũng được "vàng hóa"
+.main-layout-wrapper__content-area {
+  background: $bg-page-gold !important;
+}
+.ant-layout-footer {
+  background: $bg-page-gold !important;
+}
+
+// --- STYLE CHO TRANG DANH SÁCH THÚ CƯNG ---
 .pet-info {
-    &__wrapper {
-        display: flex;
-        flex-direction: column;
-        
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: transparent;
+  }
+
+  // 2. HEADER - ĐÃ ĐỒNG BỘ
+  &__header {
+    background: $bg-container-gold;
+    padding: 20px 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px $shadow-color-gold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__title {
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-dark;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      
+      &::before {
+        content: '🐾';
+        font-size: 28px;
+        color: $primary-yellow;
+      }
     }
-    &__header {
-        background-color: #fff;
-        margin-bottom: 10px;
-        padding: 12px 20px;
-        height: 80px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        &__title {
-            font-size: 20px;
-            font-weight: 550;
-            display: flex;
-            justify-content: space-between;
+
+    &__button-add-pet {
+      .ant-btn-primary {
+        background: $primary-yellow;
+        border-color: $primary-yellow;
+        &:hover, &:focus {
+          background: $yellow-dark;
+          border-color: $yellow-dark;
         }
-        &__button-add-pet {
-            align-self: self-end;
-            
-        }
+      }
     }
-    &__card-list {
-        padding: 32px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 20px;
-        background-color: #fff;
-        min-height: 80vh;
-        &__card {
-            display: inline-flex;
-            flex-direction: column;
-            width: 270px;
-            height: 323px;
-            img {
-                height: 150px;
-            }
-            &__description {
-                padding: 10px 0;
-            }
-            &__button {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-            }
-            // ant-card-body {
-            //     padding-bottom: 5px;
-            // }
-            // ul {
-            //     height: 30px;
-            //     display: flex;
-            //     align-items: center;
-            // }
-        }
+  }
+
+  // 3. DANH SÁCH CARD
+  &__card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+    padding: 0;
+    background: transparent;
+  }
+
+  // 4. CARD THÚ CƯNG - KHÔNG CÒN MÀU TRẮNG
+  &__card {
+    &.ant-card {
+      background: $bg-container-gold !important; // Nền vàng kem
+      border-radius: 20px;
+      box-shadow: 0 8px 25px $shadow-color-gold;
+      border: 2px solid transparent;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 45px rgba(196, 145, 32, 0.255);
+        border-color: $primary-yellow;
+      }
     }
+
+    .ant-card-cover img {
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .ant-card-body {
+      padding: 24px;
+    }
+
+    .ant-card-meta-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: $text-dark;
+      margin-bottom: 12px !important;
+    }
+
+    .ant-card-meta-description p {
+      // Style cho các dòng <p> bên trong description
+      p {
+        color: $text-light;
+        font-weight: 500;
+        line-height: 1.7; // Tăng khoảng cách dòng
+        margin-bottom: 6px; // Tăng khoảng cách giữa các dòng
+      }
+    }
+
+    // 5. KHU VỰC NÚT BẤM - LOẠI BỎ HOÀN TOÀN MÀU XANH/ĐỎ
+    &__actions {
+      margin-top: 24px;
+      .ant-space { // Dùng Space của antd để căn chỉnh
+        width: 100%;
+        gap: 12px !important; // Khoảng cách giữa 2 nút
+      }
+      // Nút "Thông tin chi tiết"
+       .ant-btn-primary {
+        background: $primary-yellow;
+        border-color: $primary-yellow;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        &:hover, &:focus {
+          background: $yellow-dark;
+          border-color: $yellow-dark;
+          transform: scale(1.05);
+        }
+      }
+      // Nút "Xóa"
+      .ant-btn-default {
+        background: #FFF8E1; // Nền vàng nhạt hơn
+        border-color: #FFE0B2; // Viền vàng nhạt
+        color: $text-dark; // Chữ màu nâu đậm
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        &:hover, &:focus {
+          background: #FFECB3;
+          border-color: $primary-yellow;
+        }
+      }
+    }
+  }
 }

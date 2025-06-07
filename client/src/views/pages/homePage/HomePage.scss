@@ -1,154 +1,303 @@
-.header {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-    align-items: baseline;
-    margin: 20px;
-    button {
-        background-image: linear-gradient(#0A60FF, #000000);
-        border: none;
-        border-radius: 2px;
-        width: 73px;
-        height: 37px;
-        color: #FFF;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
+/* ----- GOOGLE FONTS ----- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ----- BẢNG MÀU & BIẾN TOÀN CỤC ----- */
+:root {
+    --mau-vang-chinh: #ffc107;
+    --mau-vang-dam: #ffa000;
+    --mau-vang-nhat: #fff8e1;
+    --mau-vang-rat-nhat: #fffbeb;
+
+    --mau-nen-toi: #2c3e50;
+    --mau-chu-sang: #ffffff;
+    --mau-chu-toi: #34495e;
+    --mau-chu-phu: #7f8c8d;
+    
+    --hieu-ung-chuyen-dong: all 0.3s ease-in-out;
+    --do-bong: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* ----- ANIMATION ----- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
     }
-    span{
-        margin: 10px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-.homepage-part3{
+@keyframes gradient-text-shine {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================================
+   BODY & LAYOUT CHÍNH VỚI NỀN VÀNG
+   ========================================================================== */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(170deg, var(--mau-vang-rat-nhat) 0%, var(--mau-vang-nhat) 100%);
+    color: var(--mau-chu-toi);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+.homepage {
+    max-width: 1100px;
+    width: 90%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    gap: 3rem;
+    padding: 2rem 0;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.header {
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
-    hr{
-        margin-top: 20px;
-        width: 30%;
-        height:2px;
-        border-width:0;
-        color:gray;
-        background-color:gray
-    }
+    gap: 1.5rem;
+    padding: 1rem 0;
+    animation: fadeInUp 0.8s ease-out forwards;
 }
 
-.homepage-part2{
-    margin: auto;
-    hr{
-        margin-top: 20px;
-        width: 30%;
-        height:2px;
-        border-width:0;
-        color:gray;
-        background-color:gray
-    }
-    .homepage-part2-content{
-        display: flex;
-        .homepage-part2-left{
-            flex: 1;
-            margin-left: 20px;
-            .img-list {
-                display: flex;
-                justify-content: center;
-                margin-top: 150px;
-                width: 98%;
-                div{
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    .img-item{
-                        width: 200px;
-                        height: 200px;
-                        border-radius: 50%;
-                        margin: 20px;
-                        box-shadow: 0px 4px 4px 0px gray;
-                    }
-                    span{
-                        background: linear-gradient(#0A60FF, #000000); 
-                        background-clip: text;
-                        color: transparent;
-                        font-size: 38px;
-                        font-weight: 600;
-                        text-shadow: 10px 10px;
-                        // color: white;
-                        text-shadow: 0px 0px -4px #000000;
-                    }
-                }
-            }
-        }
-        .homepage-part2-right{  
-            width: 500px;
-            height: 560px;
-        }   
-    }
+.header button {
+    background-image: linear-gradient(45deg, var(--mau-vang-chinh), var(--mau-vang-dam));
+    border: none;
+    border-radius: 50px;
+    padding: 0 25px;
+    height: 45px;
+    color: var(--mau-nen-toi);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: var(--hieu-ung-chuyen-dong), transform 0.2s ease;
 }
 
+.header button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.header span {
+    font-weight: 500;
+    color: var(--mau-chu-phu);
+}
+
+/* ==========================================================================
+   KHỐI NỘI DUNG DẠNG "THẺ" TRÊN NỀN VÀNG
+   ========================================================================== */
+.Homepage-part1, .homepage-part2 {
+    background-color: var(--mau-chu-sang);
+    border-radius: 25px;
+    padding: 3rem 4rem;
+    box-shadow: var(--do-bong);
+    animation: fadeInUp 1s ease-out 0.2s forwards;
+    animation-fill-mode: both;
+}
+
+/* ==========================================================================
+   PART 1 - HERO SECTION
+   ========================================================================== */
 .Homepage-part1 {
     display: flex;
-    .Homepage-part1-right {
-        margin-left: 100px;
-        display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.Homepage-part1-left {
+    flex: 1;
+    text-align: center;
+}
+
+.Homepage-part1-left img {
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    transition: var(--hieu-ung-chuyen-dong);
+}
+
+.Homepage-part1-left img:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+.Homepage-part1-right {
+    flex: 1.2;
+}
+
+.Homepage-part1 h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--mau-nen-toi);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.Homepage-part1 h1 span {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--mau-chu-phu);
+    margin-top: 0.5rem;
+}
+
+.Homepage-part1 p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: var(--mau-chu-toi);
+    line-height: 1.7;
+}
+
+/* =================================================================== */
+/* ======> ĐÃ TĂNG KÍCH THƯỚC VÀ KHOẢNG CÁCH Ở ĐÂY <====== */
+/* =================================================================== */
+
+.Homepage-part1 .img-list {
+    display: flex;
+    justify-content: center;
+    gap: 3rem; /* Tăng khoảng cách giữa các ảnh (trước đây là 2.5rem) */
+    margin-bottom: 2rem;
+}
+
+.Homepage-part1 .img-list .img-item {
+    width: 140px;  /* Tăng kích thước ảnh tròn (trước đây là 120px) */
+    height: 140px; /* Tăng kích thước ảnh tròn (trước đây là 120px) */
+    border-radius: 50%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: var(--hieu-ung-chuyen-dong);
+    object-fit: cover;
+    border: 3px solid var(--mau-vang-nhat);
+}
+
+.Homepage-part1 .img-list .img-item:hover {
+    transform: translateY(-8px) scale(1.1);
+    border-color: var(--mau-vang-chinh);
+}
+
+.Homepage-part1 button {
+    background-image: linear-gradient(90deg, var(--mau-vang-chinh), var(--mau-vang-dam));
+    border: none;
+    border-radius: 50px;
+    color: var(--mau-nen-toi);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
+    transition: var(--hieu-ung-chuyen-dong);
+}
+
+.Homepage-part1 button:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(255, 193, 7, 0.5);
+}
+
+/* ==========================================================================
+   PART 2 - DỊCH VỤ & ƯU ĐIỂM
+   ========================================================================== */
+.homepage-part2 {
+    text-align: center;
+}
+
+.homepage-part2 h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--mau-nen-toi);
+    margin-bottom: 2rem;
+}
+
+.homepage-part2 > img {
+    width: 100%;
+    max-width: 600px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: var(--do-bong);
+    margin-bottom: 3rem;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.service-item {
+    background: linear-gradient(135deg, var(--mau-vang-rat-nhat) 0%, #ffffff 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: var(--hieu-ung-chuyen-dong);
+    border: 1px solid var(--mau-vang-nhat);
+}
+
+.service-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    border-color: var(--mau-vang-chinh);
+}
+
+.service-item h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--mau-nen-toi);
+    margin-bottom: 1rem;
+}
+
+.service-item p {
+    color: var(--mau-chu-phu);
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 768px) {
+    .homepage {
+        width: 95%;
+        gap: 2rem;
+        padding: 1rem 0;
+    }
+    
+    .Homepage-part1, .homepage-part2 {
+        padding: 2rem;
+    }
+    
+    .Homepage-part1 {
         flex-direction: column;
-        // align-items: center;
-        h1 {
-            width: 348.25px;
-            font-size: 38px;
-            font-weight: 700;
-            span {
-                margin-left: 20px;
-                font-size: 20px;
-            }
-        }
-
-        p{
-            font-size: 20px;
-            font-weight: 500;
-            text-align: justify;
-        }
-        
-        .img-list {
-            display: flex;
-            justify-content: center;
-            width: 98%;
-            .img-item{
-                width: 185px;
-                height: 217px;
-                border-radius: 60px;
-                margin: 20px;
-            }
-        }
-
-        button{
-            background-image: linear-gradient(90deg,#0A60FF, #000000);
-            border: none;
-            align-self: center;
-            border-radius: 2px;
-            color: #FFF;
-            font-size: 14px;
-            width: 226px;
-            height: 51px;
-            cursor: pointer;
-        }
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .Homepage-part1 h1 {
+        font-size: 2rem;
+    }
+    
+    .homepage-part2 h1 {
+        font-size: 2rem;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .header {
+        justify-content: center;
+        gap: 1rem;
     }
 }
-.homepage{
-    width: 95%;
-}
-.homepage-part2 hr, .homepage-part1 hr {
-    margin-top: 200px;
-    margin: 0 auto; 
-    width: 30%;      
-    border: 0;       
-    height: 1px;     
-    background-color: #000000; 
-}
-.homepage-part3 p {
-    width: 1300px;
-    margin-left: 100px;
-    font-size: 28px;
-    text-align: justify; 
-}
 
-
+/* Xóa đường kẻ vì không cần thiết */
+hr {
+    display: none;
+}

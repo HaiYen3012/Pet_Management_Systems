@@ -53,7 +53,7 @@ const HeaderRender = () => {
           }}
         >
           <div className="header-wrapper__logo">
-            <img className='rounded-sm' src="/logo2.jpg" alt="logo" />
+            <img className='rounded-sm' src="/logo2.png" alt="logo" />
           </div>
 
           <div className="header-wrapper__right-side">
@@ -71,7 +71,7 @@ const HeaderRender = () => {
               <Link to={'/personal-info'}>
                 <Avatar
                   style={{ width: '40px' }}
-                  size={60}
+                  size={40}
                   icon={<UserOutlined />}
                 />
               </Link>

@@ -1,0 +1,154 @@
+/* --- BIẾN MÀU SẮC CHỦ ĐẠO --- */
+:root {
+  --pet-yellow: #ffc107; /* Màu vàng của nắng, ấm áp */
+  --pet-dark-brown: #6d4c41; /* Màu nâu đậm cho chữ */
+  --pet-light-brown: #a1887f; /* Màu nâu nhạt cho placeholder */
+  --pet-bg: #fffbf2; /* Màu nền hơi ngả vàng kem */
+  --pet-border-color: #e0e0e0;
+}
+
+/* --- TỔNG THỂ MODAL --- */
+.pet-add-modal .ant-modal-content {
+  background-color: var(--pet-bg);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden; /* Đảm bảo các góc bo tròn đẹp */
+}
+
+.pet-add-modal .ant-modal-header {
+  background-color: white;
+  color: var(--pet-dark-brown);
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--pet-border-color);
+  border-radius: 16px 16px 0 0;
+}
+
+.pet-add-modal .ant-modal-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.pet-add-modal .ant-modal-body {
+  padding: 32px;
+}
+
+.pet-add-modal .ant-modal-close-x {
+  font-size: 18px;
+  color: var(--pet-light-brown);
+}
+
+/* --- BỐ CỤC CHÍNH (AVATAR & FORM) --- */
+.pet-modal-layout {
+  display: flex;
+  gap: 40px; /* Khoảng cách giữa avatar và form */
+}
+
+/* --- KHU VỰC AVATAR BÊN TRÁI --- */
+.pet-avatar-section {
+  flex: 0 0 200px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+}
+
+.pet-avatar-section .ant-avatar {
+  border: 4px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pet-avatar-section p {
+  font-size: 14px;
+  color: var(--pet-light-brown);
+  font-style: italic;
+}
+
+/* --- KHU VỰC FORM BÊN PHẢI --- */
+.pet-form-section {
+  flex: 1;
+}
+
+/* --- TÙY CHỈNH CÁC TRƯỜNG FORM --- */
+.pet-form .ant-form-item-label > label {
+  color: var(--pet-dark-brown);
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.pet-form .ant-input,
+.pet-form .ant-input-number,
+.pet-form .ant-input-affix-wrapper,
+.pet-form .ant-input-password,
+.pet-form .ant-select-selector {
+  border-radius: 8px;
+  border-color: var(--pet-border-color);
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+.pet-form .ant-input:focus,
+.pet-form .ant-input:hover,
+.pet-form .ant-input-affix-wrapper:focus,
+.pet-form .ant-input-affix-wrapper:hover,
+.pet-form .ant-input-affix-wrapper-focused {
+  border-color: var(--pet-yellow);
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+.pet-form .ant-input::placeholder {
+  color: var(--pet-light-brown);
+}
+
+.pet-form .ant-radio-group {
+  color: var(--pet-dark-brown);
+}
+
+.pet-form .ant-radio-wrapper-checked .ant-radio-inner {
+  border-color: var(--pet-yellow);
+  background-color: var(--pet-yellow);
+}
+
+.pet-form .ant-radio-inner:after {
+  background-color: white;
+}
+
+/* --- KHU VỰC NÚT BẤM --- */
+.pet-form-buttons {
+  display: flex;
+  justify-content: flex-end; /* Đẩy các nút về bên phải */
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.pet-form-buttons .ant-btn {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0 24px;
+  height: 44px;
+  font-size: 16px;
+}
+
+.pet-form-buttons .ant-btn-primary {
+  background-color: var(--pet-yellow);
+  border-color: var(--pet-yellow);
+  color: var(--pet-dark-brown);
+}
+
+.pet-form-buttons .ant-btn-primary:hover,
+.pet-form-buttons .ant-btn-primary:focus {
+  background-color: #ffca28; /* Màu vàng sáng hơn khi hover */
+  border-color: #ffca28;
+}
+
+.pet-form-buttons .ant-btn-default {
+  border: 1px solid var(--pet-border-color);
+  color: var(--pet-light-brown);
+}
+
+.pet-form-buttons .ant-btn-default:hover,
+.pet-form-buttons .ant-btn-default:focus {
+  border-color: var(--pet-yellow);
+  color: var(--pet-yellow);
+}
