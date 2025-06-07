@@ -109,7 +109,7 @@ class AuthService {
         user_id: user_id,
         roles,
       })
-      activityLogin(roles)
+      activityLogin( roles)
 
       return {
         token,

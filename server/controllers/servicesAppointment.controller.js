@@ -327,7 +327,7 @@ const createMedicalRecord = async (req, res) => {
     try {
       // Kiểm tra trạng thái của cuộc hẹn
       const appointment = await serviceAppointment.getAppointmentbyID(appointment_id);
-
+      console.log(appointment);
       // Kiểm tra xem cuộc hẹn có tồn tại không
       if (!appointment) {
         return res.status(404).json({
@@ -336,14 +336,15 @@ const createMedicalRecord = async (req, res) => {
         });
       }
 
-      // Lấy trạng thái của cuộc hẹn từ đối tượng appointment
-      const status = appointment.status;
-      if (status !== 'complete') {
-        return res.status(400).json({
-          status: "error",
-          message: "Appointment must be completed before creating a medical record.",
-        });
-      }
+      // // Lấy trạng thái của cuộc hẹn từ đối tượng appointment
+      // const status0 = appointment.status;
+      
+      // if (status0 !== 'complete') {
+      //   return res.status(400).json({
+      //     status: "error",
+      //     message: "Appointment must be completed before creating a medical record. Current status: ${status0}",
+      //   });
+      // }
 
       // Tạo medical_record mới
       const newMedicalRecord = await serviceAppointment.createMedicalRecord({ neutered, symptoms, diagnostic });

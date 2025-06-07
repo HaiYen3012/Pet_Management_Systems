@@ -25,6 +25,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.27.5",
     "cz-conventional-changelog": "^3.3.0"
   },
   "config": {
