@@ -277,6 +277,7 @@ const getPetIdFromAppointmentdb = async (appointment_id) => {
 }
 
 const createMedicalRecorddb = async ({ neutered, symptoms, diagnostic }) => {
+  console.log(neutered, symptoms, diagnostic);
   const insertMedicalRecordQuery = `
     INSERT INTO medical_records (neutered, symptoms, diagnostic, created_at)
     VALUES ($1, $2, $3, NOW())

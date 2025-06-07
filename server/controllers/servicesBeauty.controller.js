@@ -49,7 +49,7 @@ const createBeauty = async (req, res) => {
       time_slot,
     })
     let service_id = beauty.id
-    let {user_id} = req.body;
+    let {user_id} = req.user;
     const beauty_order = await serviceBeauty.createBeautyOrder({
       service_id,
       user_id ,

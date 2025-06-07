@@ -78,6 +78,7 @@ const getFoodItemById = async (req, res) => {
 const updateFoodItem = async (req, res) => {
   const { pet_id } = req.params
   const { food_id } = req.params
+  // console.log(req);
   const pet = await petService.getPetById(pet_id)
   const { name, amount, unit, description, time } = req.body
   if (!pet) {
