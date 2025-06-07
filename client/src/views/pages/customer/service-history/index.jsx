@@ -1,250 +1,219 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Checkbox, Button, Typography, Space, Select, Modal, Form, Input } from 'antd';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Table, Checkbox, Button, Typography, Space, Select, Modal, Form, Input, Card } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import ServiceHistoryAPI from 'api/service/service-history';
 import { toast } from 'react-toastify';
-import '../../admin/staff/index.css';
+// Import file CSS mới
+import './ServiceHistory.scss';
 
 const { Option } = Select;
 const { confirm } = Modal;
+const { Title } = Typography;
 
 function ServiceHistory() {
-  const [rows, setRows] = useState([]);
+  const [allServices, setAllServices] = useState([]); // Lưu trữ tất cả dịch vụ
+  const [filteredRows, setFilteredRows] = useState([]); // Dữ liệu hiển thị trên bảng
   const [selected, setSelected] = useState([]);
-  const [sortType, setSortType] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isBankFormVisible, setBankFormVisible] = useState(false);
+  const [bankForm] = Form.useForm();
 
+  // Tối ưu: Chỉ fetch dữ liệu một lần khi component mount
   useEffect(() => {
     const fetchAllServices = async () => {
+      setLoading(true);
       try {
         const detailPetResponse = await ServiceHistoryAPI.getDetailPet();
-        const allServices = detailPetResponse.data.flatMap(pet =>
+        const servicesData = detailPetResponse.data.flatMap(pet =>
           pet.services.map(service => ({
             ...service,
             pet_name: pet.pet_name,
             species: pet.species,
-            age: pet.age,
-            weight: pet.weight,
-            sex: pet.sex,
-            health: pet.health,
-            describe: pet.describe
+            // Thêm các thông tin khác của pet nếu cần
           }))
         );
-        setRows(allServices);
+        setAllServices(servicesData);
+        setFilteredRows(servicesData); // Ban đầu hiển thị tất cả
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error("Lỗi khi tải dữ liệu: ", error);
+        toast.error("Không thể tải lịch sử dịch vụ.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchAllServices();
   }, []);
 
-  const canCancelService = () => {
-    const selectedRows = rows.filter(row => selected.includes(row.order_id));
-    return !selectedRows.some(row => row.status === 'canceled');
+  // Tối ưu: Lọc dữ liệu trên client thay vì gọi lại API
+  const handleStatusFilter = (value) => {
+    if (value === 'all') {
+      setFilteredRows(allServices);
+    } else {
+      const filteredData = allServices.filter(row => row.status === value);
+      setFilteredRows(filteredData);
+    }
   };
 
   const handleCancelService = async () => {
-    if (canCancelService()) {
-      const servicesToUpdate = rows.filter(row => selected.includes(row.order_id));
-      try {
-        for (const service of servicesToUpdate) {
+    const servicesToUpdate = allServices.filter(row => selected.includes(row.order_id));
+    
+    // Sử dụng Promise.all để xử lý song song và bắt lỗi tốt hơn
+    try {
+      await Promise.all(
+        servicesToUpdate.map(service => {
           const body = { id: service.id, status: 'canceled' };
-          let response;
           switch (service.service_type) {
-            case 'beauty':
-              response = await ServiceHistoryAPI.cancelBeauty(body);
-              break;
-            case 'storage':
-              response = await ServiceHistoryAPI.cancelStorageService(body);
-              break;
-            case 'appointment':
-              response = await ServiceHistoryAPI.cancelAppointment(body);
-              break;
-            default:
-              throw new Error('Unknown service type');
+            case 'beauty': return ServiceHistoryAPI.cancelBeauty(body);
+            case 'storage': return ServiceHistoryAPI.cancelStorageService(body);
+            case 'appointment': return ServiceHistoryAPI.cancelAppointment(body);
+            default: return Promise.reject(new Error('Loại dịch vụ không xác định'));
           }
-          if (response.data.status === 'success') {
-            console.log(`Service with ID ${response.data.id} updated successfully.`);
-            toast.success("Cập nhật thành công");
-          } else {
-            throw new Error('Failed to update service');
-          }
-        }
-        setRows(prevRows =>
-          prevRows.map(row =>
-            selected.includes(row.order_id) ? { ...row, status: 'canceled' } : row
-          )
-        );
-        setSelected([]);
-      } catch (error) {
-        console.error("Error updating services: ", error);
-        toast.error("Cập nhật thất bại");
-      }
-    } else {
+        })
+      );
+  
+      // Cập nhật lại state sau khi tất cả API thành công
+      const updatedServices = allServices.map(row =>
+        selected.includes(row.order_id) ? { ...row, status: 'canceled' } : row
+      );
+      setAllServices(updatedServices);
+      setFilteredRows(updatedServices.filter(row => filteredRows.includes(row))); // Cập nhật lại bảng
+      setSelected([]);
+      setBankFormVisible(false);
+      bankForm.resetFields();
+      toast.success("Đã hủy dịch vụ thành công!");
+
+    } catch (error) {
+      console.error("Lỗi khi hủy dịch vụ: ", error);
+      toast.error("Có lỗi xảy ra, không thể hủy dịch vụ.");
+    }
+  };
+
+  const showConfirmCancel = () => {
+    const selectedRows = allServices.filter(row => selected.includes(row.order_id));
+    if (selected.length === 0) {
+      toast.warn("Vui lòng chọn dịch vụ cần hủy.");
+      return;
+    }
+
+    const alreadyCanceled = selectedRows.some(row => row.status === 'canceled');
+    if (alreadyCanceled) {
       Modal.error({
-        title: 'Không thể hủy',
-        content: 'Dịch vụ đã được hủy.',
+        title: 'Không thể thực hiện',
+        content: 'Một trong các dịch vụ bạn chọn đã được hủy trước đó.',
       });
+      return;
     }
+
+    confirm({
+      title: 'Bạn chắc chắn muốn hủy dịch vụ đã chọn?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Dịch vụ sẽ được hoàn tiền theo chính sách. Vui lòng cung cấp thông tin để nhận hoàn tiền.',
+      okText: 'Đồng ý hủy',
+      cancelText: 'Không',
+      okButtonProps: { danger: true },
+      onOk: () => setBankFormVisible(true),
+    });
   };
 
-  const handleStatusFilter = (value) => {
-    setSortType(value);
-    const fetchFilteredServices = async () => {
-      try {
-        const detailPetResponse = await ServiceHistoryAPI.getDetailPet();
-        const allServices = detailPetResponse.data.flatMap(pet =>
-          pet.services.map(service => ({
-            ...service,
-            pet_name: pet.pet_name,
-            species: pet.species,
-            age: pet.age,
-            weight: pet.weight,
-            sex: pet.sex,
-            health: pet.health,
-            describe: pet.describe
-          }))
-        );
-
-        const filteredRows = value === 'all' ? allServices : allServices.filter(row => row.status === value);
-        setRows(filteredRows);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-
-    fetchFilteredServices();
-  };
-
-  const handleSelect = (record) => {
-    const selectedIndex = selected.indexOf(record.order_id);
-    const newSelected = selectedIndex === -1 ? [...selected, record.order_id] : selected.filter(item => item !== record.order_id);
-    setSelected(newSelected);
-  };
-
-  const isSelected = (order_id) => selected.includes(order_id);
-
-  const getStatusIcon = (status) => {
-    let className = '';
-    switch (status) {
-      case 'created':
-        className = 'status-tag created';
-        break;
-      case 'canceled':
-        className = 'status-tag canceled';
-        break;
-      case 'complete':
-        className = 'status-tag complete';
-        break;
-      case 'processing':
-        className = 'status-tag processing';
-        break;
-      default:
-        className = 'status-tag';
-    }
-    return (
-      <div className={className}>
-        {status}
-      </div>
-    );
-  };
-
-  const showConfirm = () => {
-    if (canCancelService()) {
-      confirm({
-        title: 'Bạn có chắc chắn muốn hủy dịch vụ?',
-        icon: <ExclamationCircleOutlined />,
-        content: 'Bạn sẽ được hoàn trả tiền nếu hủy dịch vụ',
-        okText: 'Yes',
-        okType: 'danger',
-        cancelText: 'No',
-        onOk() {
-          setBankFormVisible(true);
-        },
-        onCancel() {
-
-        },
-      });
-    } else {
-      Modal.error({
-        title: 'Không thể hủy',
-        content: 'Dịch vụ đã được hủy.'
-      });
-    }
-  };
+  const getStatusTag = (status) => (
+    <span className={`status-tag ${status}`}>{status === 'complete' ? 'completed' : status}</span>
+  );
 
   const columns = [
     {
-      title: '',
-      dataIndex: '',
       key: 'checkbox',
-      render: (text, record) => (
-        <Checkbox checked={isSelected(record.order_id)} onChange={() => handleSelect(record)} />
+      width: 60,
+      render: (_, record) => (
+        <Checkbox 
+          checked={selected.includes(record.order_id)} 
+          onChange={() => {
+            const newSelected = selected.includes(record.order_id)
+              ? selected.filter(id => id !== record.order_id)
+              : [...selected, record.order_id];
+            setSelected(newSelected);
+          }} 
+        />
       )
     },    
-    { title: 'ID dịch vụ', dataIndex: 'order_id', key: 'order_id' },
-    { title: 'Tên thú cưng', dataIndex: 'pet_name', key: 'pet_name' },
-    { title: 'Loại dịch vụ', dataIndex: 'service_type', key: 'service_type' },
+    { title: 'ID Dịch Vụ', dataIndex: 'order_id', key: 'order_id', width: 120 },
+    { title: 'Tên Thú Cưng', dataIndex: 'pet_name', key: 'pet_name' },
+    { title: 'Loại Dịch Vụ', dataIndex: 'service_type', key: 'service_type', render: (text) => text.charAt(0).toUpperCase() + text.slice(1) },
     {
-      title: 'Ngày đăng ký',
+      title: 'Ngày Đăng Ký',
       dataIndex: 'service_date',
       key: 'service_date',
-      render: (text) => moment(text).format('YYYY-MM-DD')
+      render: (text) => moment(text).format('DD/MM/YYYY')
     },
-    { title: 'Tổng cộng', dataIndex: 'total', key: 'total' },
-    { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: getStatusIcon },
+    { title: 'Tổng Tiền', dataIndex: 'total', key: 'total', render: (text) => `${Number(text).toLocaleString('vi-VN')} ₫` },
+    { title: 'Trạng Thái', dataIndex: 'status', key: 'status', render: getStatusTag },
   ];
 
   return (
-    <div style={{ width: '100%', overflow: 'hidden' }}>
-      <Space style={{ padding: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography.Title level={2}>Lịch sử đăng ký</Typography.Title>
-        <Space>
-          <Select value={sortType} onChange={handleStatusFilter} style={{ width: 120 }} placeholder="Lọc">
-            <Option value="all">all</Option>
-            <Option value="created">created</Option>
-            <Option value="processing">processing</Option>
-            <Option value="completed">completed</Option>
-            <Option value="canceled">canceled</Option>
-          </Select>
-          <Button type="primary" danger onClick={showConfirm}>
-            Hủy dịch vụ
-          </Button>
-        </Space>
-      </Space>
-      <Table dataSource={rows} columns={columns} rowKey="order_id" pagination={{ pageSize: 10 }} />
+    <div className="service-history-page">
+      <Card className="service-history-card">
+        <div className="service-history-header">
+          <Title level={2}>Lịch sử Dịch vụ</Title>
+          <div className="service-history-controls">
+            <Select defaultValue="all" onChange={handleStatusFilter} style={{ width: 150 }}>
+              <Option value="all">Tất cả trạng thái</Option>
+              <Option value="created">Đã tạo</Option>
+              <Option value="processing">Đang xử lý</Option>
+              <Option value="completed">Hoàn thành</Option>
+              <Option value="canceled">Đã hủy</Option>
+            </Select>
+            <Button type="primary" danger className="btn-cancel-service" onClick={showConfirmCancel}>
+              Hủy Dịch Vụ
+            </Button>
+          </div>
+        </div>
+
+        <Table 
+          className="service-history-table"
+          dataSource={filteredRows} 
+          columns={columns} 
+          rowKey="order_id" 
+          pagination={{ pageSize: 8, showSizeChanger: false }}
+          loading={loading}
+        />
+      </Card>
+      
       <Modal
-        title="Thông tin ngân hàng"
-        visible={isBankFormVisible}
-        onCancel={() => setBankFormVisible(false)}
+        title="Thông Tin Nhận Hoàn Tiền"
+        className="bank-info-modal"
+        open={isBankFormVisible}
+        onCancel={() => {
+          setBankFormVisible(false);
+          bankForm.resetFields();
+        }}
         footer={null}
+        centered
       >
-        <Form onFinish={(values) => setBankFormVisible(false)} layout="vertical" style={{ maxWidth: 400, margin: 'auto' }}>
+        <Form form={bankForm} onFinish={handleCancelService} layout="vertical">
           <Form.Item
             name="accountNumber"
             label="Số tài khoản"
             rules={[{ required: true, message: 'Vui lòng nhập số tài khoản!' }]}
-            style={{ display: 'flex', marginBottom: 16 }}
           >
-            <Input placeholder="example" />
+            <Input placeholder="Nhập số tài khoản ngân hàng của bạn" />
           </Form.Item>
           <Form.Item
             name="bankName"
-            label="Ngân hàng"
+            label="Tên Ngân hàng"
             rules={[{ required: true, message: 'Vui lòng chọn ngân hàng!' }]}
-            style={{ display: 'flex', marginBottom: 16 }}
           >
-            <Select placeholder="Chọn ngân hàng">
-              <Option value="AgriBank">AgriBank</Option>
+            <Select placeholder="Chọn từ danh sách">
+              <Option value="AgriBank">Agribank</Option>
               <Option value="VietinBank">VietinBank</Option>
               <Option value="MB Bank">MB Bank</Option>
+              <Option value="Techcombank">Techcombank</Option>
+              <Option value="Vietcombank">Vietcombank</Option>
             </Select>
           </Form.Item>
-          <Form.Item style={{ textAlign: 'center' }}>
-            <Button type="primary" htmlType="submit" onClick={handleCancelService}>
-              Xác nhận
+          <Form.Item style={{ textAlign: 'right', marginTop: 24 }}>
+            <Button type="primary" htmlType="submit" className="btn-confirm-refund">
+              Xác nhận và Hủy
             </Button>
           </Form.Item>
         </Form>
