@@ -1,45 +1,93 @@
 .header-wrapper {
-  height: '45px';
-  position: 'sticky';
-  top: 0;
-  z-index: 1;
-  width: '100%';
-  display: 'flex';
-  align-items: center;
+  /* Setting core header properties for structure and gold theme */
+  height: 65px; /* Increased height for a balanced, spacious look */
+  background-color: #FFC107; /* Vibrant gold (Amber) as primary theme color */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth and prominence */
+  padding: 0 40px; /* Wider padding for a refined, open feel */
+  justify-content: space-between; /* Distributes logo and right-side items evenly */
 
+  /* Maintaining sticky positioning and smooth transitions */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensures header stays on top of other elements */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease; /* Smooth transitions for all changes */
+
+  /* Styling the logo section */
   &__logo {
     display: inline-flex;
     align-items: center;
+    position: relative;
+    padding: 5px;
     img {
-      width: 45px;
+      width: 60px; /* Tăng kích thước logo cho sự nổi bật */
+      height: 60px;
+      border-radius: 50%; /* Bo tròn logo cho vẻ ngoài hiện đại */
+      border: 2px solid #FFD700; /* Viền vàng sáng hơn để tạo điểm nhấn */
+      background-color: #fff; /* Nền trắng để logo nổi trên tông vàng của header */
+      padding: 5px; /* Khoảng đệm bên trong để viền không sát vào hình */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ nhẹ cho chiều sâu */
+      transition: all 0.3s ease; /* Chuyển động mượt mà cho các hiệu ứng */
+      &:hover {
+        transform: scale(1.2) rotate(-12deg); /* Phóng to và xoay nhẹ khi hover */
+        border-color: #FFEA00; /* Viền chuyển sang vàng sáng hơn khi hover */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Bóng đổ đậm hơn khi hover */
+      }
     }
   }
 
+  
+
+  /* Styling the right-side container for icons and username */
   &__right-side {
     display: inline-flex;
-    gap: 20px;
+    gap: 30px; /* Increased spacing for clarity and elegance */
     align-items: center;
-    &__username {
-      display: inline-block;
-      color: #fff;
-      text-align: center;
-    }
-    div {
-      display: inline-block;
-      color: #ffff;
-    }
-    &__search {
-      font-size: 23px;
-    }
-    &__question {
-      font-size: 18px;
-    }
-    &__bell {
-      font-size: 23px;
+
+    /* General styling for child elements with hover effects */
+    > * {
+      cursor: pointer; /* Hand cursor for interactivity */
+      transition: all 0.3s ease; /* Smooth transition for all properties */
+      &:hover {
+        transform: translateY(-3px); /* Subtle lift effect on hover */
+        color: #FFD700; /* Lighter gold shade for hover contrast */
+      }
     }
 
-    &__language {
-      font-size: 23px;
+    /* Styling the username for prominence on gold background */
+    &__username {
+      display: inline-block;
+      color: #1A1A1A; /* Darker shade for strong contrast on gold */
+      text-align: center;
+      font-weight: 700; /* Bolder weight for emphasis */
+      font-size: 16px; /* Slightly larger for readability */
+      padding: 6px 12px; /* Padding for a button-like feel */
+      border-radius: 4px; /* Subtle rounding for elegance */
+      background-color: rgba(255, 255, 255, 0.2); /* Light overlay for distinction */
+      &:hover {
+        color: #000; /* Deep black on hover for maximum contrast */
+        background-color: rgba(255, 255, 255, 0.3); /* Slightly stronger overlay on hover */
+      }
+    }
+
+    /* Styling icons for consistency and visibility */
+    div {
+      display: inline-block;
+      color: #1A1A1A; /* Dark shade for clear visibility on gold */
+      &:hover {
+        color: #FFD700; /* Lighter gold for hover effect */
+      }
+    }
+
+    /* Specific icon sizes for balanced proportions */
+    &__search, &__bell, &__language {
+      font-size: 26px; /* Slightly larger for prominence */
+    }
+
+    &__question {
+      font-size: 22px; /* Adjusted for visual hierarchy */
     }
   }
 }

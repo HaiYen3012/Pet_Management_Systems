@@ -1,0 +1,70 @@
+// --- START OF FILE footer.scss ---
+
+// Bảng màu đồng bộ
+$text-color-footer: #a0aab8; // Màu xám xanh nhẹ, dễ đọc nhưng không gây chú ý
+$heart-color: #ff4d4f;       // Màu đỏ cho trái tim
+
+.footer-wrapper {
+  // Ghi đè style mặc định của Antd Footer
+  &.ant-layout-footer {
+    background: transparent !important; // Nền trong suốt để lấy nền của layout
+    padding: 24px 40px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center; // Căn giữa toàn bộ nội dung
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  // Chữ Copyright
+  &__copyright {
+    color: $text-color-footer;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  // Dấu gạch chia cách
+  &__divider {
+    &.ant-divider-vertical {
+      height: 16px;
+      border-color: rgba(0, 0, 0, 0.1); // Màu gạch mờ
+    }
+  }
+
+  // Khu vực "Made with love"
+  &__made-with {
+    .ant-typography {
+      color: $text-color-footer;
+      font-size: 14px;
+    }
+  }
+
+  // Icon trái tim
+  &__heart-icon {
+    color: $heart-color;
+    font-size: 16px;
+    // Hiệu ứng đập nhẹ nhàng, liên tục
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+}
+
+// Định nghĩa animation cho trái tim
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.2);
+  }
+  20% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
