@@ -1,81 +1,133 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+/* ----- CÁC BIẾN MÀU VÀ KEYFRAMES GIỐNG HỆT TRANG LOGIN ----- */
+:root {
+  --primary-yellow: #ffc107;
+  --dark-yellow: #f5b000;
+  --light-yellow: #ffe082;
+  --text-dark: #212529;
+  --text-secondary: #6c757d;
+  --white-color: #ffffff;
 }
+@keyframes moveIn { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0% { transform: translatey(0px); } 50% { transform: translatey(-20px); } 100% { transform: translatey(0px); } }
 
+/* ----- GLOBAL RESET ----- */
+* { padding: 0; margin: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+/* ----- GIAO DIỆN CHÍNH CỦA TRANG ĐĂNG KÝ ----- */
 .register-container {
-  width: 100vw;
-  height: auto;
-  background: #0050b3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // Áp dụng lại nền động và hiệu ứng kính mờ
+  position: relative;
+  background: linear-gradient(135deg, var(--light-yellow) 0%, var(--primary-yellow) 100%);
+  color: var(--text-dark);
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 2rem 0; // Thêm padding để form không bị dính sát khi quá dài
+
+  // Các khối cầu trang trí chuyển động ở nền (giống hệt login)
+  &::before, &::after { content: ''; position: absolute; border-radius: 50%; animation: float 6s ease-in-out infinite; }
+  &::before { width: 300px; height: 300px; background-color: rgba(255, 255, 255, 0.2); top: -50px; left: -80px; }
+  &::after { width: 200px; height: 200px; background-color: rgba(255, 255, 255, 0.25); bottom: -60px; right: -50px; animation-delay: 1.5s; }
+
   &__sub {
-    width: 50vw;
-    height: auto;
-    // margin: auto;
+    width: 100%;
     display: flex;
+    align-items: center;
     justify-content: center;
+    padding: 2rem;
+
     &__content {
-      // align-items: center;
-      // justify-content: center;
-      width: 80%;
-      max-width: 600px;
-      height: 100%;
-      background-color: #fff;
-      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
-      border-radius: 20px;
-      padding: 1.4rem 3.5rem 1.5rem 3.5rem;
+      // Áp dụng hiệu ứng kính mờ
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      border-radius: 25px;
+      padding: 2.5rem 3.5rem;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      width: 100%;
+      // Tăng chiều rộng tối đa vì form đăng ký dài hơn
+      max-width: 550px;
+      animation: moveIn 0.8s ease-out;
+
       &__form {
-        max-width: 100vw;
+        width: 100%;
         &__header {
+          text-align: center;
+          margin-bottom: 2rem;
           &__title {
-            font-size: 20pt;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
           }
           &__sub-title {
-            font-size: 0.75rem;
-            color: #666666;
-            margin: 20px 0;
-          }
-        }
-
-        .form-item {
-          .ant-form-item-required {
-            font-size: 0.85rem;
-          }
-          .ant-form-item-explain-error {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
           }
         }
       }
 
+      // Style cho tất cả Form.Item để nhất quán
+      .ant-form-item {
+        margin-bottom: 18px !important; // Giảm khoảng cách giữa các trường
+      }
+      
+      // Style cho input chung (giống hệt login)
+      .ant-input-affix-wrapper {
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        border: 1px solid transparent !important;
+        background: rgba(255, 255, 255, 0.5) !important;
+        transition: all 0.3s ease;
+        &:focus-within, &:hover {
+          border-color: var(--primary-yellow) !important;
+          box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25) !important;
+          background: rgba(255, 255, 255, 0.8) !important;
+        }
+      }
+      
+      // Nút đăng ký (dùng class .btn-register đã có trong JSX)
+      button.btn-register {
+        width: 100%;
+        background: linear-gradient(45deg, var(--primary-yellow), var(--dark-yellow));
+        border: none;
+        color: var(--white-color);
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 12px 0;
+        height: auto;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
+        margin-top: 1rem; // Thêm khoảng cách với trường cuối cùng
+
+        &:hover {
+          transform: translateY(-5px) scale(1.03);
+          box-shadow: 0 10px 25px rgba(255, 193, 7, 0.5);
+        }
+      }
+
+      // Link quay về trang đăng nhập
       .to-login {
         text-align: center;
-        margin-top: 20px;
-        font-size: 0.85rem;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
 
         .login-link {
-          color: #1890ff;
+          color: var(--dark-yellow);
           cursor: pointer;
+          font-weight: 600;
+          transition: color 0.3s ease;
           &:hover {
-            opacity: 0.9;
+            color: var(--primary-yellow);
+            text-decoration: underline;
           }
         }
       }
     }
   }
-}
-
-.ant-col.ant-form-item-control.ant-col-xs-24.ant-col-xs-offset-0.ant-col-sm-16.ant-col-sm-offset-8.css-dev-only-do-not-override-1kuana8 {
-  margin: 0;
-}
-button.ant-btn.css-dev-only-do-not-override-1kuana8.ant-btn-primary.btn-register {
-  width: 100%;
-  margin-top: 20px;
 }

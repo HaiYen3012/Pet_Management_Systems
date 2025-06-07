@@ -1,0 +1,89 @@
+// --- File: main-layout.scss ---
+
+// Biến màu để dễ quản lý và đồng bộ với header
+$primary-yellow: #ffc107;
+$bg-content: #f8f9fa; // Nền trắng ngà, sạch sẽ, dễ chịu
+$bg-sider: #fffcf2;   // Nền màu kem/be nhạt cho sidebar
+$text-color: #5d4037;
+$border-color: #ebebeb;
+
+.main-layout-wrapper {
+  // Áp dụng cho toàn bộ layout
+  min-height: 100vh;
+  background-color: $bg-content; // Set nền chung cho toàn trang
+
+  // Khu vực body chứa Sider và Content
+  &__body {
+    // Không cần style đặc biệt, để antd tự xử lý
+  }
+
+  // --- NÂNG CẤP SIDEBAR ---
+  // Style trực tiếp vào class của Ant Design Sider
+  .ant-layout-sider {
+    background: $bg-sider !important; // Nền màu kem, !important để ghi đè style inline của antd
+    box-shadow: 2px 0 10px rgba(124, 77, 25, 0.05); // Đổ bóng nhẹ sang phải
+    border-right: 1px solid $border-color;
+
+    // Tùy chỉnh menu bên trong sider
+    .ant-menu {
+      background: transparent; // Nền trong suốt để lấy màu của sider
+      border-inline-end: none !important; // Bỏ đường viền mặc định của menu
+      padding: 16px 0;
+    }
+
+    // Tùy chỉnh các mục menu (menu item)
+    .ant-menu-item {
+      color: $text-color; // Màu chữ nâu ấm
+      font-weight: 500;
+      
+      // Hiệu ứng khi không được chọn nhưng hover vào
+      &:hover:not(.ant-menu-item-selected) {
+        background-color: rgba($primary-yellow, 0.2);
+        color: $text-color;
+      }
+      
+      // Style cho mục menu đang được chọn (active)
+      &.ant-menu-item-selected {
+        background-color: $primary-yellow;
+        color: $text-color; // Chữ vẫn màu nâu để dễ đọc
+        font-weight: 700;
+        
+        // Cái gạch dọc màu xanh mặc định của antd sẽ bị thay thế
+        &::after {
+          border-right: 4px solid $text-color; // Thay bằng gạch màu nâu đậm
+        }
+      }
+
+      // Icon trong menu
+      .anticon {
+        font-size: 18px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  // --- NÂNG CẤP KHU VỰC NỘI DUNG ---
+  &__content-area {
+    padding: 24px; // Thêm padding cho cả khu vực này
+    background: transparent; // Nền trong suốt để lấy màu của wrapper
+  }
+
+  &__content {
+    // Đây là khu vực chính để render component
+    background: #ffffff; // Nền trắng tinh cho nội dung để nổi bật
+    padding: 24px;
+    min-height: 280px;
+    border-radius: 16px; // Bo góc mạnh hơn, mềm mại hơn
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); // Đổ bóng nhẹ nhàng
+  }
+}
+
+// --- NÂNG CẤP FOOTER ---
+// Style cho component Footer của Ant Design
+.ant-layout-footer {
+  text-align: center;
+  background-color: transparent; // Nền trong suốt
+  color: #a0a0a0; // Màu chữ xám nhạt, không gây chú ý
+  padding: 16px 50px;
+  font-size: 14px;
+}

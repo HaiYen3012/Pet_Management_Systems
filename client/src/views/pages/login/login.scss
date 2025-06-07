@@ -1,3 +1,20 @@
+/* ----- GOOGLE FONTS & FONT AWESOME (VÍ DỤ ICON) ----- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+
+/* ----- BIẾN MÀU SẮC ----- */
+:root {
+  --primary-yellow: #ffc107;
+  --dark-yellow: #f5b000;
+  --light-yellow: #ffe082;
+  --text-dark: #212529;
+  --text-secondary: #6c757d;
+  --white-color: #ffffff;
+  --light-gray: #dee2e6;
+}
+
+/* ----- GLOBAL RESET ----- */
 * {
   padding: 0;
   margin: 0;
@@ -5,75 +22,189 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* ----- KEYFRAMES CHO ANIMATION ----- */
+@keyframes moveIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+	0% {
+		transform: translatey(0px);
+	}
+	50% {
+		transform: translatey(-20px);
+	}
+	100% {
+		transform: translatey(0px);
+	}
+}
+
+
+/* ----- GIAO DIỆN CHÍNH ----- */
 .login-container {
-  width: auto;
-  height: auto;
-  background: #0050b3;
+  position: relative; // Cần thiết cho các khối cầu nền
+  background: linear-gradient(135deg, var(--light-yellow) 0%, var(--primary-yellow) 100%);
+  color: var(--text-dark);
+  overflow: hidden; // Ẩn các phần thừa của khối cầu
+  
+  // Các khối cầu trang trí chuyển động ở nền
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  &::before {
+    width: 300px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.2);
+    top: -50px;
+    left: -80px;
+  }
+  
+  &::after {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.25);
+    bottom: -60px;
+    right: -50px;
+    animation-delay: 1.5s;
+  }
 
   &__sub {
-    width: 50%;
-    height: 100vh;
-    margin: auto;
-    align-items: center;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
+    align-items: center;
     justify-content: center;
+    padding: 2rem;
+
     &__content {
-      background-color: #fff;
-      box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
-      border-radius: 20px;
-      padding: 1.4rem 3.5rem 1.5rem 3.5rem;
+      // --- HIỆU ỨNG KÍNH MỜ (GLASSMORPHISM) ---
+      background: rgba(255, 255, 255, 0.65); // Nền bán trong suốt
+      backdrop-filter: blur(15px); // Hiệu ứng làm mờ nền
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      border-radius: 25px;
+      
+      padding: 2.5rem 3.5rem;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      width: 100%;
+      max-width: 450px;
+      
+      // Animation xuất hiện
+      animation: moveIn 0.8s ease-out;
+
+      // --- ICON/LOGO MỚI ---
+      .login-container__logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-yellow), var(--dark-yellow));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: var(--white-color);
+        box-shadow: 0 5px 20px rgba(245, 176, 0, 0.5);
+        margin-bottom: 2rem;
+      }
+      
       &__form {
+        width: 100%;
         &__header {
+          text-align: center;
+          margin-bottom: 2rem;
+
           &__title {
-            font-size: 20pt;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 2.2rem; // Tăng size cho ấn tượng hơn
+            font-weight: 800; // Đậm hơn
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
           }
           &__sub-title {
-            font-size: 0.75rem;
-            color: #666666;
-            margin: 20px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
           }
         }
+        
+        .ant-input, .ant-input-password-input {
+          border-radius: 10px !important;
+          padding: 14px 16px !important;
+          border: 1px solid transparent !important; // Mặc định trong suốt
+          background: rgba(255, 255, 255, 0.5) !important; // Nền hơi trong
+          transition: all 0.3s ease;
+          &:focus, &:hover {
+            border-color: var(--primary-yellow) !important;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25) !important;
+            background: rgba(255, 255, 255, 0.8) !important;
+          }
+        }
+
         .remember-forgot {
           display: flex;
           justify-content: space-between;
-          margin-top: -12px;
+          align-items: center;
+          margin: 1rem 0;
+          font-size: 0.875rem;
+
           .login-form-forgot {
-            color: #1890ff;
+            color: var(--dark-yellow);
             cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
             &:hover {
-              opacity: 0.9;
+              color: var(--primary-yellow);
+              letter-spacing: 0.5px;
             }
           }
         }
-        .login-form-button {
+
+        .login-form-button.ant-btn-primary {
           width: 100%;
-        }
-        .form-item {
-          .ant-form-item-required {
-            font-size: 0.85rem;
-          }
-          .ant-form-item-explain-error {
-            font-size: 0.85rem;
+          background: linear-gradient(45deg, var(--primary-yellow), var(--dark-yellow));
+          border: none;
+          color: var(--white-color); // Chữ trắng nổi bật trên nền vàng đậm
+          font-weight: 600;
+          font-size: 1.1rem;
+          padding: 14px 0;
+          height: auto;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 5px 20px rgba(255, 193, 7, 0.4);
+
+          &:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(255, 193, 7, 0.5);
           }
         }
       }
 
       .register {
         text-align: center;
-        margin-top: 20px;
-        font-size: 0.85rem;
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
 
         .register-link {
-          color: #1890ff;
+          color: var(--dark-yellow);
           cursor: pointer;
+          font-weight: 600;
+          transition: color 0.3s ease;
           &:hover {
-            opacity: 0.9;
+            color: var(--primary-yellow);
+            text-decoration: underline;
           }
         }
       }
