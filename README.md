@@ -33,6 +33,7 @@ Hệ thống quản lý thú cưng toàn diện với giao diện web hiện đ�
 1. **Tạo file environment**
    - Trong thư mục `server`, tạo file `.env`
    - Sao chép cấu trúc từ file `.env.example`
+   - Không cần sửa database_url cũng được vì không dùng đến
 
 2. **Cập nhật cấu hình database**
    - Mở file `server/config/index.js`
