@@ -5,7 +5,7 @@ const connectionString = process.env.DATABASE_URL
 
 const pool = new Pool({
   user: 'postgres',
-  password: '23102004',
+  password: '30122004',
   host: 'localhost',
   port: 5432,
   database: 'pet_home',
