@@ -27,9 +27,6 @@ const UpdateStaffForm = () => {
                 wrapperCol={{ span: 14 }}
                 onFinish={onFinish}
                 autoComplete="off"
-                initialValues={{
-                    roles: 'staff' // Giá trị mặc định cho vai trò
-                }}
             >
                 <Form.Item
                     label="Tên nhân viên"
@@ -55,18 +52,6 @@ const UpdateStaffForm = () => {
                         <Radio value="female">Nữ</Radio>
                         <Radio value="other">Không xác định</Radio>
                     </Radio.Group>
-                </Form.Item>
-
-                {/* Thêm trường chọn vai trò */}
-                <Form.Item
-                    label="Vai trò"
-                    name="roles"
-                    rules={[{ required: true, message: 'Hãy chọn vai trò!' }]}
-                >
-                    <Select placeholder="Chọn vai trò">
-                        <Option value="staff">Nhân viên</Option>
-                        <Option value="doctor">Bác sĩ</Option>
-                    </Select>
                 </Form.Item>
 
                 <Form.Item
@@ -117,7 +102,7 @@ const UpdateStaffForm = () => {
                     label="Thành phố"
                     name="city"
                 >
-                    <Select placeholder="Chọn thành phố">
+                    <Select placeholder="Please Select">
                         <Option value="hanoi">Hanoi</Option>
                         <Option value="saigon">Ho Chi Minh City</Option>
                     </Select>

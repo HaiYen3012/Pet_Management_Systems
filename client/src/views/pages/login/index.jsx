@@ -16,8 +16,6 @@ const takePath = (roles) => {
       return '/staff/pet-manage'
     case 'admin':
       return '/admin/statistics'
-    case 'doctor':
-      return '/staff/pet-manage'
     default:
       return '/' // Thêm một đường dẫn mặc định
   }

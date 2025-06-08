@@ -14,10 +14,8 @@ const { logger } = require('../utils/logger')
 class StaffService {
   createStaff = async (staff) => {
     try {
-      console.log(staff)
       const { email, username } = staff
       const errors = {}
-      
 
       const foundUserByEmail = await getStaffByEmailDb(email)
       const foundUserByName = await getStaffByUsernameDb(username)
@@ -32,7 +30,7 @@ class StaffService {
       if (Object.keys(errors).length > 0) {
         throw new ErrorHandler(403, errors)
       }
-      console.log(staff)
+
       return await createStaffDb(staff)
     } catch (error) {
       throw new ErrorHandler(error.statusCode, error.message)

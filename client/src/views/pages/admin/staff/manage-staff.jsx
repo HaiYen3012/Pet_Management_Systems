@@ -7,30 +7,15 @@ import {
   Table,
   Typography,
   Card,
-  Space,
-  Tag,
-} from 'antd'
-import {
-  EditOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-  LoadingOutlined,
-} from '@ant-design/icons'
-import {
-  FaPlus,
-  FaSearch,
-  FaPen,
-  FaTrashAlt,
-  FaSave,
-  FaTimes,
-} from 'react-icons/fa'
-import './manage-staff.scss'
-import ModalStaff from './modalStaff'
-import staff from 'api/staff'
-import { toast } from 'react-toastify'
+} from 'antd';
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import './manage-staff.scss';
+import ModalStaff from './modalStaff';
+import staff from 'api/staff';
+import { toast } from 'react-toastify';
 
 const { Title } = Typography;
-
 
 const StaffManage = () => {
   const [form] = Form.useForm();
@@ -44,7 +29,6 @@ const StaffManage = () => {
     address: '',
     city: '',
     country: '',
-    roles: 'staff', // Thêm trường roles với giá trị mặc định
     created_at: '',
   };
   const [listStaff, setListStaff] = useState([]);
@@ -93,7 +77,6 @@ const StaffManage = () => {
       const modifiedData = data.map((item) => ({
         ...item,
         key: item.user_id,
-        roles: item.roles || 'staff', // Đảm bảo có giá trị mặc định cho roles
         created_at: convertDate(item.created_at),
       }));
       setListStaff(modifiedData);
@@ -105,17 +88,6 @@ const StaffManage = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // Hàm render roles với màu sắc khác nhau
-  const renderRoles = (roles) => {
-    const roleConfig = {
-      staff: { color: 'blue', text: 'Nhân viên' },
-      doctor: { color: 'green', text: 'Bác sĩ' }
-    }
-    
-    const config = roleConfig[roles] || { color: 'default', text: roles }
-    return <Tag color={config.color}>{config.text}</Tag>
-  }
 
   const columns = [
     {
@@ -163,17 +135,6 @@ const StaffManage = () => {
       title: 'Quốc tịch',
       dataIndex: 'country',
       key: 'country',
-    },
-    {
-      title: 'Vai trò',
-      dataIndex: 'roles',
-      width: '100px',
-      render: (roles) => renderRoles(roles),
-      filters: [
-        { text: 'Nhân viên', value: 'staff' },
-        { text: 'Bác sĩ', value: 'doctor' },
-      ],
-      onFilter: (value, record) => record.roles === value,
     },
     {
       title: 'Ngày tạo',
@@ -278,5 +239,4 @@ const StaffManage = () => {
   );
 };
 
-export default StaffManage
-
+export default StaffManage;

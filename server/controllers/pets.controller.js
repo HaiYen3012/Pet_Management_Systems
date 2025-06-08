@@ -79,7 +79,7 @@ const getPetList = async (req, res) => {
 
 const allPet = async (req, res) => {
   const pets = await petService.getAllPet()
-  // console.log(pets)
+
   return res.status(200).json(pets)
 }
 
@@ -154,7 +154,7 @@ const servicePet = async (req, res) => {
   if (!user) {
     throw new ErrorHandler(404, 'User not found')
   }
-  if (req.user.roles.includes('admin') || req.user.roles.includes('staff') || req.user.roles.includes('doctor') ) {
+  if (req.user.roles.includes('admin') || req.user.roles.includes('staff')) {
     const { id } = req.body
     const pets = await petService.getServicePet({ id })
     res.status(200).json(pets)

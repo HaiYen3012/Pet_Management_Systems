@@ -7,7 +7,6 @@ export const PetProvider = ({ children }) => {
   const [customerPets, setCustomerPets] = useState([])
   const [allPets, setAllPets] = useState([])
   const { userData } = useAuth()
- 
 
   useEffect(() => {
     if (userData && userData.roles === 'customer') {
@@ -25,9 +24,8 @@ export const PetProvider = ({ children }) => {
   useEffect(() => {
     if (
       userData &&
-      (userData.roles === 'staff' || userData.roles === 'admin' || userData.roles === 'doctor')
+      (userData.roles === 'staff' || userData.roles === 'admin')
     ) {
-
       pet
         .getAllPet()
         .then((response) => {
