@@ -156,9 +156,8 @@ const ManageCustomer = () => {
           showModal()
         }
         return (
-          // THAY ĐỔI: Chuyển từ màu cam sang màu vàng
           <button
-            className="ml-3 p-2 text-yellow-500 hover:text-yellow-600 hover:bg-yellow-50 rounded border transition-colors"
+            className="ml-3 p-2 text-orange-300 hover:text-orange-400 hover:bg-orange-50 rounded border transition-colors"
             onClick={() => handleUpdate()}
           >
             <FaPen />
@@ -184,10 +183,12 @@ const ManageCustomer = () => {
             cancelText="Hủy"
             onConfirm={() => handleDelete()}
           >
-            {/* GIỮ NGUYÊN: Màu đỏ cho hành động nguy hiểm */}
             <button className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border  transition-colors">
               <FaTrashAlt />
             </button>
+            {/* <Button danger>
+                            <DeleteOutlined style={{ fontSize: '20px', color: 'red' }} />
+                        </Button> */}
           </Popconfirm>
         )
       },
@@ -205,17 +206,10 @@ const ManageCustomer = () => {
         </Space>
 
         <div className="manage-customer__content">
-          {/* THAY ĐỔI: Chuyển nút primary sang màu vàng */}
           <Button
             onClick={handleCreate}
             type="primary"
-            style={{
-              marginBottom: 16,
-              width: '100px',
-              backgroundColor: '#fadb14', // Màu vàng của antd
-              borderColor: '#fadb14',
-              color: '#000', // Màu chữ đen để dễ đọc trên nền vàng
-            }}
+            style={{ marginBottom: 16, width: '100px' }}
           >
             <PlusOutlined />
             Thêm
@@ -236,10 +230,7 @@ const ManageCustomer = () => {
             />
           ) : (
             <Spin
-              // THAY ĐỔI: Chuyển icon loading sang màu vàng
-              indicator={
-                <LoadingOutlined style={{ fontSize: 30, color: '#fadb14' }} spin />
-              }
+              indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
               style={{
                 height: '100vh',
                 alignItems: 'center',
@@ -264,4 +255,4 @@ const ManageCustomer = () => {
   )
 }
 
-export default ManageCustomer
+export default ManageCustomerzz
