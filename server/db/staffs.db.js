@@ -75,9 +75,10 @@ const updateStaffDb = async ({
   city,
   country,
   avatar,
+  roles,
 }) => {
   const { rows: staff } = await pool.query(
-    `UPDATE users set username = $1, email = $2, fullname = $3, phone_numbers = $4, address = $5, city = $6, country = $7, avatar = $8
+    `UPDATE users set username = $1, email = $2, fullname = $3, phone_numbers = $4, address = $5, city = $6, country = $7, avatar = $8, roles = $10
         WHERE user_id = $9 returning username, email, fullname, user_id, phone_numbers, address, city, country, avatar`,
     [
       username,
@@ -89,6 +90,7 @@ const updateStaffDb = async ({
       country,
       avatar,
       staff_id,
+      roles,
     ],
   )
   return staff[0]

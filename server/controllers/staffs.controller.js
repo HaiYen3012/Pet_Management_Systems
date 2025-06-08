@@ -67,7 +67,7 @@ const getStaffProfile = async (req, res) => {
 }
 
 const updateStaff = async (req, res) => {
-  const { username, email, fullname, address, phone_numbers, city, country } =
+  const { username, email, fullname, address, phone_numbers, city, country, roles } =
     req.body
   if (
     +req.params.staff_id === req.staff.staff_id ||
@@ -83,6 +83,7 @@ const updateStaff = async (req, res) => {
         city,
         country,
         staff_id: req.params.staff_id,
+        roles
       })
       return res.status(201).json(results)
     } catch (error) {
