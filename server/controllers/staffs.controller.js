@@ -9,7 +9,6 @@ const getAllStaffs = async (req, res) => {
 }
 
 const createStaff = async (req, res) => {
-  // console.log(req.body)
   const {
     username,
     password,
@@ -20,7 +19,6 @@ const createStaff = async (req, res) => {
     city,
     country,
     avatar,
-    roles
   } = req.body
 
   const hashedPassword = await hashPassword(password)
@@ -35,7 +33,6 @@ const createStaff = async (req, res) => {
     city,
     country,
     avatar,
-    roles,
   })
 
   res.status(201).json({
@@ -67,7 +64,7 @@ const getStaffProfile = async (req, res) => {
 }
 
 const updateStaff = async (req, res) => {
-  const { username, email, fullname, address, phone_numbers, city, country, roles } =
+  const { username, email, fullname, address, phone_numbers, city, country } =
     req.body
   if (
     +req.params.staff_id === req.staff.staff_id ||
@@ -83,7 +80,6 @@ const updateStaff = async (req, res) => {
         city,
         country,
         staff_id: req.params.staff_id,
-        roles
       })
       return res.status(201).json(results)
     } catch (error) {

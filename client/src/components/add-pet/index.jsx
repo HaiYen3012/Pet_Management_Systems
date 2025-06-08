@@ -24,7 +24,7 @@ const AddPetModal = ({ visible, onCancel }) => {
       avatar: values.avatar || '/avatarpet1.png'
     };
 
-    if (userData && (userData.roles === 'staff' || userData.roles === 'admin' || userData.roles === 'doctor')) {
+    if (userData && (userData.roles === 'staff' || userData.roles === 'admin')) {
       pet
         .createPetByStaff(finalValues)
         .then((res) => {

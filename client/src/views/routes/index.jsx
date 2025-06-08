@@ -95,13 +95,13 @@ function AllRoutes() {
       <Routes>
         <Route path="/" element={<Homepage />} />
 
-        {/* Customer routes */}
         <Route element={<RoleProtectedRoute roles={['customer']} />}>
           <Route path="/pet" element={<MainLayout component={PetList} />} />
           <Route
             path="/pet/basic-info/:slug"
             element={<MainLayout component={PetInfo} />}
           />
+
           <Route
             path="/service-register"
             element={<MainLayout component={ServiceRegisterPet} />}
@@ -116,11 +116,14 @@ function AllRoutes() {
           />
         </Route>
 
-        {/* Staff and Doctor shared routes */}
-        <Route element={<RoleProtectedRoute roles={['staff', 'doctor']} />}>
+        <Route element={<RoleProtectedRoute roles={['staff']} />}>
           <Route
             path="/staff/pet-manage"
             element={<MainLayout component={PetInfoOverview} />}
+          />
+          <Route
+            path="/staff/customer-manage"
+            element={<MainLayout component={ManageCustomer} />}
           />
           <Route
             path="/staff/medical-record-manage"
@@ -128,15 +131,6 @@ function AllRoutes() {
           />
         </Route>
 
-        {/* Staff only routes */}
-        <Route element={<RoleProtectedRoute roles={['staff']} />}>
-          <Route
-            path="/staff/customer-manage"
-            element={<MainLayout component={ManageCustomer} />}
-          />
-        </Route>
-
-        {/* Admin routes */}
         <Route element={<RoleProtectedRoute roles={['admin']} />}>
           <Route
             path="/admin/statistics"
@@ -168,7 +162,6 @@ function AllRoutes() {
           />
         </Route>
 
-        {/* Staff and Admin shared service routes */}
         <Route element={<RoleProtectedRoute roles={['staff', 'admin']} />}>
           <Route
             path="/cleaning-info"
@@ -177,6 +170,14 @@ function AllRoutes() {
           <Route
             path="/cleaning-used"
             element={<MainLayout component={CleaningServiceUsage} />}
+          />
+          <Route
+            path="/medical-info"
+            element={<MainLayout component={MedicalInfo} />}
+          />
+          <Route
+            path="/medical-used"
+            element={<MainLayout component={MedicalServiceUsage} />}
           />
           <Route
             path="/storage-info"
@@ -188,22 +189,9 @@ function AllRoutes() {
           />
         </Route>
 
-        {/* Medical service routes for staff, admin, and doctor */}
-        <Route element={<RoleProtectedRoute roles={['staff', 'admin', 'doctor']} />}>
-          <Route
-            path="/medical-info"
-            element={<MainLayout component={MedicalInfo} />}
-          />
-          <Route
-            path="/medical-used"
-            element={<MainLayout component={MedicalServiceUsage} />}
-          />
-        </Route>
-
-        {/* Personal info for all authenticated users */}
         <Route
           element={
-            <RoleProtectedRoute roles={['staff', 'customer', 'admin', 'doctor']} />
+            <RoleProtectedRoute roles={['staff', 'customer', 'admin']} />
           }
         >
           <Route
@@ -212,7 +200,6 @@ function AllRoutes() {
           />
         </Route>
 
-        {/* Guest routes */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -220,8 +207,7 @@ function AllRoutes() {
           <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
 
-        {/* 404 route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*">Cook</Route>
       </Routes>
     </>
   )
