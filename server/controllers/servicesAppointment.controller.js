@@ -78,7 +78,7 @@ const getAllAppointmentbyUserSession = async (req, res) => {
   const { user_id, roles } = req.user
 
   const user = await userService.getUserById(user_id)
-  const isAdminStaff = roles.includes('admin') || roles.includes('staff');
+  const isAdminStaff = roles.includes('admin') || roles.includes('staff') || roles.includes('doctor');
 
   if (!user) {
     throw new ErrorHandler(404, 'User not found')
@@ -102,7 +102,7 @@ const getAllAppointmentbyPetId = async (req, res) => {
   const { user_id, roles } = req.user
   const{ pet_id } = req.query
   const user = await userService.getUserById(user_id)
-  const isAdminStaff = roles.includes('admin') || roles.includes('staff');
+  const isAdminStaff = roles.includes('admin') || roles.includes('staff') || roles.includes('doctor');
   // const pet = await petService.getPetById(pet_id)
   if (!user) {
     throw new ErrorHandler(404, 'User not found')
@@ -141,7 +141,7 @@ const getAppointmentbyID = async (req, res) => {
       return res.status(404).json({ status: 'error', message: 'Appointment not found' });
     }
 
-    const hasAccess = req.user.roles.includes('admin') || req.user.roles.includes('staff') || appointmentById.user_id === +user_id;
+    const hasAccess = req.user.roles.includes('admin') || req.user.roles.includes('staff') || req.user.roles.includes('doctor')  || appointmentById.user_id === +user_id;
 
     if (hasAccess) {
       return res.status(200).json({
@@ -181,7 +181,7 @@ const updateAppointment = async (req, res) => {
   if (!user) {
     throw new ErrorHandler(404, 'User not found')
   }
-  if (req.user.roles.includes('admin') || req.user.roles.includes('staff')) {
+  if (req.user.roles.includes('admin') || req.user.roles.includes('staff') || req.user.roles.includes('doctor') ) {
     const { id, date, note, time_slot, pet_id, status } = req.body
     const validStatuses = ['complete', 'canceled', 'processing']
     if (!validStatuses.includes(status)) {
@@ -256,7 +256,7 @@ const updateAppointmentStatus = async (req, res) => {
   }
 
   try {
-    if (req.user.roles.includes('admin') || req.user.roles.includes('staff')) {
+    if (req.user.roles.includes('admin') || req.user.roles.includes('staff') || req.user.roles.includes('doctor') ) {
       const response = await serviceAppointment.updateAppointmentStatus({
         id,
         status,
@@ -326,7 +326,7 @@ const createMedicalRecord = async (req, res) => {
     throw new ErrorHandler(404, 'User not found');
   }
 
-  if (req.user.roles.includes('admin') || req.user.roles.includes('staff')) {
+  if (req.user.roles.includes('admin') || req.user.roles.includes('staff') || req.user.roles.includes('doctor') ) {
     try {
       // Kiểm tra trạng thái của cuộc hẹn
       const appointment = await serviceAppointment.getAppointmentbyID(appointment_id);
@@ -437,7 +437,7 @@ const updateMedicalRecord = async (req, res) => {
 
   try {
     // Kiểm tra vai trò của người dùng
-    if (req.user.roles.includes('admin') || req.user.roles.includes('staff')) {
+    if (req.user.roles.includes('admin') || req.user.roles.includes('staff') || req.user.roles.includes('doctor') ) {
       // Gọi hàm service để thực hiện cập nhật thông tin y tế
       const updatedMedicalRecord = await serviceAppointment.updateMedicalRecord({medical_record_id, neutered, symptoms, diagnostic, prescriptions });
       

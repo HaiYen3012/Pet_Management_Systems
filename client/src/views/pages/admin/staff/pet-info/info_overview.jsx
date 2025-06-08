@@ -36,8 +36,11 @@ const PetInfoOverview = () => {
   const [visibleAddPetModal, setVisibleAddPetModal] = useState(false)
   const [visibleUpdateModal, setVisibleUpdateModal] = useState(false)
   const [selectedPet, setSelectedPet] = useState(null)
-
-  const { allPets: pets, setAllPets } = usePet()
+  
+  const { allPets: pets, setAllPets } = usePet();
+  
+  // console.log('pets:', pets);
+  // console.log('setAllPets:', setAllPets);
 
   const columns = [
     { title: 'ID', dataIndex: 'pet_id', key: 'pet_id' },

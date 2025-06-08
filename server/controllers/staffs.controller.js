@@ -9,6 +9,7 @@ const getAllStaffs = async (req, res) => {
 }
 
 const createStaff = async (req, res) => {
+  // console.log(req.body)
   const {
     username,
     password,
@@ -19,6 +20,7 @@ const createStaff = async (req, res) => {
     city,
     country,
     avatar,
+    roles
   } = req.body
 
   const hashedPassword = await hashPassword(password)
@@ -33,6 +35,7 @@ const createStaff = async (req, res) => {
     city,
     country,
     avatar,
+    roles,
   })
 
   res.status(201).json({

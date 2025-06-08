@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Button, Modal, Form, Input, Radio, Select } from 'antd';
 import staff from 'api/staff';
 import { toast } from 'react-toastify';
 import user from 'api/user';
+
+const { Option } = Select;
 
 const ModalStaff = (props) => {
     const { form, isModalOpen, handleOk, handleCancel,
@@ -27,6 +29,7 @@ const ModalStaff = (props) => {
                     address: values.address,
                     city: values.city,
                     country: values.country,
+                    roles: values.roles, // Thêm roles vào update
                 })
 
                 if (res && res.status === 201) {
@@ -51,7 +54,6 @@ const ModalStaff = (props) => {
         },
     };
 
-
     useEffect(() => {
         form.setFieldsValue({
             user_id: dataModal.user_id,
@@ -63,6 +65,7 @@ const ModalStaff = (props) => {
             address: dataModal.address,
             city: dataModal.city,
             country: dataModal.country,
+            roles: dataModal.roles || 'staff', // Thêm roles với giá trị mặc định
         });
     }, [dataModal])
 
@@ -95,6 +98,7 @@ const ModalStaff = (props) => {
                             address: dataModal.address,
                             city: dataModal.city,
                             country: dataModal.country,
+                            roles: dataModal.roles || 'staff', // Thêm roles vào initialValues
                         }
                     }
                 >
@@ -108,7 +112,6 @@ const ModalStaff = (props) => {
                             </Form.Item>
                     }
 
-
                     <Form.Item
                         name="fullname"
                         label="Họ và tên"
@@ -121,7 +124,6 @@ const ModalStaff = (props) => {
                         name="username"
                         label="Tên đăng nhập"
                         rules={[{ required: true, message: 'Hãy nhập tên đăng nhập!' }]}
-
                     >
                         <Input disabled={action === "UPDATE"} />
                     </Form.Item>
@@ -193,6 +195,23 @@ const ModalStaff = (props) => {
                         ]}
                     >
                         <Input />
+                    </Form.Item>
+
+                    {/* Thêm trường chọn vai trò */}
+                    <Form.Item
+                        label="Vai trò"
+                        name="roles"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng chọn vai trò!',
+                            },
+                        ]}
+                    >
+                        <Select placeholder="Chọn vai trò">
+                            <Option value="staff">Nhân viên</Option>
+                            <Option value="doctor">Bác sĩ</Option>
+                        </Select>
                     </Form.Item>
 
                     {

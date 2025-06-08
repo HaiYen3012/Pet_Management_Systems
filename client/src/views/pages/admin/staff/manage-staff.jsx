@@ -8,6 +8,7 @@ import {
   Table,
   Typography,
   Space,
+  Tag,
 } from 'antd'
 import {
   EditOutlined,
@@ -40,6 +41,7 @@ const StaffManage = () => {
     address: '',
     city: '',
     country: '',
+    roles: 'staff', // Thêm trường roles với giá trị mặc định
     created_at: '',
   }
   const [listStaff, setListStaff] = useState(dataModalDefault)
@@ -91,6 +93,7 @@ const StaffManage = () => {
       let newItem = {
         ...item,
         key: item.user_id,
+        roles: item.roles || 'staff', // Đảm bảo có giá trị mặc định cho roles
         created_at: convertDate(item.created_at),
       }
       return newItem
@@ -101,6 +104,17 @@ const StaffManage = () => {
   useEffect(() => {
     fetchData()
   }, [])
+
+  // Hàm render roles với màu sắc khác nhau
+  const renderRoles = (roles) => {
+    const roleConfig = {
+      staff: { color: 'blue', text: 'Nhân viên' },
+      doctor: { color: 'green', text: 'Bác sĩ' }
+    }
+    
+    const config = roleConfig[roles] || { color: 'default', text: roles }
+    return <Tag color={config.color}>{config.text}</Tag>
+  }
 
   const columns = [
     {
@@ -141,6 +155,17 @@ const StaffManage = () => {
     {
       title: 'Quốc tịch',
       dataIndex: 'country',
+    },
+    {
+      title: 'Vai trò',
+      dataIndex: 'roles',
+      width: '100px',
+      render: (roles) => renderRoles(roles),
+      filters: [
+        { text: 'Nhân viên', value: 'staff' },
+        { text: 'Bác sĩ', value: 'doctor' },
+      ],
+      onFilter: (value, record) => record.roles === value,
     },
     {
       title: 'Ngày tạo',

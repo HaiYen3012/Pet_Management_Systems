@@ -2,12 +2,12 @@ const pool = require('../config')
 
 const getAllStaffsDb = async () => {
   const { rows: staffs } = await pool.query(
-    `Select * from public.users u where u.roles=$1
-    `, ['staff'],
+    `SELECT * FROM public.users u WHERE u.roles IN ($1, $2)`,
+    ['staff', 'doctor']
   )
-
   return staffs
 }
+
 
 const createStaffDb = async ({
   username,
@@ -19,6 +19,7 @@ const createStaffDb = async ({
   city,
   country,
   avatar,
+  roles,
 }) => {
   const { rows: staff } = await pool.query(
     `INSERT INTO users(username, password, email, fullname, phone_numbers, address, city, country, avatar, roles) 
@@ -34,7 +35,7 @@ const createStaffDb = async ({
       city,
       country,
       avatar,
-      'staff',
+      roles,
     ],
   )
   return staff[0]
