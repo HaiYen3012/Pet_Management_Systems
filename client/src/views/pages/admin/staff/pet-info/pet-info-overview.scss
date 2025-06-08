@@ -46,23 +46,80 @@
   padding: 0 32px 32px 32px;
 }
 
+/* --- THANH TÌM KIẾM --- */
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.search-bar .ant-form {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.search-bar .ant-form-item {
+  margin-bottom: 0;
+}
+
+.search-input {
+  border-radius: 8px !important;
+  border-color: var(--pet-border-color) !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+}
+
+.search-input:hover,
+.search-input:focus {
+  border-color: var(--pet-yellow) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
+.search-button {
+  background-color: var(--pet-yellow) !important;
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-dark-brown) !important;
+  border-radius: 8px !important;
+  height: 40px !important;
+}
+
+.search-button:hover,
+.search-button:focus {
+  background-color: #ffca28 !important;
+  border-color: #ffca28 !important;
+}
+
+.sort-select .ant-select-selector {
+  border-radius: 8px !important;
+  border-color: var(--pet-border-color) !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+}
+
+.sort-select .ant-select-selector:hover,
+.sort-select .ant-select-selector:focus {
+  border-color: var(--pet-yellow) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
 /* --- NÚT THÊM --- */
 .add-button {
-  background-color: var(--pet-yellow);
-  border-color: var(--pet-yellow);
-  color: var(--pet-dark-brown);
+  background-color: var(--pet-yellow) !important;
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-dark-brown) !important;
   font-weight: 500;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  padding: 4px 16px;
-  height: 40px;
+  border-radius: 8px !important;
+  padding: 4px 16px !important;
+  height: 40px !important;
 }
 
 .add-button:hover,
 .add-button:focus {
-  background-color: #ffca28;
-  border-color: #ffca28;
-  color: var(--pet-dark-brown);
+  background-color: #ffca28 !important;
+  border-color: #ffca28 !important;
 }
 
 /* --- TÙY CHỈNH BẢNG (TABLE) --- */
@@ -92,29 +149,22 @@
 }
 
 /* --- TÙY CHỈNH NÚT CẬP NHẬT VÀ XÓA --- */
-button.text-orange-300 {
+.action-buttons button.text-orange-300 {
   border-color: var(--pet-border-color);
   color: #f59e0b;
 }
 
-button.text-orange-300:hover {
+.action-buttons button.text-orange-300:hover {
   color: #f59e0b;
   background-color: #fef3c7;
 }
 
-button.text-red-500 {
+.action-buttons button.text-red-500 {
   border-color: var(--pet-border-color);
   color: #ef4444;
 }
 
-button.text-red-500:hover {
+.action-buttons button.text-red-500:hover {
   color: #dc2626;
   background-color: #fee2e2;
-}
-
-/* Định dạng cho spinner */
-.ant-spin {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

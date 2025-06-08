@@ -1,12 +1,15 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form, Input, Radio, Select } from 'antd';
+
 import staff from 'api/staff';
 import { toast } from 'react-toastify';
-import user from 'api/user';
+import './modal-staff.scss';
 
 const { Option } = Select;
 
 const ModalStaff = (props) => {
+
     const { form, isModalOpen, handleOk, handleCancel,
         action, dataModal, fetchData } = props;
 
@@ -60,7 +63,6 @@ const ModalStaff = (props) => {
             fullname: dataModal.fullname,
             username: dataModal.username,
             email: dataModal.email,
-            gender: dataModal.gender,
             phone_numbers: dataModal.phone_numbers,
             address: dataModal.address,
             city: dataModal.city,
@@ -278,5 +280,6 @@ const ModalStaff = (props) => {
         </>
     );
 }
+
 
 export default ModalStaff;

@@ -4,7 +4,6 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import ServiceHistoryAPI from 'api/service/service-history';
 import { toast } from 'react-toastify';
-// Import file CSS mới
 import './ServiceHistory.scss';
 
 const { Option } = Select;
@@ -30,9 +29,10 @@ function ServiceHistory() {
             ...service,
             pet_name: pet.pet_name,
             species: pet.species,
-            // Thêm các thông tin khác của pet nếu cần
+            status: service.status === 'complete' ? 'completed' : service.status, // Chuẩn hóa status
           }))
         );
+        console.log('Dữ liệu dịch vụ:', servicesData); // Kiểm tra dữ liệu
         setAllServices(servicesData);
         setFilteredRows(servicesData); // Ban đầu hiển thị tất cả
       } catch (error) {
@@ -78,12 +78,11 @@ function ServiceHistory() {
         selected.includes(row.order_id) ? { ...row, status: 'canceled' } : row
       );
       setAllServices(updatedServices);
-      setFilteredRows(updatedServices.filter(row => filteredRows.includes(row))); // Cập nhật lại bảng
+      setFilteredRows(updatedServices); // Cập nhật lại bảng với toàn bộ dữ liệu đã sửa
       setSelected([]);
       setBankFormVisible(false);
       bankForm.resetFields();
       toast.success("Đã hủy dịch vụ thành công!");
-
     } catch (error) {
       console.error("Lỗi khi hủy dịch vụ: ", error);
       toast.error("Có lỗi xảy ra, không thể hủy dịch vụ.");
@@ -118,7 +117,7 @@ function ServiceHistory() {
   };
 
   const getStatusTag = (status) => (
-    <span className={`status-tag ${status}`}>{status === 'complete' ? 'completed' : status}</span>
+    <span className={`status-tag ${status}`}>{status}</span>
   );
 
   const columns = [

@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   Button,
-  Space,
   Typography,
   Select,
-  message,
   Input,
   Form,
   Modal,
-} from 'antd'
-import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
-import InfoModal from './pet-modal/info_detail'
-import UpdateModal from './pet-modal/info_update'
-import AddPetModal from 'components/add-pet'
-import usePet from 'hooks/usePet'
-import pet from 'api/pet'
-import { toast } from 'react-toastify'
-const { Option } = Select
-const { confirm } = Modal
-import {
-  FaPlus,
-  FaSearch,
-  FaPen,
-  FaTrashAlt,
-  FaSave,
-  FaTimes,
-} from 'react-icons/fa'
+  Card,
+} from 'antd';
+import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import InfoModal from './pet-modal/info_detail';
+import UpdateModal from './pet-modal/info_update';
+import AddPetModal from 'components/add-pet';
+import usePet from 'hooks/usePet';
+import pet from 'api/pet';
+import { toast } from 'react-toastify';
+import './pet-info-overview.scss';
+
+const { Option } = Select;
+const { Title } = Typography;
+const { confirm } = Modal;
 
 const PetInfoOverview = () => {
   const [sortOrder, setSortOrder] = useState({})
@@ -43,28 +38,29 @@ const PetInfoOverview = () => {
   // console.log('setAllPets:', setAllPets);
 
   const columns = [
-    { title: 'ID', dataIndex: 'pet_id', key: 'pet_id' },
+    { title: 'ID', dataIndex: 'pet_id', key: 'pet_id', width: 80 },
     { title: 'Tên thú cưng', dataIndex: 'fullname', key: 'fullname' },
     { title: 'Chủng loại', dataIndex: 'species', key: 'species' },
-    { title: 'Tuổi', dataIndex: 'age', key: 'age' },
-    { title: 'Giới tính', dataIndex: 'sex', key: 'sex' },
-    { title: 'Cân nặng', dataIndex: 'weight', key: 'weight' },
-    { title: 'ID khách hàng', dataIndex: 'user_id', key: 'user_id' },
+    { title: 'Tuổi', dataIndex: 'age', key: 'age', width: 80 },
+    { title: 'Giới tính', dataIndex: 'sex', key: 'sex', width: 100 },
+    { title: 'Cân nặng', dataIndex: 'weight', key: 'weight', width: 100 },
+    { title: 'ID khách hàng', dataIndex: 'user_id', key: 'user_id', width: 120 },
     {
       title: 'Chi tiết',
-      key: 'action',
+      key: 'detail',
+      width: 120,
       render: (_, record) => (
-        <Space size="middle">
-          <a onClick={() => showDetails(record)}>Xem chi tiết</a>
-        </Space>
+        <a onClick={() => showDetails(record)} className="text-blue-500">
+          Xem chi tiết
+        </a>
       ),
     },
-    // { title: 'x', dataIndex: 'x', key: 'x' },
     {
-      title: 'Action',
+      title: 'Hành động',
       key: 'action',
+      width: 150,
       render: (_, record) => (
-        <Space size="middle">
+        <div className="action-buttons">
           <button
             className="ml-3 p-2 text-orange-300 hover:text-orange-400 hover:bg-orange-50 rounded border transition-colors"
             onClick={() => updateInfos(record)}
@@ -73,182 +69,172 @@ const PetInfoOverview = () => {
           </button>
           <button
             onClick={() => showConfirm(record.pet_id)}
-            className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border  transition-colors"
+            className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border transition-colors"
           >
             <FaTrashAlt />
           </button>
-        </Space>
+        </div>
       ),
     },
-  ]
+  ];
 
   const showDetails = (record) => {
-    setSelectedPet(record)
-    setVisibleInfoModal(true)
-  }
+    setSelectedPet(record);
+    setVisibleInfoModal(true);
+  };
 
   const updateInfos = (record) => {
-    setSelectedPet(record)
-    setVisibleUpdateModal(true)
-  }
+    setSelectedPet(record);
+    setVisibleUpdateModal(true);
+  };
 
   const handleCancel = () => {
-    setVisibleInfoModal(false)
-    setVisibleAddPetModal(false)
-    setVisibleUpdateModal(false)
-  }
+    setVisibleInfoModal(false);
+    setVisibleAddPetModal(false);
+    setVisibleUpdateModal(false);
+  };
+
   const handleAddPet = () => {
-    setVisibleAddPetModal(true)
-  }
+    setVisibleAddPetModal(true);
+  };
 
   const handleDelete = (pet_id) => {
     pet
       .deletePet(pet_id)
       .then(() => {
-        toast.success('Xóa thú cưng thành công!')
-        const newPets = pets.filter((item) => item.pet_id !== pet_id)
-        setAllPets(newPets)
-        setSortedData(newPets)
+        toast.success('Xóa thú cưng thành công!');
+        const newPets = pets.filter((item) => item.pet_id !== pet_id);
+        setAllPets(newPets);
+        setSortedData(newPets);
       })
       .catch((error) => {
-        console.error('xóa thú cưng thất bại:', error)
-      })
-  }
+        toast.error('Xóa thú cưng thất bại!');
+        console.error('Xóa thú cưng thất bại:', error);
+      });
+  };
 
   const handleSearchChange = (e) => {
-    const value = e.target.value.toLowerCase()
-    setSearchName(value)
-
-    const filteredData = pets.filter((pet) => {
-      return pet.fullname.toLowerCase().includes(value)
-    })
-    setSortedData(filteredData)
-  }
+    const value = e.target.value.toLowerCase();
+    setSearchName(value);
+    const filteredData = pets.filter((pet) =>
+      pet.fullname.toLowerCase().includes(value)
+    );
+    setSortedData(filteredData);
+  };
 
   useEffect(() => {
     if (!sortOrder.field || !sortOrder.order) {
-      setSortedData(pets)
-      return
+      setSortedData(pets);
+      return;
     }
-
     const sorted = [...pets].sort((a, b) => {
-      let fieldA = a[sortOrder.field]
-      let fieldB = b[sortOrder.field]
-      if (sortOrder.field === 'lastDispatch') {
-        fieldA = new Date(fieldA)
-        fieldB = new Date(fieldB)
-      }
-      if (fieldA < fieldB) return sortOrder.order === 'ascend' ? -1 : 1
-      if (fieldA > fieldB) return sortOrder.order === 'ascend' ? 1 : -1
-      return 0
-    })
-    setSortedData(sorted)
-  }, [sortOrder, pets])
+      let fieldA = a[sortOrder.field];
+      let fieldB = b[sortOrder.field];
+      if (fieldA < fieldB) return sortOrder.order === 'ascend' ? -1 : 1;
+      if (fieldA > fieldB) return sortOrder.order === 'ascend' ? 1 : -1;
+      return 0;
+    });
+    setSortedData(sorted);
+  }, [sortOrder, pets]);
 
   const handleSortChange = (value) => {
-    const [field, order] = value.split('-')
-    setSortOrder({ field, order })
-  }
+    const [field, order] = value.split('-');
+    setSortOrder({ field, order });
+  };
 
   const showConfirm = (pet_id) => {
     confirm({
       title: 'Bạn có chắc muốn xóa thú cưng?',
       icon: <ExclamationCircleOutlined />,
-      content:
-        'Bạn sẽ không thể hoàn tác và xem lại được thông tin của thú cưng.',
-      okText: 'Yes',
+      content: 'Bạn sẽ không thể hoàn tác và xem lại được thông tin của thú cưng.',
+      okText: 'Xóa',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Hủy',
       onOk() {
-        handleDelete(pet_id)
+        handleDelete(pet_id);
       },
-      onCancel() {
-        console.log('Cancel')
-      },
-    })
-  }
+    });
+  };
 
   return (
-    <div>
-      <Space style={{ width: '100%', justifyContent: 'center' }}>
-        <Typography.Title level={2}>Danh sách thú cưng</Typography.Title>
-        <br />
-        <br />
-      </Space>
-
-      <Space
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 16,
-          width: '100%',
-        }}
-      >
-        <Form
-          layout="inline"
-          style={{
-            border: '1px solid #d9d9d9',
-            padding: '10px',
-            borderRadius: '4px',
-          }}
-        >
-          <Form.Item label="Tên thú cưng">
-            <Input
-              placeholder="Please enter"
-              style={{ width: 200 }}
-              onChange={handleSearchChange}
-              onPressEnter={handleSearchChange}
-            />
-          </Form.Item>
-          <Button
-            type="primary"
-            onClick={handleSearchChange}
-            style={{ marginLeft: 8, marginRight: 10 }}
-          >
-            Tìm kiếm
-          </Button>
-        </Form>
-        <Space>
-          <Select
-            placeholder="Sắp xếp theo"
-            style={{ width: 180 }}
-            onChange={handleSortChange}
-          >
-            <Option value="fullname-ascend">Tên (A-Z)</Option>
-            <Option value="fullname-descend">Tên (Z-A)</Option>
-            <Option value="pet_id-ascend">Id thú cưng</Option>
-          </Select>
-          <Button
-            type="primary"
-            onClick={handleAddPet}
-            icon={<PlusOutlined />}
-            style={{ margin: '0 15px' }}
-          >
-            Thêm thú cưng
-          </Button>
-        </Space>
-      </Space>
-      {pets && (
-        <Table columns={columns} dataSource={sortedData} pagination={30} />
-      )}
-
-      <InfoModal
-        visible={visibleInfoModal}
-        onCancel={handleCancel}
-        selectedPet={selectedPet}
-      />
-
-      <UpdateModal
-        visible={visibleUpdateModal}
-        onCancel={handleCancel}
-        selectedPet={selectedPet}
-        key={selectedPet ? selectedPet.pet_id : '1'}
-        setSelectedPet={setSelectedPet}
-      />
-      <AddPetModal visible={visibleAddPetModal} onCancel={handleCancel} />
+    <div className="manage-page">
+      <Card className="manage-card">
+        <div className="manage-header">
+          <Title level={2}>Danh sách thú cưng</Title>
+          <p>Quản lý thông tin thú cưng một cách dễ dàng và hiệu quả.</p>
+        </div>
+        <div className="manage-content">
+          <div className="search-bar">
+            <Form layout="inline">
+              <Form.Item label="Tên thú cưng">
+                <Input
+                  placeholder="Nhập tên thú cưng"
+                  value={searchName}
+                  onChange={handleSearchChange}
+                  className="search-input"
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  onClick={handleSearchChange}
+                  className="search-button"
+                >
+                  Tìm kiếm
+                </Button>
+              </Form.Item>
+              <Form.Item>
+                <Select
+                  placeholder="Sắp xếp theo"
+                  onChange={handleSortChange}
+                  className="sort-select"
+                >
+                  <Option value="fullname-ascend">Tên (A-Z)</Option>
+                  <Option value="fullname-descend">Tên (Z-A)</Option>
+                  <Option value="pet_id-ascend">ID thú cưng</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  type="primary"
+                  onClick={handleAddPet}
+                  icon={<PlusOutlined />}
+                  className="add-button"
+                >
+                  Thêm thú cưng
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+          <Table
+            className="manage-table"
+            columns={columns}
+            dataSource={sortedData}
+            pagination={{
+              defaultPageSize: 8,
+              showSizeChanger: true,
+              pageSizeOptions: ['8', '15', '25'],
+            }}
+            rowKey="pet_id"
+            scroll={{ x: 1200 }}
+          />
+        </div>
+        <InfoModal
+          visible={visibleInfoModal}
+          onCancel={handleCancel}
+          selectedPet={selectedPet}
+        />
+        <UpdateModal
+          visible={visibleUpdateModal}
+          onCancel={handleCancel}
+          selectedPet={selectedPet}
+          setAllPets={setAllPets}
+          allPets={pets}
+        />
+        <AddPetModal visible={visibleAddPetModal} onCancel={handleCancel} />
+      </Card>
     </div>
-  )
-}
+  );
+};
 
-export default PetInfoOverview
+export default PetInfoOverview;
