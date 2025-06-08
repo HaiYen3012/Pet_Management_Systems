@@ -287,3 +287,8 @@ INSERT INTO "users" ("username", "email", "password", "fullname", "phone_numbers
 ('customer', 'customer@petcare.com', '$2b$10$mCT/vjETWWeusgX6hCPTXeD6DCWaFsU.Gdr2WLaUwS7x6sBPIB95W', 'Customer User', '0123456789', 'customer', '123 Customer Street', 'Ho Chi Minh City', 'Vietnam', NOW()),
 ('staff', 'staff@petcare.com', '$2b$10$mCT/vjETWWeusgX6hCPTXeD6DCWaFsU.Gdr2WLaUwS7x6sBPIB95W', 'Staff User', '0987654321', 'staff', '456 Staff Avenue', 'Ho Chi Minh City', 'Vietnam', NOW()),
 ('admin', 'admin@petcare.com', '$2b$10$mCT/vjETWWeusgX6hCPTXeD6DCWaFsU.Gdr2WLaUwS7x6sBPIB95W', 'Admin User', '0111222333', 'admin', '789 Admin Boulevard', 'Ho Chi Minh City', 'Vietnam', NOW());
+
+ALTER TYPE "roles_t" ADD VALUE 'doctor';
+
+INSERT INTO "users" ("username", "email", "password", "fullname", "phone_numbers", "roles", "address", "city", "country", "created_at") VALUES
+('doctor', 'doctor@petcare.com', '$2b$10$mCT/vjETWWeusgX6hCPTXeD6DCWaFsU.Gdr2WLaUwS7x6sBPIB95W', 'Doctor User', '0123456789', 'doctor', '123 Doctor Street', 'Ho Chi Minh City', 'Vietnam', NOW());

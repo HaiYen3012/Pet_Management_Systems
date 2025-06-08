@@ -42,6 +42,14 @@ const staffMenu = [
   ]),
 ]
 
+const doctorMenu = [
+  getItem('Quản lí thú cưng', '/staff/pet-manage', <TableOutlined />),
+  getItem('Hồ sơ khám bệnh', '/staff/medical-record-manage', <FormOutlined />),
+  getItem('Khám bệnh', 'medical-service', <FormOutlined />, [
+    getItem('Sử dụng dịch vụ', '/medical-used'),
+    getItem('Thông tin dịch vụ', '/medical-info'),
+  ])
+]
 const adminMenu = [
   getItem('Thống kê báo cáo', '/admin/statistics', <AreaChartOutlined />),
   getItem('Quản lý khách hàng', '/admin/customer-manage', <FormOutlined />),
@@ -71,7 +79,8 @@ const takeMenu = (roles) => {
       return staffMenu
     case 'admin':
       return adminMenu
-
+    case 'doctor':
+      return doctorMenu
     default:
       break
   }
