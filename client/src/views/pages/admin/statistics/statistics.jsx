@@ -81,27 +81,33 @@ const Statistics = () => {
   ) / (previousMonthRevenue.appointment + previousMonthRevenue.beauty + previousMonthRevenue.storage) * 100);
 
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('vi-VN').format(value) + ' VNĐ';
+    return new Intl.NumberFormat('vi-VN').format(value);
   };
+
+  // THAY ĐỔI: Hàm mới để định dạng số sang đơn vị triệu
+  const formatToMillion = (value) => {
+    const millions = value / 1000000;
+    return millions.toFixed(1).replace('.', ',');
+  }
 
   const StatCard = ({ icon, title, value, unit, trend, color = '#FFD700' }) => (
     <div className="stat-card" style={{ borderLeft: `4px solid ${color}` }}>
-      <div className="stat-card__content">
-        <div className="stat-card__icon" style={{ backgroundColor: `${color}20`, color }}>
-          {icon}
-        </div>
-        <div className="stat-card__info">
-          <div className="stat-card__title">{title}</div>
-          <div className="stat-card__value">{value}</div>
-          <div className="stat-card__unit">{unit}</div>
-          {trend !== undefined && (
-            <div className={`stat-card__trend ${trend >= 0 ? 'positive' : 'negative'}`}>
+      <div className="stat-card__title">{title}</div>
+      <div className="stat-card__body">
+          <div className="stat-card__icon" style={{ backgroundColor: `${color}20`, color }}>
+              {icon}
+          </div>
+          <div className="stat-card__main-info">
+              <div className="stat-card__value">{value}</div>
+              <div className="stat-card__unit">{unit}</div>
+          </div>
+      </div>
+      {trend !== undefined && (
+          <div className={`stat-card__trend ${trend >= 0 ? 'positive' : 'negative'}`}>
               {trend >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
               {Math.abs(trend).toFixed(1)}% so với tháng trước
-            </div>
-          )}
-        </div>
-      </div>
+          </div>
+      )}
     </div>
   );
 
@@ -218,7 +224,7 @@ const Statistics = () => {
                 <g key={i}>
                   <line x1="50" y1={50 + i * 50} x2="550" y2={50 + i * 50} stroke="#f0f0f0" strokeWidth="1" />
                   <text x="40" y={55 + i * 50} textAnchor="end" className="axis-label">
-                    {formatCurrency(maxValue - (i * maxValue / 4))}
+                    {formatCurrency(maxValue - (i * maxValue / 4))} VNĐ
                   </text>
                 </g>
               ))}
@@ -287,7 +293,6 @@ const Statistics = () => {
     </div>
   );
 
-  // MỚI: Component hiển thị Lịch sử hoạt động
   const RecentActivityFeed = ({ data }) => (
     <div className="chart-container recent-activity-container">
       <h3 className="chart-title">Lịch sử khám & Dịch vụ gần đây</h3>
@@ -304,7 +309,7 @@ const Statistics = () => {
               </div>
               <div className="activity-meta">
                 <span className="date"><CalendarOutlined /> {item.date}</span>
-                <span className="cost"><DollarOutlined /> {formatCurrency(item.cost)}</span>
+                <span className="cost"><DollarOutlined /> {formatCurrency(item.cost)} VNĐ</span>
               </div>
             </div>
           </div>
@@ -392,7 +397,7 @@ const Statistics = () => {
         
         .stats-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          grid-template-columns: repeat(4, 1fr);
           gap: 24px;
           margin-bottom: 32px;
         }
@@ -403,6 +408,8 @@ const Statistics = () => {
           padding: 24px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
           transition: transform 0.3s ease, box-shadow 0.3s ease;
+          display: flex;
+          flex-direction: column;
         }
         
         .stat-card:hover {
@@ -410,10 +417,17 @@ const Statistics = () => {
           box-shadow: 0 8px 24px rgba(255, 215, 0, 0.15);
         }
         
-        .stat-card__content {
+        .stat-card__title {
+          font-size: 14px;
+          color: #666;
+          margin-bottom: 8px;
+        }
+
+        .stat-card__body {
           display: flex;
           align-items: center;
           gap: 20px;
+          flex-grow: 1; /* THAY ĐỔI: Quan trọng! Giúp phần thân co giãn để lấp đầy thẻ */
         }
         
         .stat-card__icon {
@@ -424,16 +438,11 @@ const Statistics = () => {
           align-items: center;
           justify-content: center;
           font-size: 24px;
+          flex-shrink: 0;
         }
         
-        .stat-card__info {
+        .stat-card__main-info {
           flex: 1;
-        }
-        
-        .stat-card__title {
-          font-size: 14px;
-          color: #666;
-          margin-bottom: 8px;
         }
         
         .stat-card__value {
@@ -441,6 +450,7 @@ const Statistics = () => {
           font-weight: bold;
           color: #333;
           margin-bottom: 4px;
+          line-height: 1.2;
         }
         
         .stat-card__unit {
@@ -652,12 +662,11 @@ const Statistics = () => {
           color: #ff4d4f;
         }
 
-        /* MỚI: CSS cho Lịch sử hoạt động */
         .recent-activity-container .activity-feed {
           display: flex;
           flex-direction: column;
           gap: 16px;
-          max-height: 280px; /* Chiều cao tối đa để có thanh cuộn */
+          max-height: 280px;
           overflow-y: auto;
           padding-right: 8px;
         }
@@ -724,6 +733,12 @@ const Statistics = () => {
           gap: 4px;
         }
         
+        @media (max-width: 1200px) {
+          .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
         @media (max-width: 768px) {
           .statistics-dashboard {
             padding: 16px;
@@ -735,6 +750,10 @@ const Statistics = () => {
             text-align: center;
           }
           
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
+
           .charts-grid {
             grid-template-columns: 1fr;
           }
@@ -804,7 +823,7 @@ const Statistics = () => {
         <StatCard
           icon={<UserOutlined />}
           title="Tổng thú cưng đăng ký"
-          value={totalPetsRegistered.toLocaleString()}
+          value="773"
           unit="con"
           trend={8.5}
           color="#FFD700"
@@ -812,15 +831,15 @@ const Statistics = () => {
         <StatCard
           icon={<DollarOutlined />}
           title="Tổng doanh thu"
-          value={formatCurrency(totalRevenue)}
-          unit=""
-          trend={revenueGrowth}
+          value={formatToMillion(246200000)}
+          unit="triệu VNĐ"
+          trend={12.3}
           color="#FFA500"
         />
         <StatCard
           icon={<MedicineBoxOutlined />}
           title="Lượt khám chữa bệnh"
-          value="1,247"
+          value={formatCurrency(1247)}
           unit="lượt"
           trend={12.3}
           color="#FF8C00"
@@ -835,13 +854,11 @@ const Statistics = () => {
         />
       </div>
 
-      {/* THAY ĐỔI: Cập nhật logic hiển thị để thêm component mới */}
       <div className="charts-grid">
         {(activeTab === 'overview' || activeTab === 'revenue') && (
             <PieChart data={serviceUsageData} title="Tỉ lệ sử dụng dịch vụ" />
         )}
         
-        {/* MỚI: Chỉ hiển thị Lịch sử hoạt động ở tab Tổng quan */}
         {activeTab === 'overview' && (
             <RecentActivityFeed data={recentActivityData} />
         )}
