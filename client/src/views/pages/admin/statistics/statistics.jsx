@@ -50,6 +50,15 @@ const serviceUsageData = [
   { service: 'Tư vấn dinh dưỡng', usage: 6.7, color: '#FFB347' }
 ];
 
+// MỚI: Dữ liệu cho lịch sử hoạt động gần đây
+const recentActivityData = [
+  { id: 1, petName: 'Milo a.k.a Vàng', service: 'Khám tổng quát', doctor: 'BS. An', date: '02/06/2025', cost: 350000 },
+  { id: 2, petName: 'Luna Mèo Anh', service: 'Tiêm phòng dại', doctor: 'BS. Bình', date: '15/05/2025', cost: 250000 },
+  { id: 3, petName: 'Kiki Phốc Sóc', service: 'Cắt tỉa lông', doctor: 'Spa. Chi', date: '14/05/2025', cost: 450000 },
+  { id: 4, petName: 'Jack Corgi', service: 'Lưu trữ (2 ngày)', doctor: 'Reception', date: '13/05/2025', cost: 600000 },
+  { id: 5, petName: 'Bông Gòn Poodle', service: 'Điều trị da', doctor: 'BS. An', date: '12/05/2025', cost: 750000 },
+];
+
 const Statistics = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedYear, setSelectedYear] = useState('2025');
@@ -277,6 +286,33 @@ const Statistics = () => {
       </div>
     </div>
   );
+
+  // MỚI: Component hiển thị Lịch sử hoạt động
+  const RecentActivityFeed = ({ data }) => (
+    <div className="chart-container recent-activity-container">
+      <h3 className="chart-title">Lịch sử khám & Dịch vụ gần đây</h3>
+      <div className="activity-feed">
+        {data.map(item => (
+          <div key={item.id} className="activity-item">
+            <div className="activity-icon">
+              <MedicineBoxOutlined />
+            </div>
+            <div className="activity-details">
+              <div className="activity-pet-service">
+                <span className="pet-name">{item.petName}</span>
+                <span className="service-name">{item.service}</span>
+              </div>
+              <div className="activity-meta">
+                <span className="date"><CalendarOutlined /> {item.date}</span>
+                <span className="cost"><DollarOutlined /> {formatCurrency(item.cost)}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
 
   return (
     <div className="statistics-dashboard">
@@ -615,6 +651,78 @@ const Statistics = () => {
         .health-trend.negative {
           color: #ff4d4f;
         }
+
+        /* MỚI: CSS cho Lịch sử hoạt động */
+        .recent-activity-container .activity-feed {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          max-height: 280px; /* Chiều cao tối đa để có thanh cuộn */
+          overflow-y: auto;
+          padding-right: 8px;
+        }
+
+        .activity-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 12px;
+          background: #fafafa;
+          border-radius: 8px;
+          border-left: 4px solid #FFA500;
+        }
+
+        .activity-icon {
+          font-size: 20px;
+          color: #FFA500;
+          background-color: #FFA50020;
+          width: 40px;
+          height: 40px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .activity-details {
+          flex: 1;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .activity-pet-service {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .activity-pet-service .pet-name {
+          font-weight: bold;
+          color: #333;
+        }
+
+        .activity-pet-service .service-name {
+          font-size: 14px;
+          color: #666;
+        }
+
+        .activity-meta {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 4px;
+          font-size: 12px;
+          color: #888;
+        }
+
+        .activity-meta .date, .activity-meta .cost {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
         
         @media (max-width: 768px) {
           .statistics-dashboard {
@@ -634,6 +742,18 @@ const Statistics = () => {
           .pie-chart-wrapper {
             flex-direction: column;
             gap: 24px;
+          }
+
+          .activity-details {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .activity-meta {
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: 8px;
           }
         }
       `}</style>
@@ -715,12 +835,19 @@ const Statistics = () => {
         />
       </div>
 
+      {/* THAY ĐỔI: Cập nhật logic hiển thị để thêm component mới */}
       <div className="charts-grid">
         {(activeTab === 'overview' || activeTab === 'revenue') && (
-          <>
             <PieChart data={serviceUsageData} title="Tỉ lệ sử dụng dịch vụ" />
-            <LineChart data={revenueData} title="Xu hướng doanh thu theo tháng" />
-          </>
+        )}
+        
+        {/* MỚI: Chỉ hiển thị Lịch sử hoạt động ở tab Tổng quan */}
+        {activeTab === 'overview' && (
+            <RecentActivityFeed data={recentActivityData} />
+        )}
+
+        {(activeTab === 'overview' || activeTab === 'revenue') && (
+          <LineChart data={revenueData} title="Xu hướng doanh thu theo tháng" />
         )}
         
         {(activeTab === 'overview' || activeTab === 'registration') && (
