@@ -12,6 +12,7 @@ import {
   Popconfirm,
   Modal,
   DatePicker,
+  Card,
 } from 'antd'
 import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import '../../index.css'
@@ -325,84 +326,90 @@ const MedicalServiceUsage = () => {
   })
 
   return (
-    <div>
-      <Typography.Title level={2} style={{ textAlign: 'center' }}>
-        Sử dụng dịch vụ y tế
-      </Typography.Title>
-      <Space
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 16,
-          marginLeft: 50,
-          width: '100%',
-        }}
-      >
-        <Form
-          layout="inline"
+    <div className="manage-page">
+      <Card className="manage-card">
+        <div className="manage-header">
+          <Typography.Title level={2}>Sử dụng dịch vụ y tế</Typography.Title>
+          <p>
+            Quản lý và theo dõi các lịch hẹn dịch vụ y tế một cách hiệu quả.
+          </p>
+        </div>
+        
+        <Space
           style={{
-            border: '1px solid #d9d9d9',
-            padding: '10px',
-            borderRadius: '4px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+            marginLeft: 50,
+            width: '100%',
           }}
         >
-          <Form.Item label="ID thú cưng">
-            <Input
-              placeholder="Nhập id"
-              style={{ width: 200 }}
-              onChange={handleSearchChange}
-              onPressEnter={handleSearchChange}
-            />
-          </Form.Item>
-          <Button
-            type="primary"
-            onClick={handleSearchChange}
-            style={{ marginLeft: 8, marginRight: 10 }}
+          <Form
+            layout="inline"
+            style={{
+              border: '1px solid #d9d9d9',
+              padding: '10px',
+              borderRadius: '4px',
+            }}
           >
-            Tìm kiếm
-          </Button>
-        </Form>
-      </Space>
-      <Row
-        style={{
-          marginBottom: 16,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography.Title level={3} style={{ marginBottom: 0 }}>
-          Search Table
-        </Typography.Title>
-        <Space>
-          <Select
-            placeholder="Sắp xếp theo"
-            style={{ width: 200 }}
-            onChange={handleSortChange}
-          >
-            <Option value="date-ascend">Ngày khám (Tăng dần)</Option>
-            <Option value="date-descend">Ngày khám (Giảm dần)</Option>
-          </Select>
-          <Button type="primary" icon={<PlusOutlined />} onClick={addNewRow}>
-            Thêm mới
-          </Button>
+            <Form.Item label="ID thú cưng">
+              <Input
+                placeholder="Nhập id"
+                style={{ width: 200 }}
+                onChange={handleSearchChange}
+                onPressEnter={handleSearchChange}
+              />
+            </Form.Item>
+            <Button
+              type="primary"
+              onClick={handleSearchChange}
+              style={{ marginLeft: 8, marginRight: 10 }}
+            >
+              Tìm kiếm
+            </Button>
+          </Form>
         </Space>
-      </Row>
-      <Form form={form} component={false}>
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
+        <Row
+          style={{
+            marginBottom: 16,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
-          bordered
-          dataSource={data}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{ pageSize: 10 }}
-        />
-      </Form>
+        >
+          <Typography.Title level={3} style={{ marginBottom: 0 }}>
+            Search Table
+          </Typography.Title>
+          <Space>
+            <Select
+              placeholder="Sắp xếp theo"
+              style={{ width: 200 }}
+              onChange={handleSortChange}
+            >
+              <Option value="date-ascend">Ngày khám (Tăng dần)</Option>
+              <Option value="date-descend">Ngày khám (Giảm dần)</Option>
+            </Select>
+            <Button type="primary" icon={<PlusOutlined />} onClick={addNewRow}>
+              Thêm mới
+            </Button>
+          </Space>
+        </Row>
+        <Form form={form} component={false}>
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            bordered
+            dataSource={data}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={{ pageSize: 10 }}
+          />
+        </Form>
+      </Card>
     </div>
   )
 }

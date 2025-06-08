@@ -46,25 +46,6 @@
   padding: 0 32px 32px 32px;
 }
 
-/* --- NÚT THÊM --- */
-.add-button {
-  background-color: var(--pet-yellow);
-  border-color: var(--pet-yellow);
-  color: var(--pet-dark-brown);
-  font-weight: 500;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  padding: 4px 16px;
-  height: 40px;
-}
-
-.add-button:hover,
-.add-button:focus {
-  background-color: #ffca28;
-  border-color: #ffca28;
-  color: var(--pet-dark-brown);
-}
-
 /* --- TÙY CHỈNH BẢNG (TABLE) --- */
 .manage-table .ant-table {
   border: 1px solid var(--pet-border-color);
@@ -89,32 +70,4 @@
 .manage-table .ant-table-pagination.ant-pagination {
   padding: 16px 0;
   margin: 0;
-}
-
-/* --- TÙY CHỈNH NÚT CẬP NHẬT VÀ XÓA --- */
-button.text-orange-300 {
-  border-color: var(--pet-border-color);
-  color: #f59e0b;
-}
-
-button.text-orange-300:hover {
-  color: #f59e0b;
-  background-color: #fef3c7;
-}
-
-button.text-red-500 {
-  border-color: var(--pet-border-color);
-  color: #ef4444;
-}
-
-button.text-red-500:hover {
-  color: #dc2626;
-  background-color: #fee2e2;
-}
-
-/* Định dạng cho spinner */
-.ant-spin {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

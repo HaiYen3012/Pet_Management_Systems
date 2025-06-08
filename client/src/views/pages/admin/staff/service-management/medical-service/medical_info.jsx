@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
-import { Table, Space, Typography, Tabs } from 'antd'
-import useService from 'hooks/useService'
+import React from 'react';
+import { Table, Typography, Card } from 'antd';
+import useService from 'hooks/useService';
+import './medical-info.scss';
+
+const { Title } = Typography;
 
 const columns = [
   {
@@ -9,7 +12,7 @@ const columns = [
     defaultSortOrder: 'ascend',
     sorter: (a, b) => a.id - b.id,
     fixed: 'left',
-    width: '70px',
+    width: 70,
   },
   {
     title: 'Thời gian',
@@ -23,32 +26,35 @@ const columns = [
     title: 'Đơn vị',
     dataIndex: 'unit',
   },
-]
+];
 
 const MedicalInfo = () => {
-  const { serviceAppointment } = useService()
+  const { serviceAppointment } = useService();
 
   return (
-    <div className="beauty-info">
-      <Space style={{ width: '100%', justifyContent: 'center' }}>
-        <Typography.Title level={2}>
-          Bảng giá dịch vụ khám chữa bệnh
-        </Typography.Title>
-        <br />
-        <br />
-      </Space>
-      <Table
-        dataSource={serviceAppointment}
-        columns={columns}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '20', '30'],
-        }}
-      />
-      ;
+    <div className="manage-page">
+      <Card className="manage-card">
+        <div className="manage-header">
+          <Title level={2}>Bảng giá dịch vụ khám chữa bệnh</Title>
+          <p>Xem và quản lý giá của các dịch vụ y tế một cách dễ dàng.</p>
+        </div>
+        <div className="manage-content">
+          <Table
+            className="manage-table"
+            dataSource={serviceAppointment}
+            columns={columns}
+            pagination={{
+              defaultPageSize: 8,
+              showSizeChanger: true,
+              pageSizeOptions: ['8', '15', '25'],
+            }}
+            rowKey="id"
+            scroll={{ x: 600 }}
+          />
+        </div>
+      </Card>
     </div>
-  )
-}
+  );
+};
 
-export default MedicalInfo
+export default MedicalInfo;

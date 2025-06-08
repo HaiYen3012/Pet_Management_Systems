@@ -10,25 +10,23 @@ const { Title } = Typography
 
 // Định dạng giá tiền cho đẹp
 const formatPrice = (price) => (
-  <span className="price-cell">
-    {Number(price).toLocaleString('vi-VN')} ₫
-  </span>
-);
+  <span className="price-cell">{Number(price).toLocaleString('vi-VN')} ₫</span>
+)
 
 // Cột cho dịch vụ Khám & Làm đẹp
 const columnsAppointmentAndBeauty = [
   {
     // THAY ĐỔI: Sửa "Mã Dịch Vụ" thành "ID"
-    title: 'ID', 
+    title: 'ID',
     dataIndex: 'id',
     key: 'id',
     width: 120,
     // Chức năng sort đã có sẵn ở đây
-    sorter: (a, b) => a.id - b.id, 
+    sorter: (a, b) => a.id - b.id,
   },
   {
     // THAY ĐỔI: Sửa "Hạng Mục" thành "Thời gian"
-    title: 'Thời gian', 
+    title: 'Thời gian',
     dataIndex: 'time',
     key: 'time',
   },
@@ -77,20 +75,19 @@ const columnsStorage = [
 // Component Bảng con để tái sử dụng
 const ServiceTable = ({ dataSource, columns }) => (
   <div className="service-cost-table-wrapper">
-      <Table
-        className="service-cost-table"
-        dataSource={dataSource}
-        columns={columns}
-        rowKey="id"
-        pagination={{
-          defaultPageSize: 8,
-          showSizeChanger: true,
-          pageSizeOptions: ['8', '15', '25'],
-        }}
-      />
+    <Table
+      className="service-cost-table"
+      dataSource={dataSource}
+      columns={columns}
+      rowKey="id"
+      pagination={{
+        defaultPageSize: 8,
+        showSizeChanger: true,
+        pageSizeOptions: ['8', '15', '25'],
+      }}
+    />
   </div>
-);
-
+)
 
 const ServiceCost = () => {
   const { serviceAppointment, serviceBeauty, serviceStorage } = useService()
@@ -100,17 +97,29 @@ const ServiceCost = () => {
     {
       key: '1',
       label: 'Dịch vụ Khám & Chữa bệnh',
-      children: <ServiceTable dataSource={serviceAppointment} columns={columnsAppointmentAndBeauty} />,
+      children: (
+        <ServiceTable
+          dataSource={serviceAppointment}
+          columns={columnsAppointmentAndBeauty}
+        />
+      ),
     },
     {
       key: '2',
       label: 'Dịch vụ Trông giữ (Hotel)',
-      children: <ServiceTable dataSource={serviceStorage} columns={columnsStorage} />,
+      children: (
+        <ServiceTable dataSource={serviceStorage} columns={columnsStorage} />
+      ),
     },
     {
       key: '3',
       label: 'Dịch vụ Spa & Grooming',
-      children: <ServiceTable dataSource={serviceBeauty} columns={columnsAppointmentAndBeauty} />,
+      children: (
+        <ServiceTable
+          dataSource={serviceBeauty}
+          columns={columnsAppointmentAndBeauty}
+        />
+      ),
     },
   ]
 
@@ -120,14 +129,14 @@ const ServiceCost = () => {
         <div className="service-cost-header">
           <Title level={2}>Bảng Giá Dịch Vụ</Title>
           <p>
-            Chúng tôi cung cấp các dịch vụ chăm sóc toàn diện với mức giá hợp lý, 
-            đảm bảo mang lại trải nghiệm tốt nhất cho các bé cưng.
+            Chúng tôi cung cấp các dịch vụ chăm sóc toàn diện với mức giá hợp
+            lý, đảm bảo mang lại trải nghiệm tốt nhất cho các bé cưng.
           </p>
         </div>
-        
-        <Tabs 
-          defaultActiveKey="1" 
-          items={serviceItems} 
+
+        <Tabs
+          defaultActiveKey="1"
+          items={serviceItems}
           centered // Căn giữa các tab
           className="service-cost-tabs"
         />

@@ -1,0 +1,106 @@
+:root {
+  --pet-yellow: #ffc107;
+  --pet-dark-brown: #6d4c41;
+  --pet-light-brown: #a1887f;
+  --pet-bg-main: #fdfaf5;
+  --pet-bg-container: #ffffff;
+  --pet-border-color: #f0e9e1;
+}
+
+/* --- TỔNG THỂ TRANG --- */
+.service-cost-page {
+  background-color: var(--pet-bg-main);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* --- KHUNG CARD CHÍNH --- */
+.service-cost-card {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+}
+
+/* --- HEADER CỦA CARD --- */
+.service-cost-header {
+  text-align: center;
+  padding: 40px 24px 24px 24px;
+}
+
+.service-cost-header .ant-typography {
+  color: var(--pet-dark-brown);
+  margin-bottom: 8px;
+}
+
+.service-cost-header p {
+  font-size: 16px;
+  color: var(--pet-light-brown);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- TÙY CHỈNH TABS --- */
+.service-cost-tabs .ant-tabs-nav {
+  padding: 0 32px; /* Tạo khoảng trống 2 bên cho thanh tab */
+  margin-bottom: 0;
+}
+
+.service-cost-tabs .ant-tabs-tab {
+  padding: 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--pet-light-brown);
+}
+
+.service-cost-tabs .ant-tabs-tab-btn:focus, 
+.service-cost-tabs .ant-tabs-tab-btn:active {
+  color: var(--pet-yellow);
+}
+
+.service-cost-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+}
+
+.service-cost-tabs .ant-tabs-ink-bar {
+  background: var(--pet-yellow);
+  height: 3px;
+  border-radius: 3px;
+}
+
+/* --- TÙY CHỈNH BẢNG (TABLE) --- */
+.service-cost-table-wrapper {
+  padding: 0 32px 32px 32px;
+}
+
+.service-cost-table .ant-table {
+  border: 1px solid var(--pet-border-color);
+  border-radius: 8px;
+}
+
+.service-cost-table .ant-table-thead > tr > th {
+  background-color: #faf8f5;
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.service-cost-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.service-cost-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: var(--pet-bg-main);
+}
+.service-cost-table .ant-table-pagination.ant-pagination {
+  padding: 16px 0;
+  margin: 0;
+}
+
+/* Định dạng đặc biệt cho cột giá */
+.price-cell {
+  font-weight: 600;
+  color: #c88116; /* Màu vàng cam đậm hơn */
+}
