@@ -1,35 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Form,
   Spin,
-  InputNumber,
   Popconfirm,
   Table,
   Typography,
-  Space,
-} from 'antd'
+  Card,
+} from 'antd';
 import {
-  EditOutlined,
-  DeleteOutlined,
   PlusOutlined,
   LoadingOutlined,
-} from '@ant-design/icons'
-import './manage-customer.scss'
-import {
-  FaPlus,
-  FaSearch,
-  FaPen,
-  FaTrashAlt,
-  FaSave,
-  FaTimes,
-} from 'react-icons/fa'
-import ModalCustomer from './modal-add-edit'
-import user from 'api/user'
-import { toast } from 'react-toastify'
+} from '@ant-design/icons';
+import { FaPen, FaTrashAlt } from 'react-icons/fa';
+import ModalCustomer from './modal-add-edit';
+import user from 'api/user';
+import { toast } from 'react-toastify';
+import './manage-customer.scss';
+
+const { Title } = Typography;
 
 const ManageCustomer = () => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const dataModalDefault = {
     key: '',
     user_id: '',
@@ -41,218 +33,214 @@ const ManageCustomer = () => {
     city: '',
     country: '',
     created_at: '',
-  }
-  const [listCustomer, setListCustomer] = useState(dataModalDefault)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [action, setAction] = useState('')
-  const [dataModal, setDataModal] = useState({})
+  };
+  const [listCustomer, setListCustomer] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [action, setAction] = useState('');
+  const [dataModal, setDataModal] = useState(dataModalDefault);
 
   const handleOk = () => {
-    setIsModalOpen(false)
-    setAction('')
-    setDataModal(dataModalDefault)
-    form.resetFields()
-  }
+    setIsModalOpen(false);
+    setAction('');
+    setDataModal(dataModalDefault);
+    form.resetFields();
+  };
 
   const showModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const handleCancel = () => {
-    setDataModal(dataModalDefault)
-    setAction('')
-    setIsModalOpen(false)
-    form.resetFields()
-  }
+    setDataModal(dataModalDefault);
+    setAction('');
+    setIsModalOpen(false);
+    form.resetFields();
+  };
 
   const handleCreate = () => {
-    setDataModal(dataModalDefault)
-    setAction('CREATE')
-    showModal()
-  }
+    setDataModal(dataModalDefault);
+    setAction('CREATE');
+    showModal();
+  };
 
   const convertDate = (dateString) => {
-    const date = new Date(dateString)
-    const day = date.getDate().toString().padStart(2, '0')
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const year = date.getFullYear()
-
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    const seconds = date.getSeconds().toString().padStart(2, '0')
-
-    const formattedDate = `${hours}:${minutes}:${seconds} ${day}/${month}/${year} `
-    return formattedDate
-  }
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+  };
 
   const fetchData = async () => {
-    const data = (await user.getAllCustomer()).data
-    const modifiedData = data.map((item) => {
-      let newItem = {
+    try {
+      const data = (await user.getAllCustomer()).data;
+      const modifiedData = data.map((item) => ({
         ...item,
         key: item.user_id,
         created_at: convertDate(item.created_at),
-      }
-      return newItem
-    })
-    setListCustomer(modifiedData)
-  }
+      }));
+      setListCustomer(modifiedData);
+    } catch (error) {
+      toast.error('Failed to fetch customers');
+    }
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const columns = [
     {
       title: 'ID',
       dataIndex: 'user_id',
-      defaultSortOrder: 'descend',
+      key: 'user_id',
+      width: 120,
       sorter: (a, b) => a.user_id - b.user_id,
       fixed: 'left',
-      width: '60px',
     },
     {
       title: 'Tên khách hàng',
       dataIndex: 'fullname',
+      key: 'fullname',
       fixed: 'left',
     },
     {
       title: 'Tên đăng nhập',
       dataIndex: 'username',
-      width: '140px',
+      key: 'username',
+      width: 140,
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      width: '220px',
+      key: 'email',
+      width: 220,
     },
     {
       title: 'SĐT',
       dataIndex: 'phone_numbers',
+      key: 'phone_numbers',
     },
     {
       title: 'Địa chỉ',
       dataIndex: 'address',
+      key: 'address',
     },
     {
       title: 'Thành phố',
       dataIndex: 'city',
+      key: 'city',
     },
     {
       title: 'Quốc tịch',
       dataIndex: 'country',
+      key: 'country',
     },
     {
       title: 'Ngày tạo',
       dataIndex: 'created_at',
+      key: 'created_at',
     },
     {
       title: 'Cập nhật',
+      key: 'update',
       width: 95,
-      render: (text, record) => {
-        const handleUpdate = () => {
-          setAction('UPDATE')
-          setDataModal(record)
-          showModal()
-        }
-        return (
-          <button
-            className="ml-3 p-2 text-orange-300 hover:text-orange-400 hover:bg-orange-50 rounded border transition-colors"
-            onClick={() => handleUpdate()}
-          >
-            <FaPen />
-          </button>
-        )
-      },
+      render: (_, record) => (
+        <Button
+          className="action-button update-button"
+          onClick={() => {
+            setAction('UPDATE');
+            setDataModal(record);
+            showModal();
+          }}
+          icon={<FaPen />}
+        />
+      ),
       fixed: 'right',
     },
     {
       title: 'Xóa',
+      key: 'delete',
       width: 90,
-      render: (text, record) => {
-        const handleDelete = async () => {
-          await user.deleteUser(record.user_id)
-          toast.success('Xóa khách hàng thành công!')
-          fetchData()
-        }
-        return (
-          <Popconfirm
-            title="Xóa khách hàng"
-            description="Bạn có chắc chắn muốn xóa?"
-            okText="Xóa"
-            cancelText="Hủy"
-            onConfirm={() => handleDelete()}
-          >
-            <button className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border  transition-colors">
-              <FaTrashAlt />
-            </button>
-            {/* <Button danger>
-                            <DeleteOutlined style={{ fontSize: '20px', color: 'red' }} />
-                        </Button> */}
-          </Popconfirm>
-        )
-      },
+      render: (_, record) => (
+        <Popconfirm
+          title="Xóa khách hàng"
+          description="Bạn có chắc chắn muốn xóa?"
+          okText="Xóa"
+          cancelText="Hủy"
+          onConfirm={async () => {
+            await user.deleteUser(record.user_id);
+            toast.success('Xóa khách hàng thành công!');
+            fetchData();
+          }}
+        >
+          <Button
+            className="action-button delete-button"
+            icon={<FaTrashAlt />}
+            danger
+          />
+        </Popconfirm>
+      ),
       fixed: 'right',
     },
-  ]
+  ];
 
   return (
-    <>
-      <div className="manage-customer__container">
-        <Space style={{ width: '100%', justifyContent: 'center' }}>
-          <Typography.Title level={2}>Quản lý khách hàng</Typography.Title>
-          <br />
-          <br />
-        </Space>
-
-        <div className="manage-customer__content">
+    <div className="manage-customer-page">
+      <Card className="manage-customer-card">
+        <div className="manage-customer-header">
+          <Title level={2}>Quản lý khách hàng</Title>
+          <p>Quản lý thông tin khách hàng một cách dễ dàng và hiệu quả.</p>
+        </div>
+        <div className="manage-customer-content">
           <Button
-            onClick={handleCreate}
             type="primary"
-            style={{ marginBottom: 16, width: '100px' }}
+            className="add-button"
+            onClick={handleCreate}
+            icon={<PlusOutlined />}
           >
-            <PlusOutlined />
             Thêm
           </Button>
           {listCustomer && listCustomer.length > 0 ? (
             <Table
+              className="manage-customer-table"
               columns={columns}
               dataSource={listCustomer}
               pagination={{
-                defaultPageSize: 10,
+                defaultPageSize: 8,
                 showSizeChanger: true,
-                pageSizeOptions: ['10', '20', '30'],
+                pageSizeOptions: ['8', '15', '25'],
               }}
-              bordered
-              scroll={{
-                x: 1500,
-              }}
+              rowKey="user_id"
+              scroll={{ x: 1500 }}
             />
           ) : (
             <Spin
               indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
               style={{
                 height: '100vh',
-                alignItems: 'center',
                 display: 'flex',
                 justifyContent: 'center',
+                alignItems: 'center',
               }}
             />
           )}
         </div>
-      </div>
+        <ModalCustomer
+          form={form}
+          isModalOpen={isModalOpen}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
+          action={action}
+          dataModal={dataModal}
+          fetchData={fetchData}
+        />
+      </Card>
+    </div>
+  );
+};
 
-      <ModalCustomer
-        form={form}
-        isModalOpen={isModalOpen}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        action={action}
-        dataModal={dataModal}
-        fetchData={fetchData}
-      />
-    </>
-  )
-}
-
-export default ManageCustomerzz
+export default ManageCustomer;

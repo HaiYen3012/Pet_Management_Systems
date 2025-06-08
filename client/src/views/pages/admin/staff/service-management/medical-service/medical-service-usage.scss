@@ -1,0 +1,250 @@
+:root {
+  --pet-yellow: #ffc107;
+  --pet-dark-brown: #6d4c41;
+  --pet-light-brown: #a1887f;
+  --pet-bg-main: #fdfaf5;
+  --pet-bg-container: #ffffff;
+  --pet-border-color: #f0e9e1;
+}
+
+/* --- TỔNG THỂ TRANG --- */
+.manage-page {
+  background-color: var(--pet-bg-main);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* --- KHUNG CARD CHÍNH --- */
+.manage-card {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+}
+
+/* --- HEADER CỦA CARD --- */
+.manage-header {
+  text-align: center;
+  padding: 40px 24px 24px 24px;
+}
+
+.manage-header .ant-typography {
+  color: var(--pet-dark-brown);
+  margin-bottom: 8px;
+}
+
+.manage-header p {
+  font-size: 16px;
+  color: var(--pet-light-brown);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- TÙY CHỈNH NỘI DUNG --- */
+.manage-content {
+  padding: 0 32px 32px 32px;
+}
+
+/* --- THANH TÌM KIẾM --- */
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.search-bar .ant-form {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.search-bar .ant-form-item {
+  margin-bottom: 0;
+}
+
+.search-input {
+  border-radius: 8px !important;
+  border-color: var(--pet-border-color) !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+}
+
+.search-input:hover,
+.search-input:focus {
+  border-color: var(--pet-yellow) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
+.search-button {
+  background-color: var(--pet-yellow) !important;
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-dark-brown) !important;
+  border-radius: 8px !important;
+  height: 40px !important;
+}
+
+.search-button:hover,
+.search-button:focus {
+  background-color: #ffca28 !important;
+  border-color: #ffca28 !important;
+}
+
+.sort-select .ant-select-selector {
+  border-radius: 8px !important;
+  border-color: var(--pet-border-color) !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+}
+
+.sort-select .ant-select-selector:hover,
+.sort-select .ant-select-selector:focus {
+  border-color: var(--pet-yellow) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
+/* --- NÚT THÊM --- */
+.add-button {
+  background-color: var(--pet-yellow) !important;
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-dark-brown) !important;
+  font-weight: 500;
+  border-radius: 8px !important;
+  padding: 4px 16px !important;
+  height: 40px !important;
+}
+
+.add-button:hover,
+.add-button:focus {
+  background-color: #ffca28 !important;
+  border-color: #ffca28 !important;
+}
+
+/* --- TÙY CHỈNH BẢNG (TABLE) --- */
+.manage-table .ant-table {
+  border: 1px solid var(--pet-border-color);
+  border-radius: 8px;
+}
+
+.manage-table .ant-table-thead > tr > th {
+  background-color: #faf8f5;
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.manage-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.manage-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: var(--pet-bg-main);
+}
+
+.manage-table .ant-table-pagination.ant-pagination {
+  padding: 16px 0;
+  margin: 0;
+}
+
+/* --- TÙY CHỈNH NÚT CẬP NHẬT VÀ XÓA --- */
+.action-buttons button.text-orange-300 {
+  border-color: var(--pet-border-color);
+  color: #f59e0b;
+}
+
+.action-buttons button.text-orange-300:hover {
+  color: #f59e0b;
+  background-color: #fef3c7;
+}
+
+.action-buttons button.text-red-500 {
+  border-color: var(--pet-border-color);
+  color: #ef4444;
+}
+
+.action-buttons button.text-red-500:hover {
+  color: #dc2626;
+  background-color: #fee2e2;
+}
+
+/* --- TÙY CHỈNH TRẠNG THÁI --- */
+.status-tag {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-created {
+  background-color: #e0f7fa;
+  color: #00695c;
+}
+
+.status-processing {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-complete {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-canceled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* --- TÙY CHỈNH INPUT KHI CHỈNH SỬA --- */
+.editable-input {
+  border-radius: 8px !important;
+  border-color: var(--pet-border-color) !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+}
+
+.editable-input:hover,
+.editable-input:focus {
+  border-color: var(--pet-yellow) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
+.editable-select .ant-select-selector {
+  border-radius: 8px !important;
+  border-color: var(--pet-border-color) !important;
+  padding: 8px 12px !important;
+  font-size: 15px !important;
+}
+
+.editable-select .ant-select-selector:hover,
+.editable-select .ant-select-selector:focus {
+  border-color: var(--pet-yellow) !important;
+  box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+}
+
+/* --- TÙY CHỈNH LINK LƯU/HỦY --- */
+.action-links {
+  display: flex;
+  gap: 12px;
+}
+
+.save-link {
+  color: #1890ff !important;
+  font-weight: 500;
+}
+
+.save-link:hover {
+  color: #40a9ff !important;
+}
+
+.cancel-link {
+  color: #ef4444 !important;
+  font-weight: 500;
+}
+
+.cancel-link:hover {
+  color: #dc2626 !important;
+}

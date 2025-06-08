@@ -1,14 +1,126 @@
-.manage-customer {
-    &__container {
-        // width: calc(100vw - 250px);
-        &__content {
-            // width: calc(100vw - 250px);
-            background: #fff;
-            padding: 10px;
-            padding-top: 30px;
-            min-height: 800px;
-            display: flex;
-            flex-direction: column;
-        }
-    }
+:root {
+  --pet-yellow: #ffc107;
+  --pet-dark-brown: #6d4c41;
+  --pet-light-brown: #a1887f;
+  --pet-bg-main: #fdfaf5;
+  --pet-bg-container: #ffffff;
+  --pet-border-color: #f0e9e1;
+}
+
+/* --- TỔNG THỂ TRANG --- */
+.manage-customer-page {
+  background-color: var(--pet-bg-main);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* --- KHUNG CARD CHÍNH --- */
+.manage-customer-card {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+}
+
+/* --- HEADER CỦA CARD --- */
+.manage-customer-header {
+  text-align: center;
+  padding: 40px 24px 24px 24px;
+}
+
+.manage-customer-header .ant-typography {
+  color: var(--pet-dark-brown);
+  margin-bottom: 8px;
+}
+
+.manage-customer-header p {
+  font-size: 16px;
+  color: var(--pet-light-brown);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- TÙY CHỈNH NỘI DUNG --- */
+.manage-customer-content {
+  padding: 0 32px 32px 32px;
+}
+
+/* --- NÚT THÊM --- */
+.add-button {
+  background-color: var(--pet-yellow);
+  border-color: var(--pet-yellow);
+  color: var(--pet-dark-brown);
+  font-weight: 500;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  padding: 4px 16px;
+  height: 40px;
+}
+
+.add-button:hover,
+.add-button:focus {
+  background-color: #ffca28;
+  border-color: #ffca28;
+  color: var(--pet-dark-brown);
+}
+
+/* --- TÙY CHỈNH BẢNG (TABLE) --- */
+.manage-customer-table .ant-table {
+  border: 1px solid var(--pet-border-color);
+  border-radius: 8px;
+}
+
+.manage-customer-table .ant-table-thead > tr > th {
+  background-color: #faf8f5;
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.manage-customer-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--pet-border-color);
+}
+
+.manage-customer-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: var(--pet-bg-main);
+}
+
+.manage-customer-table .ant-table-pagination.ant-pagination {
+  padding: 16px 0;
+  margin: 0;
+}
+
+/* --- TÙY CHỈNH NÚT HÀNH ĐỘNG --- */
+.action-button {
+  border-radius: 8px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.update-button {
+  border-color: var(--pet-border-color);
+  color: var(--pet-light-brown);
+}
+
+.update-button:hover {
+  background: var(--pet-bg-main);
+  color: var(--pet-dark-brown);
+}
+
+.delete-button {
+  border-color: var(--pet-border-color);
+}
+
+.delete-button:hover {
+  background: var(--pet-bg-main);
+}
+
+/* Định dạng cho spinner */
+.ant-spin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -2,13 +2,15 @@ require('dotenv').config()
 const { Pool } = require('pg')
 
 const connectionString = process.env.DATABASE_URL
+const dbPassword = process.env.DB_PASSWORD
+const dbName = process.env.DB_NAME
 
 const pool = new Pool({
   user: 'postgres',
-  password: '30122004',
+  password: dbPassword,
   host: 'localhost',
   port: 5432,
-  database: 'pet_home',
+  database: dbName,
   ssl: false, // Bắt buộc phải false với PostgreSQL local
 });
 
