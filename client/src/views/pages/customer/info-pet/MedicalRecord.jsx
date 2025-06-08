@@ -1,195 +1,198 @@
 import React, { useEffect, useState } from 'react';
 import service from 'api/service';
-import { Spin } from 'antd'
-import { LoadingOutlined } from '@ant-design/icons'
-import { useParams } from 'react-router-dom'
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
 import { formatDateIsoString } from 'helpers/formartdate';
+
+// --- ICONS (Sử dụng SVG để dễ dàng tùy chỉnh màu sắc và kích thước) ---
+const ChevronLeftIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+  </svg>
+);
+
+// --- COMPONENTS ĐÃ ĐƯỢC THIẾT KẾ LẠI VỚI TÔNG MÀU VÀNG - NÂU ---
 
 function MedicalRecordTitle({ title, date }) {
   return (
-    <div className="flex gap-1 self-start mb-4">
-      <div className="text-3xl font-medium leading-10 text-black text-opacity-80">
-        {title}
-      </div>
-      <div className="my-auto text-sm leading-5 text-black text-opacity-50">
-        {date}
-      </div>
+    <div className="pb-4 mb-6 border-b-2 border-amber-200/80">
+      <h1 className="text-4xl font-bold text-amber-900">{title}</h1>
+      <p className="mt-1 text-base text-amber-700">{date}</p>
     </div>
   );
 }
 
 function MedicalRecordDetail({ label, value }) {
   return (
-    <div className="flex gap-10 p-2">
-      <div className="text-base w-40 font-medium leading-6 text-black text-opacity-80">
-        {label}
+    <div className="grid grid-cols-3 gap-4 px-4 py-3 border-b border-amber-200/50 last:border-b-0">
+      <div className="col-span-1 font-semibold text-amber-800">{label}</div>
+      <div className="col-span-2 text-amber-900 not-italic">{value}</div>
+    </div>
+  );
+}
+
+function MedicalRecord({ diagnostic, symptoms }) {
+  return (
+    <div className="bg-amber-50 rounded-xl shadow-lg overflow-hidden">
+      <div className="p-6">
+        <h3 className="text-xl font-semibold text-amber-800 mb-4">Thông tin khám bệnh</h3>
+        <div className="flex flex-col">
+          <MedicalRecordDetail label="Triệu chứng:" value={symptoms || "Chưa cập nhật"} />
+          <MedicalRecordDetail label="Chuẩn đoán:" value={diagnostic || "Chưa cập nhật"} />
+          <MedicalRecordDetail label="Tiền sử bệnh lý:" value="Không có" />
+        </div>
       </div>
-      <div className="text-sm not-italic">{value}</div>
     </div>
   );
 }
 
-function MedicalRecord({diagnostic, neutered, symptoms, }) {
-  return (
-    <div className="flex flex-col justify-center bg-white rounded-sm border border-solid border-zinc-100 p-4">
-      <MedicalRecordDetail label="Triệu chứng :" value={symptoms} />
-      <MedicalRecordDetail label="Chuẩn đoán :" value={diagnostic} />
-      <MedicalRecordDetail label="Tiền sử bệnh lý :" value="Không có" />
-    </div>
-  );
-}
-
-function PrescriptionTable({prescriptions}) {
- 
-
-  // const prescriptions = [
-  //   {
-  //     name: 'Thuốc đau bụng',
-  //     description: 'Sáng 2 viên, tối 2 viên sau ăn',
-  //     unit: 'Viên',
-  //     amount: 30,
-  //   },
-  //   {
-  //     name: 'Thuốc đau bụng',
-  //     description: 'Sáng 2 viên, tối 2 viên sau ăn',
-  //     unit: 'Viên',
-  //     amount: 30,
-  //   },
-  //   {
-  //     name: 'Thuốc đau bụng',
-  //     description: 'Sáng 2 viên, tối 2 viên sau ăn',
-  //     unit: 'Viên',
-  //     amount: 30,
-  //   },
-  // ];
+function PrescriptionTable({ prescriptions }) {
+  if (!prescriptions || prescriptions.length === 0) {
+    return (
+      <div className="mt-8 text-center text-amber-700 p-8 bg-amber-50 rounded-xl shadow-lg">
+        Không có đơn thuốc nào.
+      </div>
+    );
+  }
 
   return (
-    <div className=" w-full mt-4">
-      <table className="w-full bg-white border border-solid border-zinc-100">
-        <thead className="bg-neutral-50">
-          <tr>
-            <th className="px-4 py-2 text-left border-b border-solid border-black border-opacity-10">STT</th>
-            <th className="px-4 py-2 text-left border-b border-solid border-black border-opacity-10">Tên thuốc</th>
-            <th className="px-4 py-2 text-left border-b border-solid border-black border-opacity-10">Mô tả</th>
-            {/* <th className="px-4 py-2 text-left border-b border-solid border-black border-opacity-10">Đơn vị tính</th> */}
-            <th className="px-4 py-2 text-left border-b border-solid border-black border-opacity-10">Số lượng</th>
-          </tr>
-        </thead>
-        <tbody>
-          {prescriptions.map((prescription, index) => (
-            <tr key={index}>
-              <td className="px-4 py-2 border-b border-solid border-black border-opacity-10">{index + 1}</td>
-              <td className="px-4 py-2 border-b border-solid border-black border-opacity-10">{prescription.medicine}</td>
-              <td className="px-4 py-2 border-b border-solid border-black border-opacity-10">{prescription.note}</td>
-              {/* <td className="px-4 py-2 border-b border-solid border-black border-opacity-10">{prescription.unit}</td> */}
-              <td className="px-4 py-2 border-b border-solid border-black border-opacity-10">{prescription.dosage}</td>
+    <div className="mt-8">
+      <h2 className="text-2xl font-semibold text-amber-900 mb-4">Đơn thuốc</h2>
+      <div className="overflow-x-auto bg-amber-50 rounded-xl shadow-lg">
+        <table className="w-full text-left">
+          <thead className="bg-amber-400 text-white">
+            <tr>
+              <th className="px-6 py-4 font-bold uppercase tracking-wider text-sm">STT</th>
+              <th className="px-6 py-4 font-bold uppercase tracking-wider text-sm">Tên thuốc</th>
+              <th className="px-6 py-4 font-bold uppercase tracking-wider text-sm">Ghi chú/Liều dùng</th>
+              <th className="px-6 py-4 font-bold uppercase tracking-wider text-sm text-right">Số lượng</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-amber-800">
+            {prescriptions.map((prescription, index) => (
+              <tr key={index} className="border-t border-amber-200/80 hover:bg-amber-200/60 transition-colors">
+                <td className="px-6 py-4">{index + 1}</td>
+                <td className="px-6 py-4 font-medium text-amber-900">{prescription.medicine}</td>
+                <td className="px-6 py-4">{prescription.note}</td>
+                <td className="px-6 py-4 text-right">{prescription.dosage}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
 
-function PaginationButton({ children, active }) {
+function PaginationButton({ children, active, onClick }) {
+  const baseClasses = "flex justify-center items-center w-10 h-10 text-base font-semibold rounded-lg transition-colors duration-200";
+  const activeClasses = "bg-amber-500 text-white shadow-md cursor-default";
+  const inactiveClasses = "bg-amber-50/80 text-amber-800 border border-amber-300 hover:bg-amber-200/80 hover:border-amber-400";
+
   return (
-    <div
-      className={`flex justify-center items-center px-2 py-px w-8 h-8 text-sm leading-6 text-center whitespace-nowrap bg-white rounded-sm border ${active
-          ? 'border-sky-500 text-sky-500'
-          : 'border-zinc-300 text-black text-opacity-80'
-        } border-solid`}
-    >
+    <button onClick={onClick} className={`${baseClasses} ${active ? activeClasses : inactiveClasses}`}>
       {children}
-    </div>
+    </button>
   );
 }
 
-function PaginationArrow({ src, alt }) {
+function PaginationArrow({ direction, onClick, disabled }) {
+  const classes = `flex justify-center items-center w-10 h-10 bg-amber-50/80 text-amber-800 border border-amber-300 rounded-lg transition-colors duration-200 ${
+    disabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-amber-200/80 hover:border-amber-400'
+  }`;
+
   return (
-    <div className="flex justify-center items-center p-2.5 w-8 h-8 bg-white rounded-sm border border-solid border-zinc-300">
-      <img loading="lazy" src={src} alt={alt} className="w-3 aspect-square" />
-    </div>
+    <button onClick={onClick} disabled={disabled} className={classes}>
+      {direction === 'prev' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+    </button>
   );
 }
 
 export function Pagination() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5;
+
   return (
-    <div className="flex gap-2 self-end mt-4">
-      <PaginationArrow
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/220fbb8d6d949daa944f15505399166ff0f5e13155ef3440cae16321a60b187a?apiKey=f19a917c094b4f6fa8172f34eb76d09c&"
-        alt="Previous page"
-      />
-      <PaginationButton active>1</PaginationButton>
-      <PaginationButton>2</PaginationButton>
-      <PaginationButton>3</PaginationButton>
-      <PaginationButton>4</PaginationButton>
-      <PaginationButton>5</PaginationButton>
-      <PaginationArrow
-        src="https://cdn.builder.io/api/v1/image/assets/TEMP/755c430c06f4ff3914692fe640bb1afaa76d927161e5df758d7039ff333a5cbf?apiKey=f19a917c094b4f6fa8172f34eb76d09c&"
-        alt="Next page"
-      />
+    <div className="flex justify-end items-center gap-2 mt-8">
+      <PaginationArrow direction="prev" onClick={() => {/* Logic lùi trang */}} disabled={currentPage === 1} />
+      {[1, 2, 3, 4, 5].map(page => (
+        <PaginationButton key={page} active={currentPage === page} onClick={() => setCurrentPage(page)}>
+          {page}
+        </PaginationButton>
+      ))}
+      <PaginationArrow direction="next" onClick={() => {/* Logic tiến trang */}} disabled={currentPage === totalPages} />
     </div>
   );
 }
 
+// --- MAIN COMPONENT ---
+
 export function MedicalRecordSection() {
-  const [medicalRecords, setMedicalRecords] = useState({})
-  const [prescriptions, setPrescription] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-  const { slug } = useParams()
+  const [medicalRecords, setMedicalRecords] = useState({});
+  const [prescriptions, setPrescription] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const { slug } = useParams();
 
   useEffect(() => {
-    const params = { pet_id: slug }
+    setLoading(true);
+    const params = { pet_id: slug };
     service
       .getMedicalRecordsbyPetId(params)
       .then((res) => {
-        setMedicalRecords(res.data.medicalRecords)
-        setPrescription(res.data.prescriptions)
-        // console.log(res);
+        setMedicalRecords(res.data.medicalRecords || {});
+        setPrescription(res.data.prescriptions || []);
+        if (!res.data.medicalRecords) {
+           setError(true);
+        }
       })
-      .catch((error) => {
-        console.log(error);
-        setError(true)
-      }).finally (()=> {
-        setLoading(false)
+      .catch((err) => {
+        console.error(err);
+        setError(true);
       })
-  }, [slug])
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [slug]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center h-[60vh] bg-amber-100">
         <Spin
-          indicator={<LoadingOutlined style={{ fontSize: 30 }} spin />}
-          style={{
-            height: '60vh',
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
+          indicator={<LoadingOutlined style={{ fontSize: 40, color: '#a16207' }} spin />}
         />
       </div>
-    )
+    );
   }
 
-  if (error ) {
+  if (error) {
     return (
-      <div className="flex justify-center items-center text-red-500 text-xl">
-        Thú cưng hiện không có hồ sơ bệnh án
+      <div className="flex flex-col items-center justify-center h-[60vh] text-center p-4 bg-amber-100">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-amber-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h2 className="text-2xl font-semibold text-amber-900">Không tìm thấy hồ sơ</h2>
+          <p className="text-amber-700 mt-2">Thú cưng này hiện chưa có hồ sơ bệnh án nào.</p>
       </div>
-    )
+    );
   }
+
   return (
-    <div className="flex flex-col ml-5 w-[74%] max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col grow pb-4 max-md:mt-10 max-md:max-w-full">
+    // Nền chính màu vàng ấm
+    <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 bg-amber-100 min-h-screen">
+      <div className="w-full">
         <MedicalRecordTitle
           title="Hồ sơ bệnh án"
-          date={`Ngày khám : ${formatDateIsoString(medicalRecords.created_at)}`}
+          date={`Ngày khám: ${formatDateIsoString(medicalRecords.created_at)}`}
         />
-        <MedicalRecord {...medicalRecords}/>
-        <div className="mt-7 text-xl font-medium leading-7 text-black text-opacity-80 max-md:max-w-full">
-          Đơn thuốc
-        </div>
+        <MedicalRecord {...medicalRecords} />
         <PrescriptionTable prescriptions={prescriptions} />
         <Pagination />
       </div>

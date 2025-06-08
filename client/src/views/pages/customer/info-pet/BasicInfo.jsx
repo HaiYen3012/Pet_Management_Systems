@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button } from 'antd'
+import { Button, ConfigProvider } from 'antd'
 import pet from 'api/pet'
 import { toast } from 'react-toastify'
 import usePet from 'hooks/usePet'
@@ -25,16 +25,45 @@ function getLabel(key) {
   }
 }
 
+// Theme màu vàng nhẹ nhàng
+const softYellowTheme = {
+  token: {
+    colorPrimary: '#F5D76E', // Vàng nhẹ nhàng
+    colorPrimaryHover: '#F2C94C',
+    colorPrimaryActive: '#E6B800',
+  },
+}
+
 function FormField({ label, value, name, onChange }) {
   return (
-    <div className="flex flex-col pb-6 text-sm leading-5">
-      <div className="text-black text-opacity-80">{label}</div>
-      <div className="flex flex-col justify-center text-black mt-2 whitespace-nowrap bg-white rounded-sm border border-solid border-zinc-300 text-opacity-80">
+    <div className="pb-6">
+      <label 
+        className="block text-sm font-medium mb-2"
+        style={{ color: '#4A4A4A' }}
+      >
+        {label}
+      </label>
+      <div className="relative">
         <input
           name={name}
           value={value}
           onChange={onChange}
-          className="justify-center items-start px-3 py-1.5 bg-white rounded-sm border border-solid border-zinc-300 max-md:pr-5"
+          className="w-full px-4 py-3 text-sm border-2 rounded-lg transition-all duration-200 focus:outline-none"
+          style={{
+            borderColor: '#E8E8E8',
+            backgroundColor: '#FEFEFE',
+            color: '#4A4A4A'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#F5D76E'
+            e.target.style.backgroundColor = '#FFFEF7'
+            e.target.style.boxShadow = '0 0 0 3px rgba(245, 215, 110, 0.1)'
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = '#E8E8E8'
+            e.target.style.backgroundColor = '#FEFEFE'
+            e.target.style.boxShadow = 'none'
+          }}
         />
       </div>
     </div>
@@ -59,7 +88,6 @@ export default function BasicInfo({selectedPet, setSelectedPet}) {
       selectedPet
     setPetInfo({ fullname, sex, species, age, weight, health, describe })
     }
-    
   }, [selectedPet])
 
   const handleChange = (event) => {
@@ -106,53 +134,101 @@ export default function BasicInfo({selectedPet, setSelectedPet}) {
   }
 
   return (
-    <div className="flex flex-col max-md:mt-10 max-md:max-w-full">
-      <h2 className="text-3xl font-medium leading-10 text-black text-opacity-80 max-md:max-w-full">
-        Thông tin cơ bản
-      </h2>
-      <div className="mt-14 max-md:mt-10 max-md:max-w-full">
+    <ConfigProvider theme={softYellowTheme}>
+      <div 
+        className="p-8 rounded-2xl shadow-sm"
+        style={{
+          background: 'linear-gradient(135deg, #FFFEF7 0%, #FFF9E6 100%)',
+          border: '1px solid #F5F5DC'
+        }}
+      >
+        {/* Header với accent vàng nhẹ */}
+        <div className="mb-8">
+          <div 
+            className="inline-block px-4 py-2 rounded-full mb-4"
+            style={{
+              background: 'linear-gradient(135deg, #F5D76E 0%, #F2C94C 100%)',
+              boxShadow: '0 2px 8px rgba(245, 215, 110, 0.3)'
+            }}
+          >
+            <span className="text-white font-medium text-sm">🐾 Hồ sơ thú cưng</span>
+          </div>
+          <h2 
+            className="text-3xl font-semibold leading-10"
+            style={{ color: '#2D2D2D' }}
+          >
+            Thông tin cơ bản
+          </h2>
+          <p className="text-gray-600 mt-2">
+            Cập nhật thông tin chi tiết cho bé yêu của bạn
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit}>
-          <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-            <div className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-              <div className="flex flex-col grow self-stretch text-sm leading-5 max-md:mt-10">
-                {Object.entries(petInfo)
-                  .slice(0, 4)
-                  .map(([key, value]) => (
-                    <FormField
-                      key={key}
-                      label={getLabel(key)} // Lấy nhãn từ hàm getLabel
-                      value={value}
-                      name={key}
-                      onChange={handleChange}
-                    />
-                  ))}
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Cột trái */}
+            <div className="space-y-2">
+              {Object.entries(petInfo)
+                .slice(0, 4)
+                .map(([key, value]) => (
+                  <FormField
+                    key={key}
+                    label={getLabel(key)}
+                    value={value}
+                    name={key}
+                    onChange={handleChange}
+                  />
+                ))}
             </div>
-            <div className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-              <div className="flex flex-col self-stretch max-md:mt-10">
-                {Object.entries(petInfo)
-                  .slice(4)
-                  .map(([key, value]) => (
-                    <FormField
-                      key={key}
-                      label={getLabel(key)} // Lấy nhãn từ hàm getLabel
-                      value={value}
-                      name={key}
-                      onChange={handleChange}
-                    />
-                  ))}
+
+            {/* Cột phải */}
+            <div className="space-y-2">
+              {Object.entries(petInfo)
+                .slice(4)
+                .map(([key, value]) => (
+                  <FormField
+                    key={key}
+                    label={getLabel(key)}
+                    value={value}
+                    name={key}
+                    onChange={handleChange}
+                  />
+                ))}
+              
+              {/* Button với style đẹp */}
+              <div className="pt-4">
                 <Button
                   htmlType="submit"
-                  style={{ maxWidth: '200px' }}
                   type="primary"
+                  size="large"
+                  className="font-medium"
+                  style={{
+                    height: '48px',
+                    paddingLeft: '32px',
+                    paddingRight: '32px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #F5D76E 0%, #F2C94C 100%)',
+                    borderColor: '#F5D76E',
+                    boxShadow: '0 4px 12px rgba(245, 215, 110, 0.4)',
+                    color: '#2D2D2D',
+                    fontWeight: '500'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = 'translateY(-1px)'
+                    e.target.style.boxShadow = '0 6px 16px rgba(245, 215, 110, 0.5)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = 'translateY(0)'
+                    e.target.style.boxShadow = '0 4px 12px rgba(245, 215, 110, 0.4)'
+                  }}
                 >
-                  Lưu thay đổi
+                  💾 Lưu thay đổi
                 </Button>
               </div>
             </div>
           </div>
         </form>
       </div>
-    </div>
+    </ConfigProvider>
   )
 }
