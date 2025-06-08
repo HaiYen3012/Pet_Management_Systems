@@ -8,10 +8,39 @@ import service from 'api/service'
 import { toast } from 'react-toastify'
 
 const statusColors = {
-  Huỷ: 'bg-zinc-300',
-  created: 'bg-sky-500',
+  Huỷ: 'bg-gray-400',
+  created: 'bg-blue-500',
   canceled: 'bg-red-500',
-  processing: 'bg-lime-600',
+  processing: 'bg-green-500',
+}
+
+const statusColorsNew = {
+  Huỷ: {
+    bg: 'bg-gray-100',
+    text: 'text-gray-700',
+    dot: 'bg-gray-400'
+  },
+  created: {
+    bg: 'bg-blue-100',
+    text: 'text-blue-700',
+    dot: 'bg-blue-500'
+  },
+  canceled: {
+    bg: 'bg-red-100',
+    text: 'text-red-700',
+    dot: 'bg-red-500'
+  },
+  processing: {
+    bg: 'bg-green-100',
+    text: 'text-green-700',
+    dot: 'bg-green-500'
+  },
+}
+
+const serviceTypeTranslations = {
+  beauty: 'Làm đẹp',
+  appointment: 'Khám bệnh',
+  storage: 'Lưu trữ',
 }
 
 export function ServiceTable() {
@@ -19,6 +48,7 @@ export function ServiceTable() {
   const [selectedServices, setSelectedServices] = useState([])
   const { customerServices } = useService()
   const [services, setServices] = useState([])
+  const [sortOrder, setSortOrder] = useState('desc') // 'asc' hoặc 'desc'
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -37,18 +67,45 @@ export function ServiceTable() {
     }
   }, [slug, customerServices])
 
+  // Hàm sắp xếp dịch vụ theo ngày
+  const sortedServices = services.sort((a, b) => {
+    const dateA = new Date(a.service_date)
+    const dateB = new Date(b.service_date)
+    
+    if (sortOrder === 'desc') {
+      return dateB - dateA // Mới nhất trước
+    } else {
+      return dateA - dateB // Cũ nhất trước
+    }
+  })
+
+  // Hàm thay đổi thứ tự sắp xếp
+  const handleSortChange = () => {
+    setSortOrder(prevOrder => prevOrder === 'desc' ? 'asc' : 'desc')
+  }
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center">
-        <SpinAntd></SpinAntd>
+      <div className="bg-gradient-to-br from-yellow-50 to-amber-100 flex justify-center items-center p-8">
+        <div className="bg-white rounded-2xl p-8 shadow-xl">
+          <SpinAntd />
+          <p className="text-amber-600 font-medium mt-4 text-center">Đang tải dịch vụ...</p>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center text-red-500 text-xl">
-        Thú cưng không sử dụng dịch vụ nào
+      <div className="bg-gradient-to-br from-yellow-50 to-amber-100 flex justify-center items-center p-8">
+        <div className="bg-white rounded-2xl p-8 shadow-xl text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <p className="text-red-500 text-lg">Thú cưng không sử dụng dịch vụ nào</p>
+        </div>
       </div>
     )
   }
@@ -62,10 +119,9 @@ export function ServiceTable() {
   }
 
   const handleDelete = () => {
-    const servicesToDelete = services.filter((service, index) =>
+    const servicesToDelete = sortedServices.filter((service, index) =>
       selectedServices.includes(index),
     )
-    // console.log('Services to delete:', servicesToDelete)
 
     servicesToDelete.map((serviceCancel) => {
       const cancelState = {
@@ -91,11 +147,8 @@ export function ServiceTable() {
       } catch (error) {
         toast.error("Cập nhật thất bại")
         console.log(error);
-
       }
     })
-    // Call the API to cancel the selected services
-    // Example: api.cancelServices(servicesToDelete);
 
     const updatedServices = services.map((service, index) => {
       if (selectedServices.includes(index)) {
@@ -108,74 +161,135 @@ export function ServiceTable() {
   }
 
   return (
-    <div className="flex flex-col pb-4 max-md:mt-10 max-md:max-w-full">
-      <div className="flex gap-2.5 justify-between px-2 py-4 w-full bg-white bg-opacity-0 max-md:flex-wrap max-md:max-w-full">
-        <h2 className="text-2xl font-medium leading-8 text-black text-opacity-80">
-          Dịch vụ đã đăng ký
-        </h2>
-        <div className="flex gap-4 text-sm leading-5">
-          <div className="flex gap-1 py-1.5 text-black text-opacity-80">
-            <div>Sắp xếp theo: Ngày</div>
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/af6868c363bd70a17601ff26c778ba2e4a1d00a347e854ccd1c916a6aae9f0cf?apiKey=f19a917c094b4f6fa8172f34eb76d09c&"
-              alt=""
-              className="shrink-0 my-auto w-2.5 aspect-[0.71]"
-            />
+    <div className="bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-100">
+      <div className="w-full px-4 py-6">
+        {/* Header Section */}
+        <div className="bg-white rounded-xl shadow-lg mb-6 overflow-hidden border border-yellow-100">
+          <div className="bg-gradient-to-r from-yellow-400 to-amber-500 p-4">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-2xl font-bold text-white">Dịch vụ đã đăng ký</h2>
+              <div className="flex flex-wrap gap-2 justify-between items-center">
+                <button
+                  onClick={handleSortChange}
+                  className="flex items-center gap-2 bg-white bg-opacity-20 rounded-lg px-3 py-1 text-sm hover:bg-opacity-30 transition-all duration-200 cursor-pointer"
+                >
+                  <span className="text-white">
+                    Sắp xếp theo: Ngày ({sortOrder === 'desc' ? 'Mới nhất' : 'Cũ nhất'})
+                  </span>
+                  <svg 
+                    className={`w-3 h-3 text-white transition-transform duration-200 ${
+                      sortOrder === 'desc' ? 'rotate-0' : 'rotate-180'
+                    }`} 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={selectedServices.length === 0}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    selectedServices.length > 0
+                      ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  Hủy dịch vụ ({selectedServices.length})
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={handleDelete}
-            className="justify-center px-4 py-1 text-center text-white bg-red-600 rounded-sm border border-red-600 border-solid shadow-sm"
-          >
-            Hủy dịch vụ
-          </button>
         </div>
-      </div>
-      <div className="overflow-y-auto max-h-[50vh] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr className="w-full border-b  bg-white ">
-              <th className="px-4 py-2 text-left">Chọn</th>
-              <th className="px-4 py-2 text-left">Mã dịch vụ</th>
-              <th className="px-4 py-2 text-left">Dịch vụ</th>
-              <th className="px-4 py-2 text-left">Giá dịch vụ</th>
-              <th className="px-4 py-2 text-left">Trạng thái</th>
-              <th className="px-4 py-2 text-left">Thời gian đăng ký</th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((service, index) => {
-              return (
-                <tr key={index} className="border-b">
-                  <td className="px-4 py-2">
+
+        {/* Services Table */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-yellow-100">
+          <div className="overflow-x-auto max-h-[60vh] scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-yellow-100">
+            <table className="min-w-full">
+              <thead className="bg-gradient-to-r from-yellow-100 to-amber-100 sticky top-0">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-amber-700 uppercase">
                     <input
                       type="checkbox"
-                      checked={selectedServices.includes(index)}
-                      onChange={() => handleCheckboxChange(index)}
+                      checked={selectedServices.length === sortedServices.length && sortedServices.length > 0}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setSelectedServices(sortedServices.map((_, index) => index))
+                        } else {
+                          setSelectedServices([])
+                        }
+                      }}
+                      className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
                     />
-                  </td>
-                  <td className="px-4 py-2 text-sky-500">{service.id}</td>
-                  <td className="px-4 py-2">{service.service_type}</td>
-                  <td className="px-4 py-2">{service.total}</td>
-                  <td className="px-4 py-2">
-                    <div className="flex items-center">
-                      <span
-                        className={`inline-block w-2 h-2 mr-2 rounded-full ${statusColors[service.status]}`}
-                      ></span>
-                      {service.status}
-                    </div>
-                  </td>
-                  <td className="px-4 py-2">
-                    {formatDateIsoString(service.service_date)}
-                  </td>
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-amber-700 uppercase">
+                    Mã
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-amber-700 uppercase">
+                    Dịch vụ
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-amber-700 uppercase">
+                    Giá
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-amber-700 uppercase">
+                    Trạng thái
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-bold text-amber-700 uppercase">
+                    Ngày
+                  </th>
                 </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody className="bg-white divide-y divide-yellow-100">
+                {sortedServices.map((service, index) => {
+                  const statusStyle = statusColorsNew[service.status] || statusColorsNew.created;
+                  return (
+                    <tr key={service.id} className="hover:bg-yellow-50 transition-colors">
+                      <td className="px-4 py-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedServices.includes(index)}
+                          onChange={() => handleCheckboxChange(index)}
+                          className="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+                        />
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-sm font-semibold text-amber-600">#{service.id}</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="text-sm font-medium text-gray-900">
+                          {serviceTypeTranslations[service.service_type] || service.service_type}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                          {service.total?.toLocaleString('vi-VN')}đ
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${statusStyle.bg} ${statusStyle.text}`}>
+                          <span className={`w-2 h-2 mr-1 rounded-full ${statusStyle.dot}`}></span>
+                          {service.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs text-gray-600">
+                          {formatDateIsoString(service.service_date)}
+                        </span>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-      <Pagination />
+        {/* Pagination */}
+        <div className="mt-6">
+          <Pagination />
+        </div>
+      </div>
     </div>
   )
 }
