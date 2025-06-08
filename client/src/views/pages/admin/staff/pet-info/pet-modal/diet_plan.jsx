@@ -36,11 +36,26 @@ const EditableField = ({
       onBlur={onBlur}
       onKeyDown={onKeyDown}
       autoFocus
+      style={{ 
+        borderColor: '#fadb14',
+        boxShadow: '0 0 0 2px rgba(250, 219, 20, 0.2)',
+        color: '#8b5a00'
+      }}
     />
   ) : (
     <div
       onDoubleClick={onDoubleClick}
-      style={{ display: 'inline-block', marginLeft: 8 }}
+      style={{ 
+        display: 'inline-block', 
+        marginLeft: 8,
+        padding: '4px 8px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        color: '#8b5a00',
+        fontWeight: '500'
+      }}
+      className="hover:bg-yellow-50"
     >
       {value}
     </div>
@@ -68,7 +83,6 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
   }
   const handleCancel = () => {
     setAddFood(false)
-    
     setVisibleAddPlan(false)
   }
   const handleShowAddModal = () => {
@@ -82,17 +96,16 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
       diet
         .getDietFood(selectedPet.pet_id)
         .then((res) => {
-          console.log('API Response:', res.data) // Debug log
+          console.log('API Response:', res.data)
           setFood(res.data)
           if (res.data && res.data.length > 0) {
             const petData = res.data.map((item, index) => ({
-              ...item, // Giữ lại tất cả properties từ API, bao gồm food_id
+              ...item,
               time: formatTimeMealToVN(item.time),
               key: index + 1,
-              // Đảm bảo food_id được preserve
-              food_id: item.food_id || item.id, // Fallback nếu API trả về 'id' thay vì 'food_id'
+              food_id: item.food_id || item.id,
             }))
-            console.log('Mapped petData:', petData) // Debug log
+            console.log('Mapped petData:', petData)
             setData(petData)
             setInitialData(petData)
           } else {
@@ -143,43 +156,80 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
     }
   }, [selectedPet, update])
 
-
   if (error) {
     return (
       <Modal
-        style={{ top: 0 }}
+        style={{ top: 20 }}
         title={
-          <span style={{ fontSize: '24px', fontWeight: 'bold' }}>
-            HỒ SƠ BỆNH ÁN
-          </span>
+          <div style={{ 
+            fontSize: '28px', 
+            fontWeight: 'bold',
+            color: '#8b5a00',
+            textAlign: 'center',
+            background: 'linear-gradient(135deg, #fff9c4 0%, #fef3c7 100%)',
+            margin: '-24px -24px 0 -24px',
+            padding: '20px 24px',
+            borderRadius: '8px 8px 0 0'
+          }}>
+            HỒ SƠ CHẾ ĐỘ ĂN
+          </div>
         }
         visible={visible}
         onCancel={onCancel}
         footer={null}
         width={1000}
+        bodyStyle={{ 
+          background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
+          minHeight: '60vh'
+        }}
       >
-        <Divider />
-        <div className="flex flex-col justify-between min-h-[60vh]">
+        <Divider style={{ borderColor: '#fadb14', margin: '16px 0' }} />
+        <div className="flex flex-col justify-between min-h-[60vh]" style={{ padding: '20px' }}>
           <div>
-            <Button icon={<PlusOutlined />} onClick={handleShowAddModal} type="primary">
-              Thêm kế hoạch ăn uống{' '}
+            <Button 
+              icon={<PlusOutlined />} 
+              onClick={handleShowAddModal} 
+              type="primary"
+              size="large"
+              style={{ 
+                background: 'linear-gradient(135deg, #fadb14 0%, #f59e0b 100%)',
+                borderColor: '#fadb14',
+                color: '#8b5a00',
+                fontWeight: 'bold',
+                height: '48px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 12px rgba(250, 219, 20, 0.3)'
+              }}
+              className="hover:shadow-lg transition-all duration-300"
+            >
+              Thêm kế hoạch ăn uống
             </Button>
             <AddDietPlan
-              addFood = {addFood}
+              addFood={addFood}
               visible={visibleAddPlan}
               onCancel={handleCancel}
               selectedPet={selectedPet}
               setUpdate={setUpdate}
             />
           </div>
-          <div className="flex justify-center items-center flex-1 text-red-500 text-xl w-full">
-            Thú cưng hiện không có chế độ ăn nào
+          <div className="flex justify-center items-center flex-1 text-xl w-full">
+            <div style={{ 
+              textAlign: 'center',
+              color: '#dc2626',
+              background: 'rgba(254, 202, 202, 0.8)',
+              padding: '40px',
+              borderRadius: '12px',
+              border: '2px dashed #f87171'
+            }}>
+              <div style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                Thú cưng hiện không có chế độ ăn nào
+              </div>
+            </div>
           </div>
         </div>
       </Modal>
     )
   }
-
 
   const handleDoubleClick = (field) => setIsEditing({ [field]: true })
   const handleChange = (field, value) =>
@@ -224,9 +274,27 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
           onBlur={saveCell}
           onKeyDown={(e) => e.key === 'Enter' && saveCell()}
           autoFocus
+          style={{ 
+            borderColor: '#fadb14',
+            boxShadow: '0 0 0 2px rgba(250, 219, 20, 0.2)',
+            color: '#8b5a00'
+          }}
         />
       ) : (
-        <div onDoubleClick={() => editCell(record, col.dataIndex)}>{text}</div>
+        <div 
+          onDoubleClick={() => editCell(record, col.dataIndex)}
+          style={{ 
+            cursor: 'pointer',
+            padding: '4px 8px',
+            borderRadius: '4px',
+            transition: 'all 0.3s ease',
+            color: '#8b5a00',
+            fontWeight: '500'
+          }}
+          className="hover:bg-yellow-50"
+        >
+          {text}
+        </div>
       ),
   }))
 
@@ -240,12 +308,10 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
 
     diet.updateDietPlan(selectedPet.pet_id, dietPlanNe).then((res) => {
       console.log(res)
-      toast.success('cập nhật thành công')
+      toast.success('Cập nhật thành công! 🎉')
     })
     
-    // Validate và update từng food item
     data.forEach((row) => {
-      // Kiểm tra food_id có tồn tại và hợp lệ
       if (!row.food_id) {
         console.error('Food ID is missing for row:', row)
         toast.error(`Không thể cập nhật thực phẩm ${row.name}: thiếu ID`)
@@ -260,7 +326,7 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
         time: formatTimeMealToE(row.time),
       }
       
-      console.log('Updating food item:', row.food_id, foodNe) // Debug log
+      console.log('Updating food item:', row.food_id, foodNe)
       
       diet
         .updateDietFood(selectedPet.pet_id, row.food_id, foodNe)
@@ -276,36 +342,70 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
     setInitialFields(editableFields)
     setInitialData(data)
     onSave && onSave(editableFields, data)
-    // onCancel()
   }
 
   return (
     <Modal
-      style={{ top: 0 }}
+      style={{ top: 20 }}
       title={
-        <span style={{ fontSize: '24px', fontWeight: 'bold' }}>Chế độ ăn</span>
+        <div style={{ 
+          fontSize: '28px', 
+          fontWeight: 'bold',
+          color: '#8b5a00',
+          textAlign: 'center',
+          background: 'linear-gradient(135deg, #fff9c4 0%, #fef3c7 100%)',
+          margin: '-24px -24px 0 -24px',
+          padding: '20px 24px',
+          borderRadius: '8px 8px 0 0'
+        }}>
+          CHỈNH SỬA CHẾ ĐỘ ĂN
+        </div>
       }
       visible={visible}
       onCancel={onCancel}
       footer={null}
       width={1000}
+      bodyStyle={{ 
+        background: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)',
+        padding: 0
+      }}
     >
-      <Divider />
+      <Divider style={{ borderColor: '#fadb14', margin: '16px 0' }} />
       <div style={{ padding: 24, minHeight: 360 }}>
         {selectedPet && (
           <div
             className="items-center"
-            style={{ display: 'flex', marginBottom: 24 }}
+            style={{ 
+              display: 'flex', 
+              marginBottom: 24,
+              background: 'rgba(255, 255, 255, 0.8)',
+              padding: '20px',
+              borderRadius: '12px',
+              border: '2px solid #fadb14',
+              boxShadow: '0 4px 12px rgba(250, 219, 20, 0.2)'
+            }}
           >
             <Avatar
-              src={selectedPet.imgUrl || '/image.png'}
+              src={selectedPet.imgUrl || '/avatarpet1.png'}
               size={150}
-              style={{ marginRight: 24 }}
+              style={{ 
+                marginRight: 24,
+                border: '4px solid #fadb14',
+                boxShadow: '0 4px 12px rgba(250, 219, 20, 0.3)'
+              }}
             />
-            <Card style={{ flex: 1 }}>
+            <Card 
+              style={{ 
+                flex: 1,
+                background: 'linear-gradient(135deg, #fff9c4 0%, #ffffff 100%)',
+                border: '1px solid #fadb14',
+                borderRadius: '8px',
+                boxShadow: '0 2px 8px rgba(250, 219, 20, 0.1)'
+              }}
+            >
               <Meta
                 title={
-                  <p className="uppercase text-xl font-bold">
+                  <p className="uppercase text-xl" style={{ color: '#8b5a00', fontWeight: 'bold' }}>
                     <EditableField
                       value={editableFields['dietName']}
                       isEditing={isEditing['dietName']}
@@ -317,44 +417,38 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
                   </p>
                 }
                 description={
-                  <div className="Diet-title">
-                    <p>
-                      <strong className="w-[250px] ">Chế độ ăn:</strong>
+                  <div className="Diet-title" style={{ color: '#8b5a00' }}>
+                    <p style={{ marginBottom: '12px' }}>
+                      <strong style={{ color: '#f59e0b', fontSize: '16px' }}>
+                        Chế độ ăn:
+                      </strong>
                       <EditableField
                         value={editableFields['dietDescription']}
                         isEditing={isEditing['dietDescription']}
-                        onDoubleClick={() =>
-                          handleDoubleClick('dietDescription')
-                        }
-                        onChange={(e) =>
-                          handleChange('dietDescription', e.target.value)
-                        }
+                        onDoubleClick={() => handleDoubleClick('dietDescription')}
+                        onChange={(e) => handleChange('dietDescription', e.target.value)}
                         onBlur={() => handleBlur('dietDescription')}
                         onKeyDown={(e) => handleKeyDown('dietDescription', e)}
                       />
                     </p>
-                    <p className="">
-                      <strong className="w-[250px] flex flex-row gap-3">
+                    <p style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <strong style={{ color: '#f59e0b', fontSize: '16px' }}>
                         Thời gian áp dụng:
                       </strong>
                       <EditableField
                         value={editableFields.date_start}
                         isEditing={isEditing['date_start']}
                         onDoubleClick={() => handleDoubleClick('date_start')}
-                        onChange={(e) =>
-                          handleChange('date_start', e.target.value)
-                        }
+                        onChange={(e) => handleChange('date_start', e.target.value)}
                         onBlur={() => handleBlur('date_start')}
                         onKeyDown={(e) => handleKeyDown('date_start', e)}
                       />
-                      <span>-</span>
+                      <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>→</span>
                       <EditableField
                         value={editableFields.date_end}
                         isEditing={isEditing['date_end']}
                         onDoubleClick={() => handleDoubleClick('date_end')}
-                        onChange={(e) =>
-                          handleChange('date_end', e.target.value)
-                        }
+                        onChange={(e) => handleChange('date_end', e.target.value)}
                         onBlur={() => handleBlur('date_end')}
                         onKeyDown={(e) => handleKeyDown('date_end', e)}
                       />
@@ -365,31 +459,93 @@ const DietPlanModal = ({ visible, onCancel, selectedPet, onSave }) => {
             </Card>
           </div>
         )}
-        <div>
-          <Button icon={<PlusOutlined />} onClick={handleAddFood} type='primary'> Thêm thực phẩm</Button>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <Button 
+            icon={<PlusOutlined />} 
+            onClick={handleAddFood} 
+            type='primary'
+            size="large"
+            style={{ 
+              background: 'linear-gradient(135deg, #fadb14 0%, #f59e0b 100%)',
+              borderColor: '#fadb14',
+              color: '#8b5a00',
+              fontWeight: 'bold',
+              height: '48px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 12px rgba(250, 219, 20, 0.3)'
+            }}
+            className="hover:shadow-lg transition-all duration-300"
+          >
+            Thêm thực phẩm
+          </Button>
           <AddDietPlan
-              addFood = {addFood}
-              visible={visibleAddPlan}
-              onCancel={handleCancel}
-              selectedPet={selectedPet}
-              setUpdate={setUpdate}
-            />
+            addFood={addFood}
+            visible={visibleAddPlan}
+            onCancel={handleCancel}
+            selectedPet={selectedPet}
+            setUpdate={setUpdate}
+          />
         </div>
+        
         <Table
           columns={columns}
           dataSource={data}
-          pagination={{ pageSize: 3 }}
-          style={{ marginBottom: 16 }}
+          pagination={{ 
+            pageSize: 3,
+            style: { 
+              background: 'rgba(255, 255, 255, 0.8)',
+              borderRadius: '8px',
+              padding: '8px'
+            }
+          }}
+          style={{ 
+            marginBottom: 16,
+            background: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            border: '1px solid #fadb14',
+            boxShadow: '0 2px 8px rgba(250, 219, 20, 0.1)'
+          }}
+          className="custom-table"
         />
-        <div style={{ textAlign: 'right' }}>
+        
+        <div style={{ 
+          textAlign: 'right',
+          background: 'rgba(255, 255, 255, 0.8)',
+          padding: '16px',
+          borderRadius: '8px',
+          border: '1px solid #fadb14'
+        }}>
           <Button
             type="primary"
-            style={{ marginRight: 8 }}
+            style={{ 
+              marginRight: 8,
+              background: 'linear-gradient(135deg, #fadb14 0%, #f59e0b 100%)',
+              borderColor: '#fadb14',
+              color: '#8b5a00',
+              fontWeight: 'bold',
+              height: '40px',
+              borderRadius: '6px',
+              boxShadow: '0 2px 8px rgba(250, 219, 20, 0.3)'
+            }}
             onClick={handleSave}
+            className="hover:shadow-lg transition-all duration-300"
           >
-            Lưu
+            Lưu thay đổi
           </Button>
-          <Button onClick={onCancel}>Hủy</Button>
+          <Button 
+            onClick={onCancel}
+            style={{ 
+              color: '#8b5a00',
+              borderColor: '#fadb14',
+              height: '40px',
+              borderRadius: '6px'
+            }}
+            className="hover:bg-yellow-50 transition-all duration-300"
+          >
+            Hủy bỏ
+          </Button>
         </div>
       </div>
     </Modal>

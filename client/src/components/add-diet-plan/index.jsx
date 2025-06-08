@@ -101,7 +101,7 @@ const AddDietPlan = ({ visible, onCancel, selectedPet, setUpdate, addFood }) => 
         title={
           <Title level={4} style={{ color: customColors.text, margin: 0 }}>
             {addFood
-              ? `Thêm Thực Phẩm cho ${selectedPet?.name}`
+              ? `Thêm Thực Phẩm`
               : `Tạo Chế Độ Ăn Mới`}
           </Title>
         }

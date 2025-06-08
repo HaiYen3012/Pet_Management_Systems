@@ -255,4 +255,4 @@ const ManageCustomer = () => {
   )
 }
 
-export default ManageCustomerzz
+export default ManageCustomer
