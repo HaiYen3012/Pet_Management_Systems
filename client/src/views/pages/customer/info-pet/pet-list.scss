@@ -1,0 +1,209 @@
+:root {
+  --pet-yellow: #ffc107;
+  --pet-dark-brown: #6d4c41;
+  --pet-light-brown: #a1887f;
+  --pet-bg-main: #fdfaf5;
+  --pet-bg-container: #ffffff;
+  --pet-border-color: #f0e9e1;
+}
+
+/* --- TỔNG THỂ TRANG --- */
+.manage-page {
+  background-color: var(--pet-bg-main);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+/* --- KHUNG CARD CHÍNH --- */
+.manage-card {
+  background: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+}
+
+/* --- HEADER CỦA CARD --- */
+.manage-header {
+  text-align: center;
+  padding: 40px 24px 24px 24px;
+}
+
+.manage-header .ant-typography {
+  color: var(--pet-dark-brown);
+  margin-bottom: 8px;
+}
+
+.manage-header p {
+  font-size: 16px;
+  color: var(--pet-light-brown);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- TÙY CHỈNH NỘI DUNG --- */
+.manage-content {
+  padding: 0 32px 32px 32px;
+}
+
+/* --- THANH HÀNH ĐỘNG --- */
+.action-bar {
+  margin-bottom: 24px;
+  text-align: right;
+}
+
+/* --- NÚT THÊM --- */
+.add-button {
+  background-color: var(--pet-yellow) !important;
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-dark-brown) !important;
+  font-weight: 500;
+  border-radius: 8px !important;
+  padding: 4px 16px !important;
+  height: 40px !important;
+}
+
+.add-button:hover,
+.add-button:focus {
+  background-color: #ffca28 !important;
+  border-color: #ffca28 !important;
+}
+
+/* --- DANH SÁCH CARD THÚ CƯNG --- */
+.pet-card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.pet-card {
+  border: 1px solid var(--pet-border-color) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pet-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(149, 157, 165, 0.2) !important;
+}
+
+.pet-card-image {
+  height: 180px;
+  object-fit: cover;
+}
+
+.pet-card .ant-card-body {
+  padding: 16px !important;
+}
+
+.pet-card .ant-card-meta-title {
+  font-size: 18px;
+  color: var(--pet-dark-brown);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.pet-card-description {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pet-card-description-item {
+  font-size: 14px;
+  color: var(--pet-light-brown);
+}
+
+.pet-card-description-item strong {
+  color: var(--pet-dark-brown);
+  margin-right: 4px;
+}
+
+.pet-card-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.detail-button {
+  background-color: var(--pet-yellow) !important;
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-dark-brown) !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  height: 36px !important;
+}
+
+.detail-button:hover,
+.detail-button:focus {
+  background-color: #ffca28 !important;
+  border-color: #ffca28 !important;
+}
+
+.delete-button {
+  border: 1px solid var(--pet-border-color) !important;
+  border-radius: 8px !important;
+  height: 36px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px !important;
+}
+
+.delete-button:hover {
+  background-color: #fee2e2 !important;
+}
+
+/* --- POPCONFIRM --- */
+.pet-popconfirm .ant-popover-inner-content {
+  background-color: var(--pet-bg-container);
+  border: 1px solid var(--pet-border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.pet-popconfirm .ant-popconfirm-title {
+  color: var(--pet-dark-brown) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+.pet-popconfirm .ant-popconfirm-description {
+  color: var(--pet-light-brown) !important;
+  font-size: 14px !important;
+}
+
+.pet-popconfirm .ant-btn {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+}
+
+.pet-popconfirm .ant-btn-primary {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+}
+
+.pet-popconfirm .ant-btn-primary:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+.pet-popconfirm .ant-btn-default {
+  border-color: var(--pet-border-color) !important;
+  color: var(--pet-light-brown) !important;
+}
+
+.pet-popconfirm .ant-btn-default:hover {
+  border-color: var(--pet-yellow) !important;
+  color: var(--pet-yellow) !important;
+}
+
+/* --- THÔNG BÁO KHÔNG CÓ THÚ CƯNG --- */
+.no-pets-message {
+  text-align: center;
+  font-size: 18px;
+  color: var(--pet-light-brown);
+  padding: 40px 0;
+}

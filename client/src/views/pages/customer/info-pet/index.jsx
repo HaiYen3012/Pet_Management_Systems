@@ -1,142 +1,132 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Button, Breadcrumb, message, Popconfirm } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
-import usePet from 'hooks/usePet'
-import { Link } from 'react-router-dom'
-import pet from 'api/pet'
-import AddPetModal from 'components/add-pet'
-import { toast } from 'react-toastify'
-const { Meta } = Card
-import './info-pet.scss'
+import React, { useEffect, useState } from 'react';
+import { Card, Button, Typography, Popconfirm } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import usePet from 'hooks/usePet';
+import { Link } from 'react-router-dom';
+import pet from 'api/pet';
+import AddPetModal from 'components/add-pet';
+import { toast } from 'react-toastify';
+import './pet-list.scss';
 
+const { Meta } = Card;
+const { Title } = Typography;
 
 const PetList = () => {
-  const [visibleAddPetModal, setVisibleAddPetModal] = useState(false)
-  const { customerPets, setCustomerPets } = usePet()
-  const [petList, setPetList] = useState([])
-  // console.log(customerPets);
+  const [visibleAddPetModal, setVisibleAddPetModal] = useState(false);
+  const { customerPets, setCustomerPets } = usePet();
 
-  const onCancel = () => {
-    setVisibleAddPetModal(false)
-  }
+  useEffect(() => {
+    setCustomerPets(customerPets);
+  }, [customerPets, setCustomerPets]);
+
   const handleAddPet = () => {
-    setVisibleAddPetModal(true)
-  }
+    setVisibleAddPetModal(true);
+  };
 
   const handleCancel = () => {
-    setVisibleAddPetModal(false)
-  }
-
+    setVisibleAddPetModal(false);
+  };
 
   const handleDelete = (pet_id) => {
     pet
       .deletePet(pet_id)
       .then(() => {
-        toast.success('Xóa thú cưng thành công!')
-        const newPets = petList.filter((item) => item.pet_id !== pet_id)
-        setCustomerPets(newPets)
+        toast.success('Xóa thú cưng thành công!');
+        const newPets = customerPets.filter((item) => item.pet_id !== pet_id);
+        setCustomerPets(newPets);
       })
       .catch((error) => {
-        console.error('xóa thú cưng thất bại:', error)
-      })
-  }
-  const confirm = (e) => {
-    handleDelete(e.pet_id)
-    message.success('Click on Yes');
-  };         
-  const cancel = (e) => {
-    console.log(e);
-    message.error('Hủy thành công');
+        console.error('Xóa thú cưng thất bại:', error);
+        toast.error('Xóa thú cưng thất bại.');
+      });
+  };
+
+  const confirm = (pet) => {
+    handleDelete(pet.pet_id);
+  };
+
+  const cancel = () => {
+    toast.info('Hủy xóa thú cưng.');
   };
 
   return (
-    <div className="pet-info__wrapper">
-      <div className="pet-info__header">
-        <Breadcrumb
-          items={[
-            {
-              title: <Link to={'/pet'}>Home</Link>,
-            },
-          ]}
-        />
-        <div className="pet-info__header__title">
-          Danh sách thú cưng
-          <div className="pet-info__header__button-add-pet">
+    <div className="manage-page">
+      <Card className="manage-card">
+        <div className="manage-header">
+          <Title level={2}>Danh sách thú cưng</Title>
+          <p>Xem và quản lý thông tin thú cưng của bạn một cách dễ dàng.</p>
+        </div>
+        <div className="manage-content">
+          <div className="action-bar">
             <Button
-              onClick={handleAddPet}
               type="primary"
               icon={<PlusOutlined />}
+              onClick={handleAddPet}
+              className="add-button"
             >
-              Thêm
+              Thêm thú cưng
             </Button>
-            <AddPetModal
-              visible={visibleAddPetModal}
-              onCancel={onCancel}
-            />
           </div>
-        </div>
-      </div>
-
-      <div className="pet-info__card-list">
-        {customerPets.length === 0 ? (
-          <div className="pet-info__card-list__none">
-            Bạn không có thú cưng nào!!!!
-          </div>
-        ) : (
-          customerPets &&
-          customerPets.map((petinfo) => (
-            <Card
-              hoverable
-              className="pet-info__card-list__card"
-              cover={
-                <img
-                  alt="example"
-                  src={
-                    petinfo?.avatar || '/avatarpet.png'
+          {customerPets.length === 0 ? (
+            <div className="no-pets-message">
+              Bạn chưa có thú cưng nào! Hãy thêm thú cưng để bắt đầu.
+            </div>
+          ) : (
+            <div className="pet-card-list">
+              {customerPets.map((petinfo) => (
+                <Card
+                  key={petinfo.pet_id}
+                  hoverable
+                  className="pet-card"
+                  cover={
+                    <img
+                      alt={petinfo.fullname}
+                      src={petinfo?.avatar || '/avatarpet.png'}
+                      className="pet-card-image"
+                    />
                   }
-                />
-              }
-            >
-              <Meta title={petinfo.fullname} />
-              <div className="pet-info__card-list__card__description">
-                <div lassName="pet-info__card-list__card__description__species">
-                  {'Loài: ' + petinfo.species}
-                </div>
-                <div lassName="pet-info__card-list__card__description__sex">
-                  {'Giới tính: ' + petinfo.sex}
-                </div>
-                <div lassName="pet-info__card-list__card__description__health">
-                  {'Trạng thái: ' + petinfo.health}
-                </div>
-              </div>
-              <div className="pet-info__card-list__card__button flex flex-row gap-3">
-                <Link to={`basic-info/${petinfo.pet_id}`}>
-                  {' '}
-                  <Button block type="primary">
-                    Thông tin chi tiết
-                  </Button>{' '}
-                </Link>
-                <Popconfirm
-                  title="Delete the task"
-                  description="Are you sure to delete this task?"
-                  onConfirm={() => confirm(petinfo)}
-                  onCancel={cancel}
-                  okText="Yes"
-                  cancelText="No"
                 >
-                  <Button
-                    type="primary"
-                    danger
-                  >
-                    Xóa
-                  </Button>
-                </Popconfirm>
-              </div>
-            </Card>
-          ))
-        )}
-      </div>
+                  <Meta title={petinfo.fullname} />
+                  <div className="pet-card-description">
+                    <div className="pet-card-description-item">
+                      <strong>Loài:</strong> {petinfo.species}
+                    </div>
+                    <div className="pet-card-description-item">
+                      <strong>Giới tính:</strong> {petinfo.sex}
+                    </div>
+                    <div className="pet-card-description-item">
+                      <strong>Trạng thái:</strong> {petinfo.health}
+                    </div>
+                  </div>
+                  <div className="pet-card-buttons">
+                    <Link to={`basic-info/${petinfo.pet_id}`}>
+                      <Button type="primary" block className="detail-button">
+                        Thông tin chi tiết
+                      </Button>
+                    </Link>
+                    <Popconfirm
+                      title="Xóa thú cưng"
+                      description="Bạn có chắc muốn xóa thú cưng này?"
+                      onConfirm={() => confirm(petinfo)}
+                      onCancel={cancel}
+                      okText="Xóa"
+                      cancelText="Hủy"
+                      overlayClassName="pet-popconfirm"
+                    >
+                      <Button className="delete-button">
+                        <span className="text-red-500 hover:text-red-600">Xóa</span>
+                      </Button>
+                    </Popconfirm>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+          <AddPetModal visible={visibleAddPetModal} onCancel={handleCancel} />
+        </div>
+      </Card>
     </div>
-  )
-}
-export default PetList
+  );
+};
+
+export default PetList;
