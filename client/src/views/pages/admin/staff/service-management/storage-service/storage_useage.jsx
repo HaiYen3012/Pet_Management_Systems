@@ -12,6 +12,7 @@ import {
   Popconfirm,
   Modal,
   DatePicker,
+  Card,
 } from 'antd'
 import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import '../../index.css'
@@ -41,18 +42,21 @@ const EditableCell = ({
 }) => {
   const inputNode =
     inputType === 'number' ? (
-      <Input />
+      <Input style={{ borderColor: '#ffd700', borderRadius: '12px' }} />
     ) : inputType === 'select' ? (
-      <Select>
+      <Select style={{ borderRadius: '12px' }}>
         <Option value="created">created</Option>
         <Option value="processing">processing</Option>
         <Option value="complete">completed</Option>
         <Option value="canceled">canceled</Option>
       </Select>
     ) : inputType === 'date' ? (
-      <DatePicker format="YYYY-MM-DD" />
+      <DatePicker 
+        format="YYYY-MM-DD" 
+        style={{ borderColor: '#ffd700', borderRadius: '12px' }}
+      />
     ) : (
-      <Input />
+      <Input style={{ borderColor: '#ffd700', borderRadius: '12px' }} />
     )
   return (
     <td {...restProps}>
@@ -285,9 +289,50 @@ const StorageServiceUsage = () => {
       key: 'status',
       editable: true,
       inputType: 'select',
-      render: (status) => (
-        <span className={'status-tag ' + status}>{status}</span>
-      ),
+      render: (status) => {
+        let statusColor = '';
+        let bgColor = '';
+        let borderColor = '';
+        
+        switch(status) {
+          case 'created':
+            statusColor = '#1890ff';
+            bgColor = '#e6f7ff';
+            borderColor = '#91d5ff';
+            break;
+          case 'processing':
+            statusColor = '#fa8c16';
+            bgColor = '#fff7e6';
+            borderColor = '#ffd591';
+            break;
+          case 'complete':
+            statusColor = '#52c41a';
+            bgColor = '#f6ffed';
+            borderColor = '#b7eb8f';
+            break;
+          case 'canceled':
+            statusColor = '#ff4d4f';
+            bgColor = '#fff2f0';
+            borderColor = '#ffb3b3';
+            break;
+          default:
+            statusColor = '#b8860b';
+            bgColor = '#fff8dc';
+            borderColor = '#ffd700';
+        }
+        
+        return (
+          <span style={{
+            backgroundColor: bgColor,
+            color: statusColor,
+            padding: '4px 12px',
+            borderRadius: '20px',
+            fontSize: '12px',
+            fontWeight: '500',
+            border: `1px solid ${borderColor}`
+          }}>{status}</span>
+        );
+      },
     },
     {
       title: 'Action',
@@ -295,36 +340,71 @@ const StorageServiceUsage = () => {
       render: (_, record) => {
         const editable = isEditing(record)
         return editable ? (
-           <Space size="middle">
-            <button
+          <span>
+            <a
               onClick={async () => {
                 await handleSave(record.id)
               }}
-              className="ml-3 p-2 text-green-400 hover:text-green-500 hover:bg-green-50 rounded border transition-colors"
+              style={{
+                marginRight: 8,
+                color: '#ffa500',
+                fontWeight: '500'
+              }}
             >
-              <FaSave />
-            </button>
+              Lưu
+            </a>
             <Popconfirm title="Bạn có chắc muốn hủy?" onConfirm={cancel}>
-                <button
-             
-              className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50  rounded border transition-colors"
-            >
-              <FaTimes />
-            </button>
+              <a style={{ color: '#ff8c00', fontWeight: '500' }}>Hủy</a>
             </Popconfirm>
-         </Space>
+          </span>
         ) : (
           <Space size="middle">
             <button
               disabled={editingKey !== ''}
               onClick={() => edit(record)}
-              className="ml-3 p-2 text-orange-300 hover:text-orange-400 hover:bg-orange-50 rounded border transition-colors"
+              style={{
+                marginLeft: '12px',
+                padding: '8px 12px',
+                color: '#ff8c00',
+                backgroundColor: '#fff8dc',
+                border: '1px solid #ffd700',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontSize: '14px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#ffebcd';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#fff8dc';
+                e.target.style.transform = 'scale(1)';
+              }}
             >
               <FaPen />
             </button>
             <button
               onClick={() => showConfirm(record.service_id)}
-              className="ml-3 p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded border  transition-colors"
+              style={{
+                marginLeft: '12px',
+                padding: '8px 12px',
+                color: '#cd853f',
+                backgroundColor: '#ffefd5',
+                border: '1px solid #daa520',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontSize: '14px'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#ffe4b5';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#ffefd5';
+                e.target.style.transform = 'scale(1)';
+              }}
             >
               <FaTrashAlt />
             </button>
@@ -351,84 +431,163 @@ const StorageServiceUsage = () => {
   })
 
   return (
-    <div>
-      <Typography.Title level={2} style={{ textAlign: 'center' }}>
-        Sử dụng dịch vụ
-      </Typography.Title>
-      <Space
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 16,
-          marginLeft: 50,
-          width: '100%',
-        }}
-      >
-        <Form
-          layout="inline"
+    <div style={{
+      background: 'linear-gradient(135deg, #fff8dc 0%, #ffebcd 50%, #ffefd5 100%)',
+      minHeight: '100vh',
+      padding: '20px'
+    }}>
+      <Card style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: '24px',
+        boxShadow: '0 8px 32px rgba(255, 215, 0, 0.3)',
+        border: '2px solid #ffd700'
+      }}>
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '30px',
+          padding: '20px',
+          background: 'linear-gradient(45deg, #fff8dc, #ffebcd)',
+          borderRadius: '16px',
+          border: '1px solid #ffd700'
+        }}>
+          <Typography.Title level={2} style={{
+            color: '#b8860b',
+            marginBottom: '8px',
+            textShadow: '2px 2px 4px rgba(255, 215, 0, 0.3)'
+          }}>
+            Sử dụng dịch vụ lưu trữ
+          </Typography.Title>
+          <p style={{
+            color: '#cd853f',
+            fontSize: '16px',
+            margin: 0,
+            fontWeight: '500'
+          }}>
+            Quản lý và theo dõi các dịch vụ lưu trữ thú cưng một cách hiệu quả
+          </p>
+        </div>
+        
+        <Space
           style={{
-            border: '1px solid #d9d9d9',
-            padding: '10px',
-            borderRadius: '4px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+            marginLeft: 50,
+            width: '100%',
           }}
         >
-          <Form.Item label="ID thú cưng">
-            <Input
-              placeholder="Nhập id"
-              style={{ width: 200 }}
-              onChange={handleSearchChange}
-              onPressEnter={handleSearchChange}
-            />
-          </Form.Item>
-          <Button
-            type="primary"
-            onClick={handleSearchChange}
-            style={{ marginLeft: 8, marginRight: 10 }}
+          <Form
+            layout="inline"
+            style={{
+              background: 'linear-gradient(45deg, #fff8dc, #ffebcd)',
+              border: '2px solid #ffd700',
+              padding: '15px',
+              borderRadius: '20px',
+              boxShadow: '0 4px 16px rgba(255, 215, 0, 0.2)'
+            }}
           >
-            Tìm kiếm
-          </Button>
-        </Form>
-      </Space>
-      <Row
-        style={{
-          marginBottom: 16,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography.Title level={3} style={{ marginBottom: 0 }}>
-          Search Table
-        </Typography.Title>
-        <Space>
-          <Select
-            placeholder="Sắp xếp theo"
-            style={{ width: 200 }}
-            onChange={handleSortChange}
-          >
-            <Option value="date_start-ascend">Ngày bắt đầu (Tăng dần)</Option>
-            <Option value="date_start-descend">Ngày bắt đầu (Giảm dần)</Option>
-          </Select>
-          <Button type="primary" icon={<PlusOutlined />} onClick={addNewRow}>
-            Thêm mới
-          </Button>
+            <Form.Item label={<span style={{ color: '#b8860b', fontWeight: '600' }}>ID thú cưng</span>}>
+              <Input
+                placeholder="Nhập id"
+                style={{ 
+                  width: 200,
+                  borderColor: '#ffd700',
+                  borderRadius: '12px',
+                  backgroundColor: '#fffacd'
+                }}
+                onChange={handleSearchChange}
+                onPressEnter={handleSearchChange}
+              />
+            </Form.Item>
+            <Button
+              type="primary"
+              onClick={handleSearchChange}
+              style={{ 
+                marginLeft: 8, 
+                marginRight: 10,
+                background: 'linear-gradient(45deg, #ffd700, #ffb347)',
+                borderColor: '#ffd700',
+                borderRadius: '12px',
+                fontWeight: '600',
+                height: '38px'
+              }}
+            >
+              Tìm kiếm
+            </Button>
+          </Form>
         </Space>
-      </Row>
-      <Form form={form} component={false}>
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
+        <Row
+          style={{
+            marginBottom: 16,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0 20px'
           }}
-          bordered
-          dataSource={data}
-          columns={mergedColumns}
-          rowClassName="editable-row"
-          pagination={{ pageSize: 10 }}
-        />
-      </Form>
+        >
+          <Typography.Title level={3} style={{ 
+            marginBottom: 0,
+            color: '#b8860b',
+            textShadow: '1px 1px 2px rgba(255, 215, 0, 0.3)'
+          }}>
+            Search Table
+          </Typography.Title>
+          <Space>
+            <Select
+              placeholder="Sắp xếp theo"
+              style={{ 
+                width: 200,
+                borderRadius: '12px'
+              }}
+              onChange={handleSortChange}
+            >
+              <Option value="date_start-ascend">Ngày bắt đầu (Tăng dần)</Option>
+              <Option value="date_start-descend">Ngày bắt đầu (Giảm dần)</Option>
+            </Select>
+            <Button 
+              type="primary" 
+              icon={<PlusOutlined />} 
+              onClick={addNewRow}
+              style={{
+                background: 'linear-gradient(45deg, #ffd700, #ffb347)',
+                borderColor: '#ffd700',
+                borderRadius: '12px',
+                fontWeight: '600',
+                height: '38px',
+                boxShadow: '0 4px 12px rgba(255, 215, 0, 0.3)'
+              }}
+            >
+              Thêm mới
+            </Button>
+          </Space>
+        </Row>
+        <Form form={form} component={false}>
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            bordered
+            dataSource={data}
+            columns={mergedColumns}
+            rowClassName="editable-row"
+            pagination={{ 
+              pageSize: 10,
+              style: {
+                padding: '20px'
+              }
+            }}
+            style={{
+              background: '#fffacd',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '2px solid #ffd700'
+            }}
+          />
+        </Form>
+      </Card>
     </div>
   )
 }

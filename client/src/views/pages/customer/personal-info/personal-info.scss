@@ -1,107 +1,129 @@
-// --- FILE: personal-info.scss ---
-@import 'C:/Users/DUYEN/OneDrive/Documents/GitHub/Pet_Management_Systems/client/src/styles/_theme.scss'; // Import file theme chung
+// 🎨 BẢNG MÀU "VÀNG MẬT ONG & BÁNH KEM" SIÊU CUTE
+$bg-creamy: #FFFBEB;       // Vàng kem làm nền
+$primary-sunny: #FCD34D;    // Vàng nắng làm điểm nhấn
+$border-butter: #FDE68A;   // Vàng bơ làm viền input
+$text-honey: #A16207;       // Nâu mật ong cho chữ và bóng
+$white-soft: #FFFFFF;      // Trắng
 
 .personal-info {
-  // 1. CONTAINER CHÍNH - CARD THÔNG TIN VIP
+  // 1. CONTAINER CHÍNH - "THẺ THÀNH VIÊN" SIÊU XINH
   &-wrapper {
-    max-width: 900px; // Giới hạn chiều rộng để form không bị quá dài
-    margin: 0 auto; // Tự động căn giữa
-    background: $bg-gold; // Nền vàng kem
-    padding: 40px;
-    border-radius: 24px;
-    box-shadow: 0 10px 40px $shadow-gold;
-    border: 1px solid $border-gold;
+    max-width: 800px;
+    margin: 40px auto;
+    background: $bg-creamy;
+    padding: 40px 50px;
+    border-radius: 30px; // Bo góc "mũm mĩm" hơn
+    // Đổ bóng 2 lớp tạo chiều sâu mềm mại, đáng yêu
+    box-shadow: 0 4px 15px rgba($text-honey, 0.1), 0 10px 30px rgba($bg-creamy, 0.5);
+    border: 1px solid $border-butter;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px; // Khoảng cách giữa avatar và form
+    gap: 35px; // Tăng khoảng cách cho thoáng
+    transition: all 0.3s ease-in-out;
+
+    // Hiệu ứng nhấc lên khi hover vào card, siêu xịn!
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba($text-honey, 0.15), 0 15px 40px rgba($bg-creamy, 0.4);
+    }
   }
 
-  // 2. AVATAR NỔI BẬT
+  // 2. AVATAR TỎA SÁNG NHƯ "BÁU VẬT"
   &__avatar {
-    position: relative; // Để định vị nút upload
+    position: relative;
+    cursor: pointer;
     
-    // Style cho component <Avatar> của Antd
     .ant-avatar {
-      width: 150px !important;
-      height: 150px !important;
-      border: 6px solid $primary-yellow;
-      box-shadow: 0 0 0 4px $bg-gold, 0 5px 20px $shadow-gold;
+      width: 160px !important;
+      height: 160px !important;
+      border: 7px solid $white-soft;
+      // Viền kép: 1 lớp màu chính, 1 lớp trắng bên trong, siêu nổi bật!
+      box-shadow: 0 0 0 5px $primary-sunny, 0 10px 30px rgba($text-honey, 0.2);
       transition: all 0.3s ease;
     }
 
-    // Style cho khu vực Upload của Antd
+    // Nút Upload hình camera xinh xắn
     .ant-upload-wrapper {
-      // Nút upload mặc định sẽ bị ẩn đi
-      .ant-upload-list, .ant-upload.ant-upload-select {
+      .ant-upload.ant-upload-select {
         position: absolute;
-        bottom: 5px;
-        right: 5px;
-        width: 40px;
-        height: 40px;
-        margin: 0;
+        bottom: 10px;
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        background: rgba($primary-sunny, 0.9); // Nền vàng trong suốt
+        border: 2px solid $white-soft;
         border-radius: 50%;
-        background: rgba($text-dark, 0.7);
-        color: white;
-        border: 2px solid white;
+        color: $text-honey;
         display: flex;
         align-items: center;
         justify-content: center;
-        opacity: 0; // Ban đầu ẩn đi
-        transform: scale(0.8);
-        transition: all 0.3s ease;
-
-        // Chỉ hiện ra khi hover vào khu vực avatar
-        .personal-info__avatar:hover & {
-          opacity: 1;
-          transform: scale(1);
-        }
-
-        // Icon camera bên trong
-        .ant-upload-text-icon .anticon {
-          font-size: 20px;
-        }
+        opacity: 0; // Ẩn đi lúc bình thường
+        transform: scale(0.5) rotate(-45deg);
+        // Hiệu ứng nảy lên cưng xỉu khi xuất hiện
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        backdrop-filter: blur(3px); // Hiệu ứng mờ kính
+      }
+    }
+    
+    // Hiệu ứng khi di chuột vào avatar
+    &:hover {
+      .ant-avatar {
+        transform: scale(1.05); // Phóng to ảnh đại diện
+      }
+      .ant-upload-wrapper .ant-upload.ant-upload-select {
+        opacity: 1;
+        transform: scale(1) rotate(0deg); // Nút camera nảy lên và xoay
       }
     }
   }
 
-  // 3. FORM THÔNG TIN ĐỒNG BỘ
+  // 3. FORM NHẬP LIỆU "MỀM MẠI", DỄ CHỊU
   &__form {
     width: 100%;
     
-    // Style cho các ô input
+    // Tiêu đề của mỗi mục (Họ và tên, Email,...)
+    .ant-form-item-label > label {
+      color: $text-honey;
+      font-weight: 700; // In đậm, rõ ràng
+      font-size: 15px;
+    }
+
+    // Các ô input, password, date picker
     .ant-input, .ant-input-password, .ant-picker {
-      background: $yellow-super-light !important;
-      border-color: $border-gold !important;
-      color: $text-dark;
-      border-radius: 8px;
-      padding: 10px 12px;
-      height: 44px;
+      background: $white-soft !important; // Nền trắng cho dễ đọc
+      border-color: $border-butter !important;
+      color: $text-honey;
+      border-radius: 12px; // Bo tròn hơn nữa
+      height: 48px; // Cao hơn cho dễ bấm
+      padding: 10px 15px;
+      transition: all 0.2s ease;
+      font-weight: 500;
 
       &:focus, &:hover {
-        border-color: $primary-yellow !important;
-        box-shadow: 0 0 0 2px rgba($primary-yellow, 0.2) !important;
+        border-color: $primary-sunny !important; // Viền vàng đậm khi focus
+        box-shadow: 0 0 0 3px rgba($primary-sunny, 0.2) !important;
       }
     }
-    .ant-form-item-label > label {
-      color: $text-dark;
-      font-weight: 600;
-    }
 
-    // Nút "Lưu thay đổi"
+    // Nút "Lưu thay đổi" trông thật "pressable" (muốn nhấn vào)
     .ant-btn-primary {
-      background: $primary-yellow;
-      border-color: $primary-yellow;
-      height: 44px;
-      border-radius: 8px;
-      font-weight: 600;
+      background: $primary-sunny;
+      border-color: $primary-sunny;
+      color: $text-honey;
+      height: 48px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
       width: 100%;
+      box-shadow: 0 4px 15px rgba($primary-sunny, 0.3);
+      transition: all 0.2s ease-in-out;
       
       &:hover, &:focus { 
-        background: $yellow-dark; 
-        border-color: $yellow-dark; 
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba($primary-yellow, 0.3);
+        background: darken($primary-sunny, 5%);
+        border-color: darken($primary-sunny, 5%);
+        transform: translateY(-3px); // Hiệu ứng nhấc lên khi hover
+        box-shadow: 0 7px 20px rgba($primary-sunny, 0.4);
       }
     }
   }
