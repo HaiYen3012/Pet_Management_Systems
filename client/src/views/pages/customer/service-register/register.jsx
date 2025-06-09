@@ -31,7 +31,7 @@ const CuteStyle = () => (
     <style>{`
     .cute-yellow-form-container {
       background-color: #FFFBEB;
-      padding: 30px; /* Giảm padding một chút cho hợp lý khi không có tiêu đề */
+      padding: 30px;
       border-radius: 24px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
       border: 1px solid #FFF1C1;
@@ -48,12 +48,9 @@ const CuteStyle = () => (
   `}</style>
 );
 
-
 // ===================================================================
 // KẾT THÚC PHẦN GIAO DIỆN
-// TOÀN BỘ LOGIC BÊN DƯỚI ĐƯỢC GIỮ NGUYÊN
 // ===================================================================
-
 
 const convertDate = (dateString) => {
     const date = new Date(dateString);
@@ -62,16 +59,90 @@ const convertDate = (dateString) => {
     const year = date.getFullYear();
     const formattedDate = `${year}/${month}/${day}`;
     return formattedDate;
-}
-
+};
 
 export const Register = (props) => {
-    const { form, stepCurrent, setStepCurrent, formItemLayout,
-        serviceCurrent, setServiceCurrent, dataRegister, setDataRegister,
-        customerPets, serviceAppointment, serviceBeauty, serviceStorage } = props;
+    const {
+        form,
+        stepCurrent,
+        setStepCurrent,
+        formItemLayout,
+        serviceCurrent,
+        setServiceCurrent,
+        dataRegister,
+        setDataRegister,
+        customerPets,
+        serviceAppointment,
+        serviceBeauty,
+        serviceStorage
+    } = props;
 
     const [price, setPrice] = useState(0);
     const [valueTimeType, setValueTimeType] = useState('');
+    const [dateRange, setDateRange] = useState(null);
+    const [unitPrice, setUnitPrice] = useState(0);
+
+    const calculateDays = (start, end) => {
+        if (!start || !end) return 0;
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        const diffTime = endDate - startDate;
+        // Calculate days, including both start and end dates
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        return diffDays > 0 ? diffDays : 0;
+    };
+
+    const updatePrice = (roomId, dates) => {
+        if (serviceCurrent !== 'service_02' || !roomId || !dates) {
+            setPrice(0);
+            return;
+        }
+        const selectedRoom = serviceStorage.find(item => item.id === roomId);
+        if (selectedRoom) {
+            const days = calculateDays(dates[0], dates[1]);
+            setUnitPrice(selectedRoom.price);
+            setPrice(selectedRoom.price * days);
+        } else {
+            setPrice(0);
+        }
+    };
+
+    const handlePrice = (value, object) => {
+        setValueTimeType(object.children);
+        let serviceSelected = [];
+
+        switch (serviceCurrent) {
+            case 'service_01':
+                serviceSelected = serviceAppointment;
+                break;
+            case 'service_02':
+                serviceSelected = serviceStorage;
+                break;
+            case 'service_03':
+                serviceSelected = serviceBeauty;
+                break;
+            default:
+                serviceSelected = [];
+        }
+        const selected = serviceSelected.find(item => item.id === value);
+        if (selected) {
+            if (serviceCurrent === 'service_02') {
+                setUnitPrice(selected.price);
+                updatePrice(value, dateRange);
+            } else {
+                setPrice(selected.price);
+            }
+        } else {
+            setPrice(0);
+        }
+    };
+
+    const handleDateChange = (dates, dateStrings) => {
+        if (serviceCurrent === 'service_02') {
+            setDateRange(dates ? [dates[0].$d, dates[1].$d] : null);
+            updatePrice(form.getFieldValue('room_id'), dates ? [dates[0].$d, dates[1].$d] : null);
+        }
+    };
 
     const onFinishRegister = (values) => {
         let formData = {};
@@ -98,14 +169,18 @@ export const Register = (props) => {
         }
 
         setStepCurrent(stepCurrent + 1);
-        setDataRegister(formData)
+        setDataRegister(formData);
         form.resetFields();
     };
 
     const handleSelect = (value) => {
         setPrice(0);
+        setUnitPrice(0);
+        setDateRange(null);
+        setValueTimeType('');
         setServiceCurrent(value);
-    }
+        form.resetFields(['room_id', 'date', 'time_slot']);
+    };
 
     const formatCurrencyVND = (value) => {
         return new Intl.NumberFormat('vi-VN', {
@@ -114,34 +189,25 @@ export const Register = (props) => {
         }).format(value) + ' VNĐ';
     };
 
-    const handlePrice = (value, object) => {
-        setValueTimeType(object.children);
-        let serviceSelected = [];
-
-        switch (serviceCurrent) {
-            case 'service_01':
-                serviceSelected = serviceAppointment;
-                break;
-            case 'service_02':
-                serviceSelected = serviceStorage;
-                break;
-            case 'service_03':
-                serviceSelected = serviceBeauty;
-                break;
-            default:
-                serviceSelected = [];
+    const getPriceDisplay = () => {
+        if (serviceCurrent === 'service_02' && dateRange && unitPrice > 0) {
+            const days = calculateDays(dateRange[0], dateRange[1]);
+            return (
+                <span>
+                    {formatCurrencyVND(price)}
+                    <span style={{ color: '#555', marginLeft: '8px' }}>
+                        ({formatCurrencyVND(unitPrice)} × {days} ngày)
+                    </span>
+                </span>
+            );
         }
-        const selected = serviceSelected.find(item => item.id === value);
-        if (selected) {
-            setPrice(selected.price);
-        }
+        return <span>{formatCurrencyVND(price)}</span>;
     };
 
     return (
         <ConfigProvider theme={cuteYellowTheme} locale={viVN}>
             <CuteStyle />
-            {/* Mình đã đổi tên class để rõ nghĩa hơn và bỏ đi tiêu đề h2 */}
-            <div className="cute-yellow-form-container"> 
+            <div className="cute-yellow-form-container">
                 <Form
                     {...formItemLayout}
                     form={form}
@@ -153,7 +219,6 @@ export const Register = (props) => {
                         service: 'service_01',
                     }}
                 >
-                    {/* Toàn bộ các Form.Item được giữ nguyên */}
                     <Form.Item
                         name="service"
                         label="Tên dịch vụ"
@@ -236,9 +301,12 @@ export const Register = (props) => {
                         rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}
                     >
                         {serviceCurrent === 'service_02'
-                            ? <RangePicker style={{ width: '100%' }} placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}/>
-                            : <DatePicker style={{ width: '100%' }} placeholder="Chọn ngày"/>
-                        }
+                            ? <RangePicker
+                                style={{ width: '100%' }}
+                                placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+                                onChange={handleDateChange}
+                              />
+                            : <DatePicker style={{ width: '100%' }} placeholder="Chọn ngày" />}
                     </Form.Item>
 
                     {serviceCurrent !== 'service_02' &&
@@ -265,14 +333,14 @@ export const Register = (props) => {
                         name="note"
                         label={serviceCurrent === 'service_01' ? "Mô tả triệu chứng" : "Lời nhắn"}
                     >
-                        <Input.TextArea showCount maxLength={100} placeholder="Nhập ghi chú của bạn..."/>
+                        <Input.TextArea showCount maxLength={100} placeholder="Nhập ghi chú của bạn..." />
                     </Form.Item>
 
                     <Form.Item
                         label="Thành tiền"
                     >
                         <span style={{ fontWeight: 'bold', fontSize: '1.2em', color: '#D69E2E' }}>
-                            {formatCurrencyVND(price)}
+                            {getPriceDisplay()}
                         </span>
                     </Form.Item>
 
@@ -289,5 +357,5 @@ export const Register = (props) => {
                 </Form>
             </div>
         </ConfigProvider>
-    )
-}
+    );
+};
