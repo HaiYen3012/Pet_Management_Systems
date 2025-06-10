@@ -292,3 +292,20 @@ ALTER TYPE "roles_t" ADD VALUE 'doctor';
 
 INSERT INTO "users" ("username", "email", "password", "fullname", "phone_numbers", "roles", "address", "city", "country", "created_at") VALUES
 ('doctor', 'doctor@petcare.com', '$2b$10$mCT/vjETWWeusgX6hCPTXeD6DCWaFsU.Gdr2WLaUwS7x6sBPIB95W', 'Doctor User', '0123456789', 'doctor', '123 Doctor Street', 'Ho Chi Minh City', 'Vietnam', NOW());
+-- 1. Bảng room
+INSERT INTO public.room (type, max_slot, current_slot, price, unit) VALUES
+  ('vip',     4, 1,  500000.0, 'VND'),
+  ('normal',  6, 3,  300000.0, 'VND');
+  
+
+-- 2. Bảng time_slot_beauty
+INSERT INTO public.time_slot_beauty (time,    price,    unit) VALUES
+  ('09:00:00', 200000.0, 'VND'),
+  ('11:00:00', 250000.0, 'VND'),
+  ('14:00:00', 300000.0, 'VND');
+
+-- 3. Bảng time_slot_appointment
+INSERT INTO public.time_slot_appointment (time,    price,    unit) VALUES
+  ('08:30:00', 150000.0, 'VND'),
+  ('10:30:00', 180000.0, 'VND'),
+  ('13:30:00', 220000.0, 'VND');
