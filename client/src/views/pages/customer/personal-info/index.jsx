@@ -8,14 +8,14 @@ import {
     ConfigProvider, 
     Space,
     Divider,
-    Skeleton, // Dùng để tạo loading state siêu mượt
+    Skeleton,
     Typography
 } from 'antd';
 import { 
     UserOutlined, 
     SaveOutlined, 
     MailOutlined,
-    CameraOutlined, // Icon cho nút upload
+    CameraOutlined,
     HomeOutlined,
     PhoneOutlined,
     LockOutlined,
@@ -30,8 +30,6 @@ import './personal-info.scss';
 
 const { Title } = Typography;
 
-// --- SKELETON COMPONENT: Giao diện "xương" khi đang tải dữ liệu ---
-// Trải nghiệm người dùng sẽ tốt hơn rất nhiều so với icon loading đơn điệu
 const PersonalInfoSkeleton = () => (
     <div className="personal-info-wrapper">
         <Skeleton.Avatar active size={160} shape="circle" />
@@ -44,58 +42,114 @@ const PersonalInfoSkeleton = () => (
     </div>
 );
 
-// --- MAIN COMPONENT: Giao diện thông tin cá nhân đã được "lột xác" ---
 const PersonalInfo = () => {
-    const [form] = Form.useForm(); // Sử dụng hook của Form để kiểm soát
+    const [form] = Form.useForm();
     const { userData, updateUserData } = useAuth();
     const [isSendingEmail, setIsSendingEmail] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
-    // Sử dụng useEffect để điền dữ liệu vào form một cách an toàn khi userData có sẵn
     useEffect(() => {
         if (userData) {
+            console.log('Setting form values with userData:', userData);
             form.setFieldsValue(userData);
         }
     }, [userData, form]);
 
-    // Hiện đại hóa hàm bằng async/await cho dễ đọc và bảo trì
     const handleChangePassword = async () => {
         setIsSendingEmail(true);
         try {
+            console.log('Attempting to send password reset email for:', userData.email);
             const { data } = await auth.forgotPassword({ email: userData.email });
+            console.log('Password reset response:', data);
+            
             if (data.status === 'OK') {
                 toast.success('Một email hướng dẫn đổi mật khẩu đã được gửi đi!');
+            } else {
+                toast.error('Không thể gửi email đổi mật khẩu. Vui lòng thử lại.');
             }
         } catch (error) {
-            console.error(error);
-            toast.error('Có lỗi xảy ra, vui lòng thử lại.');
+            console.error('Password reset error:', error);
+            toast.error(`Có lỗi xảy ra: ${error.message || 'Vui lòng thử lại.'}`);
         } finally {
-            setIsSendingEmail(false); // Luôn tắt loading dù thành công hay thất bại
+            setIsSendingEmail(false);
         }
     };
     
-    // Hiện đại hóa hàm bằng async/await
     const handleSubmit = async (values) => {
+        console.log('Form submitted with values:', values);
         setIsSaving(true);
+        
         try {
-            // Giả lập một chút độ trễ để thấy hiệu ứng loading
-            await new Promise(resolve => setTimeout(resolve, 500));
-            await updateUserData(values); // Giả sử hàm này là async
+            // Kiểm tra xem updateUserData có tồn tại không
+            if (typeof updateUserData !== 'function') {
+                throw new Error('updateUserData function is not available');
+            }
+
+            // Đảm bảo luôn có username từ userData ban đầu
+            const submitData = {
+                ...values,
+                username: values.username || userData.username, // Fallback to original username
+                user_id: userData.user_id // Đảm bảo có user_id
+            };
+
+            console.log('Calling updateUserData with:', submitData);
+            
+            // Gọi API cập nhật
+            const result = await updateUserData(submitData);
+            console.log('Update result:', result);
+            
             toast.success('Cập nhật thông tin thành công! 🎉');
+            
         } catch(error) {
-            console.error(error);
-            toast.error('Cập nhật thất bại, vui lòng kiểm tra lại.');
+            console.error('Update error details:', {
+                message: error.message,
+                stack: error.stack,
+                response: error.response,
+                request: error.request
+            });
+            
+            // Hiển thị lỗi chi tiết hơn
+            let errorMessage = 'Cập nhật thất bại. ';
+            
+            if (error.response) {
+                // Lỗi từ server
+                errorMessage += `Server error: ${error.response.status} - ${error.response.data?.message || 'Unknown error'}`;
+            } else if (error.request) {
+                // Lỗi network
+                errorMessage += 'Không thể kết nối đến server. Kiểm tra kết nối mạng.';
+            } else {
+                // Lỗi khác
+                errorMessage += error.message || 'Lỗi không xác định.';
+            }
+            
+            toast.error(errorMessage);
         } finally {
             setIsSaving(false);
         }
     };
 
-    // Nếu chưa có dữ liệu, hiển thị skeleton siêu xịn
+    // Thêm function để validate form trước khi submit
+    const handleFormSubmit = () => {
+        console.log('Form submit triggered');
+        
+        form.validateFields()
+            .then(values => {
+                console.log('Form validation passed:', values);
+                handleSubmit(values);
+            })
+            .catch(errorInfo => {
+                console.log('Form validation failed:', errorInfo);
+                toast.error('Vui lòng kiểm tra lại thông tin đã nhập!');
+            });
+    };
+
     if (!userData) {
+        console.log('userData is not available, showing skeleton');
         return <PersonalInfoSkeleton />;
     }
     
-    // Tùy chỉnh theme vàng cho các component Antd
+    console.log('Rendering PersonalInfo with userData:', userData);
+
     const antdTheme = {
         token: {
             colorPrimary: '#FCD34D',
@@ -108,17 +162,18 @@ const PersonalInfo = () => {
     return (
         <ConfigProvider theme={antdTheme}>
             <div className="personal-info-wrapper">
-                {/* Avatar có thể upload, khớp với style SCSS */}
                 <div className="personal-info__avatar">
                     <Upload
                         name="avatar"
                         showUploadList={false}
-                        // action="/your-upload-api" // Thay bằng API upload của bạn
-                        // beforeUpload={...}
-                        // onChange={...}
+                        beforeUpload={(file) => {
+                            console.log('Avatar upload attempt:', file);
+                            // Thêm logic upload avatar ở đây
+                            return false; // Prevent default upload for now
+                        }}
                     >
                         <Avatar 
-                            src={userData.avatar_url || null} // Hiển thị avatar thật nếu có
+                            src={userData.avatar_url || null}
                             icon={<UserOutlined />} 
                         />
                     </Upload>
@@ -127,24 +182,65 @@ const PersonalInfo = () => {
                 <Form
                     form={form}
                     onFinish={handleSubmit}
+                    onFinishFailed={(errorInfo) => {
+                        console.log('Form finish failed:', errorInfo);
+                        toast.error('Có lỗi trong form. Vui lòng kiểm tra lại!');
+                    }}
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 16 }}
                     style={{ width: '100%', maxWidth: 700 }}
-                    initialValues={userData} // Set giá trị ban đầu
+                    initialValues={userData}
                 >
-                    <Form.Item label="Họ và tên" name="fullname" rules={[{ required: true, message: 'Vui lòng nhập họ tên!' }]}>
-                        <Input prefix={<UserOutlined />} placeholder="Nguyễn Văn A" />
+                    <Form.Item 
+                        label="Họ và tên" 
+                        name="fullname" 
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập họ tên!' },
+                            { min: 2, message: 'Họ tên phải có ít nhất 2 ký tự!' }
+                        ]}
+                    >
+                        <Input 
+                            prefix={<UserOutlined />} 
+                            placeholder="Nguyễn Văn A"
+                            onChange={(e) => console.log('Fullname changed:', e.target.value)}
+                        />
+                    </Form.Item>
+
+                    <Form.Item 
+                        label="Tên đăng nhập" 
+                        name="username"
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập tên đăng nhập!' },
+                            { min: 3, message: 'Tên đăng nhập phải có ít nhất 3 ký tự!' }
+                        ]}
+                    >
+                        <Input 
+                            prefix={<UserOutlined />} 
+                            placeholder="customer"
+                            onChange={(e) => console.log('Username changed:', e.target.value)}
+                        />
                     </Form.Item>
 
                     <Form.Item label="Email" name="email">
                         <Input prefix={<MailOutlined />} disabled />
                     </Form.Item>
                     
-                    <Form.Item label="Số điện thoại" name="phone_numbers" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}>
-                        <Input prefix={<PhoneOutlined />} placeholder="09xxxxxxxx" />
+                    <Form.Item 
+                        label="Số điện thoại" 
+                        name="phone_numbers" 
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                            { pattern: /^[0-9]{10,11}$/, message: 'Số điện thoại không hợp lệ!' }
+                        ]}
+                    >
+                        <Input 
+                            prefix={<PhoneOutlined />} 
+                            placeholder="09xxxxxxxx"
+                            onChange={(e) => console.log('Phone changed:', e.target.value)}
+                        />
                     </Form.Item>
                     
-                    <Form.Item label="Mật khẩu" name="password">
+                    <Form.Item label="Mật khẩu">
                         <Button
                             icon={<LockOutlined />}
                             loading={isSendingEmail}
@@ -154,30 +250,55 @@ const PersonalInfo = () => {
                         </Button>
                     </Form.Item>
 
-                    {/* Phân nhóm các trường địa chỉ cho gọn gàng */}
                     <Divider orientation="left" style={{borderColor: '#FDE68A'}}>
                         <HomeOutlined /> Thông tin địa chỉ
                     </Divider>
 
                     <Form.Item label="Quốc gia" name="country">
-                        <Input prefix={<GlobalOutlined />} placeholder="Việt Nam" />
+                        <Input 
+                            prefix={<GlobalOutlined />} 
+                            placeholder="Việt Nam"
+                            onChange={(e) => console.log('Country changed:', e.target.value)}
+                        />
                     </Form.Item>
 
                     <Form.Item label="Thành phố" name="city">
-                        <Input prefix={<EnvironmentOutlined />} placeholder="TP. Hồ Chí Minh" />
+                        <Input 
+                            prefix={<EnvironmentOutlined />} 
+                            placeholder="TP. Hồ Chí Minh"
+                            onChange={(e) => console.log('City changed:', e.target.value)}
+                        />
                     </Form.Item>
 
-                    <Form.Item label="Địa chỉ cụ thể" name="address" rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}>
-                        <Input placeholder="Số nhà, tên đường, phường/xã..." />
+                    <Form.Item 
+                        label="Địa chỉ cụ thể" 
+                        name="address" 
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập địa chỉ!' },
+                            { min: 5, message: 'Địa chỉ phải có ít nhất 5 ký tự!' }
+                        ]}
+                    >
+                        <Input 
+                            placeholder="Số nhà, tên đường, phường/xã..."
+                            onChange={(e) => console.log('Address changed:', e.target.value)}
+                        />
                     </Form.Item>
 
-                    {/* Khu vực nút bấm cuối form, được căn chỉnh đẹp hơn */}
                     <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-                        <Button type="primary" htmlType="submit" icon={<SaveOutlined />} loading={isSaving} block>
+                        <Button 
+                            type="primary" 
+                            htmlType="submit" 
+                            icon={<SaveOutlined />} 
+                            loading={isSaving} 
+                            block
+                            onClick={() => console.log('Save button clicked')}
+                        >
                             Lưu Thay Đổi
                         </Button>
                     </Form.Item>
                 </Form>
+
+
             </div>
         </ConfigProvider>
     );
