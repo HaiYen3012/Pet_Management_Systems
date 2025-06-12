@@ -165,23 +165,34 @@ const StorageServiceUsage = () => {
           date_start: moment(row.date_start.toString()).format('YYYY-MM-DD'),
           date_end: moment(row.date_end.toString()).format('YYYY-MM-DD'),
         }
-        await service.createStorageService(row)
-        setData((prev) => [...prev, row])
+        const response = await service.createStorageService(row)
+        // Refresh data after creating
+        const refreshResponse = await service.getAllStorageService()
+        const updatedData = refreshResponse.data.AllStorageService.map((item) => ({
+          ...item,
+          pet_id: item.order_pet_id,
+          user_id: item.order_user_id,
+          total: item.order_total,
+        }))
+        setData(updatedData)
         setEditingKey('')
         message.success('Thêm dịch vụ thành công!')
       }
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo)
+      message.error('Có lỗi xảy ra khi lưu dữ liệu!')
     }
   }
 
   const handleDelete = async (id) => {
     try {
+      console.log('Attempting to delete service with ID:', id) // Debug log
       await service.deleteStorageService({ service_id: id })
       const newServices = data.filter((item) => item.id !== id)
       setData(newServices)
       message.success('Xóa dịch vụ thành công!')
     } catch (error) {
+      console.error('Delete error:', error) // Debug log
       message.error('Xóa dịch vụ thất bại.')
     }
   }
@@ -225,8 +236,9 @@ const StorageServiceUsage = () => {
   }
 
   const addNewRow = () => {
+    const newId = `temp_${Date.now()}` // Tạo ID tạm thời cho record mới
     const newRow = {
-      id: '',
+      id: newId,
       room_id: '',
       pet_id: '',
       user_id: '',
@@ -237,12 +249,13 @@ const StorageServiceUsage = () => {
       status: 'created',
     }
     setData([newRow, ...data])
-    setEditingKey(newRow.id)
+    setEditingKey(newId)
     setMode('create')
     form.setFieldsValue(newRow)
   }
 
   const showConfirm = (id) => {
+    console.log('Delete confirmation for ID:', id) // Debug log
     Modal.confirm({
       title: 'Bạn có chắc muốn xóa dịch vụ?',
       icon: <ExclamationCircleOutlined />,
@@ -385,7 +398,7 @@ const StorageServiceUsage = () => {
               <FaPen />
             </button>
             <button
-              onClick={() => showConfirm(record.service_id)}
+              onClick={() => showConfirm(record.id)} // ĐÃ SỬA: từ record.service_id thành record.id
               style={{
                 marginLeft: '12px',
                 padding: '8px 12px',
